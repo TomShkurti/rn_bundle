@@ -1,0 +1,12 @@
+//
+// Created by william on 24/04/18.
+//
+
+#ifndef RN_SKILLS_AS_NEEDLEEXTRACTIONPLANNER_H
+#define RN_SKILLS_AS_NEEDLEEXTRACTIONPLANNER_H
+
+class NeedleExtractionPlanner {
+
+};
+
+#endif //RN_SKILLS_AS_NEEDLEEXTRACTIONPLANNER_H
