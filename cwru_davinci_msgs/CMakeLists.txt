@@ -1,28 +1,19 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(rn_skills_as)
+project(cwru_davinci_msgs)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
-
-find_package(Eigen3)
-
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  rospy
-  std_msgs
   geometry_msgs
+  roscpp
+  std_msgs
   trajectory_msgs
-  tf
-  Eigen3
-  cwru_davinci_kinematics
-  cwru_davinci_msgs
+  message_generation
 )
-
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -58,11 +49,14 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+ add_message_files(
+   FILES
+   ListOfJointTrajectory.msg
+   ListOfPointStamped.msg
+   ListOfTransformStamped.msg
+   ArmIndex.msg
+   JointsName.msg
+ )
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -79,10 +73,12 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-# )
+ generate_messages(
+   DEPENDENCIES
+   std_msgs
+   geometry_msgs
+   trajectory_msgs
+ )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -109,16 +105,15 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 ###################################
 ## The catkin_package macro generates cmake config files for your package
 ## Declare things to be passed to dependent projects
-## INCLUDE_DIRS: uncomment this if your package contains header files
+## INCLUDE_DIRS: uncomment this if you package contains header files
 ## LIBRARIES: libraries you create in this project that dependent projects also need
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
-
 catkin_package(
-  INCLUDE_DIRS include
-  LIBRARIES rn_skills_as
-  CATKIN_DEPENDS roscpp rospy std_msgs geometry_msgs trajectory_msgs tf cwru_davinci_kinematics
-  DEPENDS system_lib
+  #INCLUDE_DIRS include
+  #LIBRARIES cwru_davinci_msgs
+  CATKIN_DEPENDS geometry_msgs roscpp std_msgs trajectory_msgs message_runtime
+  #DEPENDS
 )
 
 ###########
@@ -127,31 +122,22 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-include_directories(
- include
-  ${catkin_INCLUDE_DIRS}
-)
+
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/rn_skills_as.cpp
+#   src/${PROJECT_NAME}/cwru_davinci_msgs.cpp
 # )
-
-add_library(RnNeedleDrivingPlanner src/RnNeedleDrivingPlanner.cpp)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
 # add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-#add_dependencies(RnNeedleDrivingPlanner ${PROJECT_NAME}_gencpp)
 
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/rn_skills_as_node.cpp)
-
-add_executable(rn_needle_driving_fncs_test tests/rn_needle_driving_fncs_test_main.cpp)
-target_link_libraries(rn_needle_driving_fncs_test ${catkin_LIBRARIES} RnNeedleDrivingPlanner)
+# add_executable(${PROJECT_NAME}_node src/cwru_davinci_msgs_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -208,7 +194,7 @@ target_link_libraries(rn_needle_driving_fncs_test ${catkin_LIBRARIES} RnNeedleDr
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_rn_skills_as.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_cwru_davinci_msgs.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

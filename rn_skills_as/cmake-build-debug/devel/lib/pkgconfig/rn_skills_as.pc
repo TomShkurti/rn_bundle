@@ -1,0 +1,8 @@
+prefix=/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/cmake-build-debug/devel
+
+Name: rn_skills_as
+Description: Description of rn_skills_as
+Version: 0.0.0
+Cflags: -I/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/include
+Libs: -L/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/cmake-build-debug/devel/lib -lrn_skills_as
+Requires: roscpp rospy std_msgs geometry_msgs trajectory_msgs tf cwru_davinci_kinematics

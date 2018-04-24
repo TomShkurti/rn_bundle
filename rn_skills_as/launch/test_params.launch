@@ -1,0 +1,3 @@
+<launch>
+  <rosparam command="load" file="$(find rn_skills_as)/config/test_params.yaml" />
+</launch>
