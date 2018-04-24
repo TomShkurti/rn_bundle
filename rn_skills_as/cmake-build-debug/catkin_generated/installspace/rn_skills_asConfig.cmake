@@ -152,7 +152,7 @@ foreach(library ${libraries})
   endif()
 endforeach()
 
-set(rn_skills_as_EXPORTED_TARGETS "")
+set(rn_skills_as_EXPORTED_TARGETS "rn_skills_as_generate_messages_cpp;rn_skills_as_generate_messages_eus;rn_skills_as_generate_messages_lisp;rn_skills_as_generate_messages_nodejs;rn_skills_as_generate_messages_py")
 # create dummy targets for exported code generation targets to make life of users easier
 foreach(t ${rn_skills_as_EXPORTED_TARGETS})
   if(NOT TARGET ${t})
@@ -160,7 +160,7 @@ foreach(t ${rn_skills_as_EXPORTED_TARGETS})
   endif()
 endforeach()
 
-set(depends "roscpp;rospy;std_msgs;geometry_msgs;trajectory_msgs;tf;cwru_davinci_kinematics")
+set(depends "roscpp;rospy;std_msgs;geometry_msgs;trajectory_msgs;tf;cwru_davinci_kinematics;actionlib_msgs;cwru_davinci_msgs;cwru_davinci_control")
 foreach(depend ${depends})
   string(REPLACE " " ";" depend_list ${depend})
   # the package name of the dependency must be kept in a unique variable so that it is not overwritten in recursive calls
@@ -189,7 +189,7 @@ foreach(depend ${depends})
   list(APPEND rn_skills_as_EXPORTED_TARGETS ${${rn_skills_as_dep}_EXPORTED_TARGETS})
 endforeach()
 
-set(pkg_cfg_extras "")
+set(pkg_cfg_extras "rn_skills_as-msg-extras.cmake")
 foreach(extra ${pkg_cfg_extras})
   if(NOT IS_ABSOLUTE ${extra})
     set(extra ${rn_skills_as_DIR}/${extra})

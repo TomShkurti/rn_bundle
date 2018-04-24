@@ -104,8 +104,8 @@ devel/lib/rn_skills_as/rn_needle_driving_fncs_test: /opt/ros/kinetic/lib/librosc
 devel/lib/rn_skills_as/rn_needle_driving_fncs_test: /opt/ros/kinetic/lib/librosconsole_backend_interface.so
 devel/lib/rn_skills_as/rn_needle_driving_fncs_test: /usr/lib/x86_64-linux-gnu/liblog4cxx.so
 devel/lib/rn_skills_as/rn_needle_driving_fncs_test: /usr/lib/x86_64-linux-gnu/libboost_regex.so
-devel/lib/rn_skills_as/rn_needle_driving_fncs_test: /opt/ros/kinetic/lib/libroscpp_serialization.so
 devel/lib/rn_skills_as/rn_needle_driving_fncs_test: /opt/ros/kinetic/lib/libxmlrpcpp.so
+devel/lib/rn_skills_as/rn_needle_driving_fncs_test: /opt/ros/kinetic/lib/libroscpp_serialization.so
 devel/lib/rn_skills_as/rn_needle_driving_fncs_test: /opt/ros/kinetic/lib/librostime.so
 devel/lib/rn_skills_as/rn_needle_driving_fncs_test: /opt/ros/kinetic/lib/libcpp_common.so
 devel/lib/rn_skills_as/rn_needle_driving_fncs_test: /usr/lib/x86_64-linux-gnu/libboost_system.so

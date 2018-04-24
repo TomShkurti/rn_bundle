@@ -1,0 +1,2 @@
+set(rn_skills_as_MESSAGE_FILES "msg/NeedleDriveAction.msg;msg/NeedleDriveActionGoal.msg;msg/NeedleDriveActionResult.msg;msg/NeedleDriveActionFeedback.msg;msg/NeedleDriveGoal.msg;msg/NeedleDriveResult.msg;msg/NeedleDriveFeedback.msg;msg/NeedleDriveLiteAction.msg;msg/NeedleDriveLiteActionGoal.msg;msg/NeedleDriveLiteActionResult.msg;msg/NeedleDriveLiteActionFeedback.msg;msg/NeedleDriveLiteGoal.msg;msg/NeedleDriveLiteResult.msg;msg/NeedleDriveLiteFeedback.msg")
+set(rn_skills_as_SERVICE_FILES "")

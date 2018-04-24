@@ -11,6 +11,8 @@ find_package(Eigen3)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  actionlib
+  actionlib_msgs
   roscpp
   rospy
   std_msgs
@@ -19,6 +21,7 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   Eigen3
   cwru_davinci_kinematics
+  cwru_davinci_control
   cwru_davinci_msgs
 )
 
@@ -72,17 +75,15 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 # )
 
 ## Generate actions in the 'action' folder
-# add_action_files(
-#   FILES
-#   Action1.action
-#   Action2.action
-# )
+add_action_files(
+  DIRECTORY action
+  FILES NeedleDrive.action NeedleDriveLite.action)
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-# )
+generate_messages(
+   DEPENDENCIES
+   actionlib_msgs std_msgs geometry_msgs trajectory_msgs cwru_davinci_msgs
+ )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -117,7 +118,7 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES rn_skills_as
-  CATKIN_DEPENDS roscpp rospy std_msgs geometry_msgs trajectory_msgs tf cwru_davinci_kinematics
+  CATKIN_DEPENDS roscpp rospy std_msgs geometry_msgs trajectory_msgs tf cwru_davinci_kinematics actionlib_msgs cwru_davinci_msgs cwru_davinci_control
   DEPENDS system_lib
 )
 
@@ -138,12 +139,23 @@ include_directories(
 # )
 
 add_library(RnNeedleDrivingPlanner src/RnNeedleDrivingPlanner.cpp)
+add_library(DavinciActionServer src/DavinciSkillsActionServer.cpp )
+add_library(DavinciActionClient src/DavinciSkillsActionClient.cpp )
+
+target_link_libraries(DavinciActionServer
+        RnNeedleDrivingPlanner ${catkin_LIBRARIES})
+
+target_link_libraries(DavinciActionClient
+        RnNeedleDrivingPlanner ${catkin_LIBRARIES})
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
 # add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 #add_dependencies(RnNeedleDrivingPlanner ${PROJECT_NAME}_gencpp)
+
+add_dependencies(DavinciActionServer rn_skills_as_generate_messages_cpp)
+add_dependencies(DavinciActionClient rn_skills_as_generate_messages_cpp)
 
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context

@@ -46,7 +46,6 @@ class RnNeedleDrivingPlanner {
         psm_2_grasp_frame_wrt_gripper_frame_ * needle_affine_wrt_grasp_two_frame_;
   }
 
-  // TODO finish this
 
   /**
    * Set a preferred grasp tf, compare all the tf options in the provided array, select

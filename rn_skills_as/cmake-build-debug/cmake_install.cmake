@@ -115,7 +115,70 @@ file(INSTALL DESTINATION "/usr/local" TYPE FILE FILES "/home/william/Epsom_catki
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/rn_skills_as/action" TYPE FILE FILES
+    "/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/action/NeedleDrive.action"
+    "/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/action/NeedleDriveLite.action"
+    )
+endif()
+
+if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/rn_skills_as/msg" TYPE FILE FILES
+    "/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/cmake-build-debug/devel/share/rn_skills_as/msg/NeedleDriveAction.msg"
+    "/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/cmake-build-debug/devel/share/rn_skills_as/msg/NeedleDriveActionGoal.msg"
+    "/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/cmake-build-debug/devel/share/rn_skills_as/msg/NeedleDriveActionResult.msg"
+    "/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/cmake-build-debug/devel/share/rn_skills_as/msg/NeedleDriveActionFeedback.msg"
+    "/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/cmake-build-debug/devel/share/rn_skills_as/msg/NeedleDriveGoal.msg"
+    "/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/cmake-build-debug/devel/share/rn_skills_as/msg/NeedleDriveResult.msg"
+    "/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/cmake-build-debug/devel/share/rn_skills_as/msg/NeedleDriveFeedback.msg"
+    )
+endif()
+
+if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/rn_skills_as/msg" TYPE FILE FILES
+    "/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/cmake-build-debug/devel/share/rn_skills_as/msg/NeedleDriveLiteAction.msg"
+    "/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/cmake-build-debug/devel/share/rn_skills_as/msg/NeedleDriveLiteActionGoal.msg"
+    "/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/cmake-build-debug/devel/share/rn_skills_as/msg/NeedleDriveLiteActionResult.msg"
+    "/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/cmake-build-debug/devel/share/rn_skills_as/msg/NeedleDriveLiteActionFeedback.msg"
+    "/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/cmake-build-debug/devel/share/rn_skills_as/msg/NeedleDriveLiteGoal.msg"
+    "/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/cmake-build-debug/devel/share/rn_skills_as/msg/NeedleDriveLiteResult.msg"
+    "/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/cmake-build-debug/devel/share/rn_skills_as/msg/NeedleDriveLiteFeedback.msg"
+    )
+endif()
+
+if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/rn_skills_as/cmake" TYPE FILE FILES "/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/cmake-build-debug/catkin_generated/installspace/rn_skills_as-msg-paths.cmake")
+endif()
+
+if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/cmake-build-debug/devel/include/rn_skills_as")
+endif()
+
+if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/roseus/ros" TYPE DIRECTORY FILES "/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/cmake-build-debug/devel/share/roseus/ros/rn_skills_as")
+endif()
+
+if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/common-lisp/ros" TYPE DIRECTORY FILES "/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/cmake-build-debug/devel/share/common-lisp/ros/rn_skills_as")
+endif()
+
+if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/gennodejs/ros" TYPE DIRECTORY FILES "/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/cmake-build-debug/devel/share/gennodejs/ros/rn_skills_as")
+endif()
+
+if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  execute_process(COMMAND "/usr/bin/python" -m compileall "/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/cmake-build-debug/devel/lib/python2.7/dist-packages/rn_skills_as")
+endif()
+
+if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/python2.7/dist-packages" TYPE DIRECTORY FILES "/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/cmake-build-debug/devel/lib/python2.7/dist-packages/rn_skills_as")
+endif()
+
+if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/cmake-build-debug/catkin_generated/installspace/rn_skills_as.pc")
+endif()
+
+if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/rn_skills_as/cmake" TYPE FILE FILES "/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/cmake-build-debug/catkin_generated/installspace/rn_skills_as-msg-extras.cmake")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)

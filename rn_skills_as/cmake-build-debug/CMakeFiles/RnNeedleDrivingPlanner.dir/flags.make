@@ -6,5 +6,5 @@ CXX_FLAGS =  -std=c++11 -g -fPIC
 
 CXX_DEFINES = -DROSCONSOLE_BACKEND_LOG4CXX -DROS_PACKAGE_NAME=\"rn_skills_as\" -DRnNeedleDrivingPlanner_EXPORTS
 
-CXX_INCLUDES = -I/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/include -I/home/william/Epsom_catkin_ws/src/cwru_davinci_kinematics/include -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 
+CXX_INCLUDES = -I/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/cmake-build-debug/devel/include -I/home/william/Epsom_catkin_ws/src/rn_bundle/rn_skills_as/include -I/home/william/Epsom_catkin_ws/devel/.private/cwru_davinci_msgs/include -I/home/william/Epsom_catkin_ws/src/cwru_davinci_kinematics/include -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 
 

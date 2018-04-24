@@ -56,6 +56,10 @@
   <build_depend>trajectory_msgs</build_depend>
   <build_depend>tf</build_depend>
   <build_depend>cwru_davinci_kinematics</build_depend>
+  <build_depend>actionlib_msgs</build_depend>
+  <build_depend>cwru_davinci_msgs</build_depend>
+  <build_depend>cwru_davinci_control</build_depend>
+  <build_depend>message_generation</build_depend>
 
 
   <build_export_depend>roscpp</build_export_depend>
@@ -70,6 +74,11 @@
   <exec_depend>trajectory_msgs</exec_depend>
   <exec_depend>tf</exec_depend>
   <exec_depend>cwru_davinci_kinematics</exec_depend>
+  <exec_depend>actionlib_msgs</exec_depend>
+  <exec_depend>cwru_davinci_msgs</exec_depend>
+  <exec_depend>cwru_davinci_control</exec_depend>
+  <exec_depend>message_generation</exec_depend>
+
   <!-- The export tag contains other, unspecified, tags -->
   <export>
     <!-- Other tools can request additional information be placed here -->

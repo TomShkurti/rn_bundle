@@ -16,7 +16,9 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
+  "devel/include"
   "../include"
+  "/home/william/Epsom_catkin_ws/devel/.private/cwru_davinci_msgs/include"
   "/home/william/Epsom_catkin_ws/src/cwru_davinci_kinematics/include"
   "/opt/ros/kinetic/include"
   "/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp"
