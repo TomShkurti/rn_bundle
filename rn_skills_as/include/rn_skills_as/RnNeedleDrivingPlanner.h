@@ -183,6 +183,11 @@ class RnNeedleDrivingPlanner {
                                            cwru_davinci_msgs::ListOfPointStamped &valid_exit_points_array);
 
 
+  // Will use fwd kin to solve pts and then estimate the distance
+  // with the velocity provided te "time from start" field can be filled
+  void setTrajectoryVelocity(double velocity, trajectory_msgs::JointTrajectory &needleDriveTraj);
+
+
 
   /// Auxiliary Utility Functions
 
@@ -344,7 +349,7 @@ class RnNeedleDrivingPlanner {
   }
 
 
-  /// Camera Free Needle Drive Functions
+  /// Camera Free Needle Drive Interface
 
   /**
    * Set hard coded transform of camera psm
@@ -354,7 +359,7 @@ class RnNeedleDrivingPlanner {
   void setHardCodedTransforms(Eigen::Affine3d psm_one_affine_wrt_lt_camera,
                               Eigen::Affine3d psm_two_affine_wrt_lt_camera);
 
-  void overlapLeftCamFrameAndPsmBase(int arm_index);
+  void overlapLeftCamFrameAndPsmBase(const int arm_index);
 
   /// may not be of much use now
   Eigen::Affine3d convertPsmBaseFrameCoordinateToCameraFrame(int arm_index,
@@ -365,10 +370,10 @@ class RnNeedleDrivingPlanner {
   // having it ordered in the base frame in the first place. BUT, we have 2 pams.. So we have to
   // do it once a time.
 
-  bool requestNeedleDrivingTrajctoryDefaultGraspInBaseFrame(const int arm_index,
-                                                            const geometry_msgs::PointStamped &needle_entry_pt_wrt_base,
-                                                            const geometry_msgs::PointStamped &needle_exit_pt_wrt_base,
-                                                            trajectory_msgs::JointTrajectory &needleDriveTraj);
+  bool requestNeedleDrivingTrajectoryDefaultGraspInBaseFrame(const int arm_index,
+                                                             const geometry_msgs::PointStamped &needle_entry_pt_wrt_base,
+                                                             const geometry_msgs::PointStamped &needle_exit_pt_wrt_base,
+                                                             trajectory_msgs::JointTrajectory &needleDriveTraj);
 
 
   bool requestOneNeedleDrivingTrajectoryInBaseFrame(const int arm_index,
@@ -478,7 +483,7 @@ class RnNeedleDrivingPlanner {
 
 
   /// Kinematics Solvers
-  davinci_kinematics::Forward davinci_fwd_solver_;
+  davinci_kinematics::Forward fwd_solver_;
   davinci_kinematics::Inverse ik_solver_;
 
 };

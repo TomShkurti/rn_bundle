@@ -468,6 +468,9 @@ double RnNeedleDrivingPlanner::computeNeedleDriveGripperAffines(int arm_index,
 }
 
 
+/*
+ * The trajectory is 7x1 and time from start is NOT filled in.
+ */
 void RnNeedleDrivingPlanner::convertAffinesToTrajectoryMsgs(const std::vector<Eigen::Affine3d> &gripper_affines_wrt_portal,
                                                             trajectory_msgs::JointTrajectory &joint_trajectory) {
 
@@ -893,6 +896,61 @@ double RnNeedleDrivingPlanner::filterValidExitPointsDefaultGrasp(const int arm_i
 
 
 
+void RnNeedleDrivingPlanner::setTrajectoryVelocity(double velocity,
+                                                   trajectory_msgs::JointTrajectory &needleDriveTraj) {
+
+  // Use Linear Estimation to get the time set according to requested velocity.
+
+  double euler_dist;
+  Eigen::Affine3d affine_gripper_wrt_base;
+  Eigen::Vector3d pt0, pt1;
+  double temp1, temp2, temp3;
+  Vectorq7x1 q_vec0, q_vec1;
+  double time_from_start, time_0, delta_t;
+
+  time_0 = 7;
+  needleDriveTraj.points[0].time_from_start = ros::Duration(time_0);
+
+  int waypoints = needleDriveTraj.points.size();
+
+  for (int n = 0; n < (waypoints-1); n++) {
+
+    for (int i = 0; i < 7; i++) {
+      q_vec0(i) = needleDriveTraj.points[n].positions[i];
+    }
+
+    affine_gripper_wrt_base = fwd_solver_.fwd_kin_solve(q_vec0);
+    pt0 = affine_gripper_wrt_base.translation();
+
+    for (int i = 0; i < 7; i++) {
+      q_vec1(i) = needleDriveTraj.points[n+1].positions[i];
+    }
+
+    affine_gripper_wrt_base = fwd_solver_.fwd_kin_solve(q_vec1);
+    pt1 = affine_gripper_wrt_base.translation();
+
+    temp1 = pt0.transpose() * pt0;
+    temp2 = pt1.transpose() * pt1;
+    temp3 = temp1 - temp2;
+    euler_dist = sqrt(abs(temp3));
+
+    delta_t = euler_dist/velocity;
+
+    time_from_start = time_from_start + delta_t;
+
+    needleDriveTraj.points[n+1].time_from_start = ros::Duration(time_from_start);
+
+  }
+
+  ROS_INFO("All points in this trajectory has their time_from_start set according to the given velocity %f",
+           velocity);
+
+}
+
+
+
+/// Adjustment & Correction
+
 /*
  * Set a preferred grasp tf, compare (by eular angle diff) all the tf options in the provided array, select
  * the one that match best.
@@ -969,4 +1027,131 @@ void RnNeedleDrivingPlanner::checkExitPoint(const Eigen::Vector3d& entry_pt,
 
 
 }
+
+
+
+/// Camera Free Needle Drive Interface
+
+void RnNeedleDrivingPlanner::setHardCodedTransforms(Eigen::Affine3d psm_one_affine_wrt_lt_camera,
+                                                    Eigen::Affine3d psm_two_affine_wrt_lt_camera) {
+
+  psm_one_affine_wrt_lt_camera_ = psm_one_affine_wrt_lt_camera;
+  psm_two_affine_wrt_lt_camera_ = psm_two_affine_wrt_lt_camera;
+
+}
+
+
+void RnNeedleDrivingPlanner::overlapLeftCamFrameAndPsmBase(const int arm_index) {
+
+
+  Eigen::Matrix3d R;
+  R.setIdentity();
+
+  switch (arm_index) {
+
+    case 1:
+
+      psm_one_affine_wrt_lt_camera_.translation() << 0, 0, 0;
+      psm_one_affine_wrt_lt_camera_.linear() = R;
+
+      break;
+
+    case 2:
+
+      psm_two_affine_wrt_lt_camera_.translation() << 0, 0, 0;
+      psm_two_affine_wrt_lt_camera_.linear() = R;
+
+      break;
+
+  }
+
+  ROS_WARN("The Left Camera Frame to PSM %d Base Frame are now set to be identical.", arm_index);
+
+}
+
+
+bool RnNeedleDrivingPlanner::requestNeedleDrivingTrajectoryDefaultGraspInBaseFrame(const int arm_index,
+                                                                                   const geometry_msgs::PointStamped &needle_entry_pt_wrt_base,
+                                                                                   const geometry_msgs::PointStamped &needle_exit_pt_wrt_base,
+                                                                                   trajectory_msgs::JointTrajectory &needleDriveTraj) {
+  bool result;
+
+  ROS_WARN("You should be using base frame coordinates.");
+
+  overlapLeftCamFrameAndPsmBase(arm_index);
+  // Now whatever you pass should be the same in both psmx base and lt camera frames. Meaning you can use directly the
+  // same request functions embedded here. However, you can only use one PSM at a time.
+
+  result = requestNeedleDrivingTrajectoryDefaultGrasp(arm_index,
+                                                      needle_entry_pt_wrt_base,
+                                                      needle_exit_pt_wrt_base,
+                                                      needleDriveTraj);
+
+  if (result != 1) {
+    ROS_WARN("Failed");
+    return result;
+  } else {
+    return result;
+  }
+
+}
+
+
+bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryInBaseFrame(const int arm_index,
+                                                                          const geometry_msgs::PointStamped &needle_entry_pt,
+                                                                          const geometry_msgs::PointStamped &needle_exit_pt,
+                                                                          const geometry_msgs::TransformStamped &grasp_transform,
+                                                                          trajectory_msgs::JointTrajectory &needleDriveTraj) {
+
+  bool result;
+
+  ROS_WARN("You should be using base frame coordinates.");
+
+  overlapLeftCamFrameAndPsmBase(arm_index);
+
+  result = requestOneNeedleDrivingTrajectory(arm_index,
+                                             needle_entry_pt,
+                                             needle_exit_pt,
+                                             grasp_transform,
+                                             needleDriveTraj);
+
+  if (result != 1) {
+    ROS_WARN("Failed");
+    return result;
+  } else {
+    return result;
+  }
+
+}
+
+
+bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryInBaseFrame(const int arm_index,
+                                                                          const geometry_msgs::PointStamped &needle_entry_pt,
+                                                                          const geometry_msgs::PointStamped &needle_exit_pt,
+                                                                          trajectory_msgs::JointTrajectory &needleDriveTraj,
+                                                                          geometry_msgs::TransformStamped &grasp_transform) {
+
+  bool result;
+
+  ROS_WARN("You should be using base frame coordinates.");
+
+  overlapLeftCamFrameAndPsmBase(arm_index);
+
+  result = requestOneNeedleDrivingTrajectory(arm_index,
+                                             needle_entry_pt,
+                                             needle_exit_pt,
+                                             needleDriveTraj,
+                                             grasp_transform);
+
+  if (result != 1) {
+    ROS_WARN("Failed");
+    return result;
+  } else {
+    return result;
+  }
+
+}
+
+
+
 
