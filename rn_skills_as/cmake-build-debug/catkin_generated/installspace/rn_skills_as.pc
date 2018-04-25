@@ -1,8 +1,0 @@
-prefix=/usr/local
-
-Name: rn_skills_as
-Description: Description of rn_skills_as
-Version: 0.0.0
-Cflags: -I/usr/local/include
-Libs: -L/usr/local/lib -lrn_skills_as
-Requires: roscpp rospy std_msgs geometry_msgs trajectory_msgs tf cwru_davinci_kinematics actionlib_msgs cwru_davinci_msgs cwru_davinci_control

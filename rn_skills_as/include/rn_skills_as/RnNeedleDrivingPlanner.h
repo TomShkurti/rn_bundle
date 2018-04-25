@@ -47,6 +47,8 @@ class RnNeedleDrivingPlanner {
   }
 
 
+  /// Adjustment & Correction
+
   /**
    * Set a preferred grasp tf, compare all the tf options in the provided array, select
    * the one that match best.
@@ -56,6 +58,18 @@ class RnNeedleDrivingPlanner {
    */
   geometry_msgs::TransformStamped getBestGraspTransform(Eigen::Affine3d preferred_tf,
                                                         const cwru_davinci_msgs::ListOfTransformStamped &grasp_tf_array);
+
+
+  /**
+   * To make sure the entry-exit distance is less than the needle diameter. This function is called
+   * internally by another member function updateNeedleAndTissueParameters()
+   * @param entry_pt
+   * @param exit_pt will be modified if adjustment is needed
+   * @param dist_entry_exit
+   */
+  void checkExitPoint(const Eigen::Vector3d& entry_pt,
+                      Eigen::Vector3d& exit_pt,
+                      double& dist_entry_exit);
 
 
   /// Interface for Applications
@@ -309,15 +323,36 @@ class RnNeedleDrivingPlanner {
   }
 
 
-  /// Set() functions
+  /// set() functions
+
+  inline void setNeedleRaidus(double new_needle_radius) {
+    needle_radius_ = new_needle_radius;
+    nh_.setParam("/needle/radius", needle_radius_);
+    ROS_INFO("Needle radius has been updated locally and in the parameter server.");
+  }
+
+  inline void setNeedleGraspDepth(double new_grasp_depth) {
+    grasp_depth_ = new_grasp_depth;
+    nh_.setParam("/needle/grasp_depth", grasp_depth_);
+    ROS_INFO("Needle grasp depth has been updated locally and in the parameter server.");
+  }
+
+  inline void setNeedleAxisHt(double new_axis_ht) {
+    needle_axis_ht_ = new_axis_ht;
+    nh_.setParam("/needle/height", needle_axis_ht_);
+    ROS_INFO("Needle axis height has been updated locally and in the parameter server.");
+  }
+
+
+  /// Camera Free Needle Drive Fncs
+
+
+
 
 
   /// TODO finish
-  void outputPspPlayfile();
+  void outputPspPlayfile(std::string path);
 
-  void resetAllParams();
-
-  // set functions including the set parameter server fncs
 
 
  private:
@@ -327,7 +362,7 @@ class RnNeedleDrivingPlanner {
   ros::Publisher exit_pt_score_publisher_;
   ros::Publisher exit_pt_array_publisher_;
 
-  /// Needle & Grasp related variables.
+  /// Needle & Grasp related variables and matrices.
   double needle_radius_;
   double grasp_depth_;
   double needle_axis_ht_;

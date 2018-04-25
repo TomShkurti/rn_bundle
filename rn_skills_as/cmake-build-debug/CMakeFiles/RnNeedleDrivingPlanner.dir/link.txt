@@ -1,1 +1,0 @@
-/usr/bin/c++ -fPIC  -std=c++11 -g  -shared -Wl,-soname,libRnNeedleDrivingPlanner.so -o devel/lib/libRnNeedleDrivingPlanner.so CMakeFiles/RnNeedleDrivingPlanner.dir/src/RnNeedleDrivingPlanner.cpp.o 

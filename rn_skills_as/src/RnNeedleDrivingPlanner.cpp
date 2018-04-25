@@ -19,8 +19,10 @@ RnNeedleDrivingPlanner::RnNeedleDrivingPlanner(const ros::NodeHandle &nodeHandle
 
   computeDefaultNeedleWrtGripperTransform();
 
-  getTransforms();
+  getTransforms(); // no restriction implied here.
 
+
+  // TODO bridge the HMI
   exit_pt_publisher_ = nh_.advertise<geometry_msgs::Point>("exit_points", 1);
   exit_pt_score_publisher_ = nh_.advertise<std_msgs::Int32MultiArray>("exit_points_score", 1);
   exit_pt_array_publisher_ = nh_.advertise<geometry_msgs::Polygon>("exit_point_array", 1);
@@ -405,7 +407,7 @@ double RnNeedleDrivingPlanner::computeNeedleDriveGripperAffines(int arm_index,
         des_gripper_one_affine_wrt_lt_camera =
             tissue_affine_wrt_lt_camera_ * des_gripper_one_affine_wrt_tissue;
         des_gripper_one_wrt_base =
-            psm_one_affine_wrt_lt_camera_.inverse() * gripper_one_affine_wrt_lt_camera_;
+            psm_one_affine_wrt_lt_camera_.inverse() * des_gripper_one_affine_wrt_lt_camera;
 
 
         if (ik_solver_.ik_solve(des_gripper_one_wrt_base)) {
@@ -434,7 +436,7 @@ double RnNeedleDrivingPlanner::computeNeedleDriveGripperAffines(int arm_index,
         des_gripper_two_affine_wrt_lt_camera =
             tissue_affine_wrt_lt_camera_ * des_gripper_two_affine_wrt_tissue;
         des_gripper_two_wrt_base =
-            psm_two_affine_wrt_lt_camera_.inverse() * gripper_two_affine_wrt_lt_camera_;
+            psm_two_affine_wrt_lt_camera_.inverse() * des_gripper_two_affine_wrt_lt_camera;
 
 
         if (ik_solver_.ik_solve(des_gripper_two_wrt_base)) {
@@ -511,15 +513,18 @@ void RnNeedleDrivingPlanner::updateNeedleAndTissueParameters(const geometry_msgs
   ROS_INFO("Needle entry point has been updated.");
   needle_exit_point_ = convertPointStampedToEigenVector(needle_exit_pt);
   ROS_INFO("Needle exit point has been updated.");
+
+  // Make sure the exit point is valid, if not, adjust it
+
+  checkExitPoint(needle_entry_point_, needle_exit_point_, dist_entrance_to_exit_);
+
   defineTissueFrameWrtLtCamera(needle_entry_point_, needle_exit_point_, tissue_normal_);
   ROS_INFO("Tissue Frame definition has been updated.");
 
-  temp1 = needle_exit_point_.transpose() * needle_exit_point_;
-  temp2 = needle_entry_point_.transpose() * needle_entry_point_;
-  temp3 = temp1 - temp2;
-  dist_entrance_to_exit_ = sqrt(abs(temp3));
   needle_axis_ht_ = sqrt(needle_radius_ * needle_radius_ - (dist_entrance_to_exit_ / 2) * (dist_entrance_to_exit_ / 2));
   suture_depth_ = needle_radius_ - needle_axis_ht_;
+  ROS_INFO("Needle axis height/suture depth has been updated.");
+
   needle_origin_wrt_tissue_frame << 0.5 * dist_entrance_to_exit_, 0, needle_axis_ht_;
   initial_needle_affine_wrt_tissue_frame_.translation() = needle_origin_wrt_tissue_frame;
   ROS_INFO("Needle Tissue Transform has been updated.");
@@ -927,4 +932,41 @@ geometry_msgs::TransformStamped RnNeedleDrivingPlanner::getBestGraspTransform(Ei
 }
 
 
+
+/*
+ * To make sure the entry-exit distance is less than the needle diameter. This function is called
+ * internally by another member function updateNeedleAndTissueParameters().
+ */
+void RnNeedleDrivingPlanner::checkExitPoint(const Eigen::Vector3d& entry_pt,
+                                            Eigen::Vector3d& exit_pt,
+                                            double& dist_entry_exit) {
+
+  double temp1, temp2, temp3;
+  Eigen::Vector3d direction;
+
+  direction = exit_pt - entry_pt;
+  direction = direction/direction.norm();
+
+  temp1 = exit_pt.transpose() * exit_pt;
+  temp2 = entry_pt.transpose() * entry_pt;
+  temp3 = temp1 - temp2;
+
+  dist_entry_exit = sqrt(abs(temp3));
+
+  if (dist_entry_exit >= 2*needle_radius_) {
+    ROS_WARN("The entry exit distance (%f) is greater than the needle diameter. It will be adjusted!",
+             dist_entry_exit);
+
+    // Update exit point and distance
+    exit_pt = entry_pt + direction * 1.8 * needle_radius_;
+    temp1 = exit_pt.transpose() * exit_pt;
+    temp3 = temp1 - temp2;
+    dist_entry_exit = sqrt(abs(temp3));
+
+  } else {
+    ROS_INFO("Entry and Exit points check passed.");
+  }
+
+
+}
 
