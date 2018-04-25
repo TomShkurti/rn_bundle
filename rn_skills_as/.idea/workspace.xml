@@ -133,8 +133,8 @@
                 <file leaf-file-name="RnNeedleDrivingPlanner.cpp" pinned="false" current-in-tab="true">
                   <entry file="file://$PROJECT_DIR$/src/RnNeedleDrivingPlanner.cpp">
                     <provider selected="true" editor-type-id="text-editor">
-                      <state relative-caret-position="306">
-                        <caret line="602" column="29" selection-start-line="602" selection-start-column="29" selection-end-line="606" selection-end-column="112" />
+                      <state relative-caret-position="36">
+                        <caret line="585" selection-start-line="585" selection-end-line="585" />
                       </state>
                     </provider>
                   </entry>
@@ -146,8 +146,8 @@
                 <file leaf-file-name="RnNeedleDrivingPlanner.cpp" pinned="false" current-in-tab="true">
                   <entry file="file://$PROJECT_DIR$/src/RnNeedleDrivingPlanner.cpp">
                     <provider selected="true" editor-type-id="text-editor">
-                      <state relative-caret-position="306">
-                        <caret line="1001" column="2" lean-forward="true" selection-start-line="1001" selection-start-column="2" selection-end-line="1001" selection-end-column="29" />
+                      <state relative-caret-position="330">
+                        <caret line="22" column="38" selection-start-line="22" selection-start-column="38" selection-end-line="22" selection-end-column="38" />
                       </state>
                     </provider>
                   </entry>
@@ -164,26 +164,32 @@
     <favorites_list name="rn_skills_as" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.6282974">
+    <splitter split-orientation="horizontal" split-proportion="0.6038916">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="DavinciSkillsActionServer.cpp" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/DavinciSkillsActionServer.cpp">
+          <file leaf-file-name="rn_needle_driving_fncs_test_main.cpp" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/tests/rn_needle_driving_fncs_test_main.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="240">
-                  <caret line="16" column="1" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
-                  <folding>
-                    <element signature="e#609#3230#0" />
-                  </folding>
+                <state relative-caret-position="540">
+                  <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="RnNeedleDrivingPlanner.cpp" pinned="false" current-in-tab="true">
+          <file leaf-file-name="DavinciSkillsActionServer.cpp" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/DavinciSkillsActionServer.cpp">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="555">
+                  <caret line="37" selection-start-line="37" selection-end-line="37" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="RnNeedleDrivingPlanner.cpp" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/RnNeedleDrivingPlanner.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="507">
-                  <caret line="946" lean-forward="true" selection-start-line="946" selection-end-line="946" />
+                <state relative-caret-position="192">
+                  <caret line="859" column="58" selection-start-line="859" selection-start-column="58" selection-end-line="859" selection-end-column="58" />
                   <folding>
                     <element signature="e#156#802#0" />
                     <element signature="e#805#2945#0" />
@@ -242,8 +248,8 @@
           <file leaf-file-name="RnNeedleDrivingPlanner.h" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/include/rn_skills_as/RnNeedleDrivingPlanner.h">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="374">
-                  <caret line="485" column="41" selection-start-line="485" selection-start-column="30" selection-end-line="485" selection-end-column="41" />
+                <state relative-caret-position="360">
+                  <caret line="87" column="100" lean-forward="true" selection-start-line="86" selection-start-column="56" selection-end-line="87" selection-end-column="100" />
                   <folding>
                     <element signature="e#8075#8497#0" />
                     <element signature="e#8501#9172#0" />
@@ -264,8 +270,8 @@
           <file leaf-file-name="rn_davinci_skills_base.h" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/include/rn_skills_as/rn_davinci_skills_base.h">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="90">
-                  <caret line="8" column="19" lean-forward="true" selection-start-line="8" selection-start-column="19" selection-end-line="8" selection-end-column="19" />
+                <state relative-caret-position="-13">
+                  <caret line="8" column="19" selection-start-line="8" selection-start-column="19" selection-end-line="8" selection-end-column="19" />
                 </state>
               </provider>
             </entry>
@@ -273,8 +279,8 @@
           <file leaf-file-name="RnNeedleDrivingPlanner.cpp" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/RnNeedleDrivingPlanner.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="9045">
-                  <caret line="606" column="60" selection-start-line="606" selection-start-column="60" selection-end-line="606" selection-end-column="60" />
+                <state relative-caret-position="345">
+                  <caret line="607" column="60" selection-start-line="607" selection-start-column="60" selection-end-line="607" selection-end-column="60" />
                   <folding>
                     <element signature="e#156#802#0" />
                     <element signature="e#805#2945#0" />
@@ -307,8 +313,8 @@
           <file leaf-file-name="CMakeLists.txt" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="345">
-                  <caret line="23" column="2" selection-start-line="23" selection-start-column="2" selection-end-line="23" selection-end-column="2" />
+                <state relative-caret-position="178">
+                  <caret line="133" column="1" lean-forward="true" selection-start-line="133" selection-start-column="1" selection-end-line="133" selection-end-column="1" />
                 </state>
               </provider>
             </entry>
@@ -328,9 +334,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>add_depen</find>
-      <find>generate_messages</find>
-      <find>find_package</find>
       <find>actionlib_msgs</find>
       <find>NeedleDriveLiteGoalConstPtr</find>
       <find>message_generation</find>
@@ -338,7 +341,6 @@
       <find>psm</find>
       <find>des_trajectory</find>
       <find>actionlib</find>
-      <find>rnNeedleDrivingPlanner</find>
       <find>initial_needle_affine_wrt_tissue_frame_</find>
       <find>updateNeedleAndTissueParameters</find>
       <find>getbest</find>
@@ -353,11 +355,15 @@
       <find>requestNeedleDrivingTrajectoryDefaultGrasp</find>
       <find>requestOneNeedleDrivingTrajectory</find>
       <find>convert</find>
-      <find>Vectorq7x1</find>
       <find>convertAffinesToTrajectoryMsgs</find>
       <find>dist</find>
       <find>temp</find>
       <find>temp1</find>
+      <find>davinci_fwd_solver_</find>
+      <find>RnNeedleDrivingPlanner</find>
+      <find>Vectorq7x1</find>
+      <find>rnNeedleDrivingPlanner</find>
+      <find>add_lib</find>
     </findStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -365,16 +371,16 @@
       <list>
         <option value="$PROJECT_DIR$/src/RnNeedleDrivingPlanner.h" />
         <option value="$PROJECT_DIR$/tests/rn_needle_driving_test_main.cpp" />
-        <option value="$PROJECT_DIR$/tests/rn_needle_driving_fncs_test_main.cpp" />
         <option value="$PROJECT_DIR$/include/rn_skills_as/rn_davinci_skills_base.h" />
         <option value="$PROJECT_DIR$/src/DavinciSkillsActionServer.h" />
         <option value="$PROJECT_DIR$/src/DavinciSkillsActionClient.cpp" />
         <option value="$PROJECT_DIR$/package.xml" />
-        <option value="$PROJECT_DIR$/CMakeLists.txt" />
-        <option value="$PROJECT_DIR$/src/DavinciSkillsActionServer.cpp" />
         <option value="$PROJECT_DIR$/include/rn_skills_as/DavinciSkillsActionServer.h" />
-        <option value="$PROJECT_DIR$/include/rn_skills_as/RnNeedleDrivingPlanner.h" />
+        <option value="$PROJECT_DIR$/src/DavinciSkillsActionServer.cpp" />
         <option value="$PROJECT_DIR$/src/RnNeedleDrivingPlanner.cpp" />
+        <option value="$PROJECT_DIR$/include/rn_skills_as/RnNeedleDrivingPlanner.h" />
+        <option value="$PROJECT_DIR$/CMakeLists.txt" />
+        <option value="$PROJECT_DIR$/tests/rn_needle_driving_fncs_test_main.cpp" />
       </list>
     </option>
   </component>
@@ -472,6 +478,12 @@
               <item name="rn_skills_as" type="462c0819:PsiDirectoryNode" />
               <item name="include" type="462c0819:PsiDirectoryNode" />
               <item name="rn_skills_as" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rn_skills_as" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rn_skills_as" type="47feb1d3:ProjectViewModuleNode" />
+              <item name="rn_skills_as" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -724,12 +736,12 @@
       <workItem from="1524616988758" duration="146000" />
       <workItem from="1524618186141" duration="863000" />
       <workItem from="1524619167645" duration="9507000" />
-      <workItem from="1524664754401" duration="6158000" />
+      <workItem from="1524664754401" duration="8099000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="84212000" />
+    <option name="totallyTimeSpent" value="86153000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -744,14 +756,14 @@
     <frame x="1976" y="-14" width="1865" height="1095" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49567723" visible="true" weight="0.21793479" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49567723" visible="true" weight="0.21793479" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32881" />
-      <window_info anchor="bottom" id="CMake" order="7" visible="true" weight="0.27557412" />
+      <window_info anchor="bottom" id="CMake" order="7" weight="0.27557412" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5021739" side_tool="true" weight="0.24270834" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32916668" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info id="Structure" order="2" sideWeight="0.50432277" weight="0.09347826" />
-      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.4978261" weight="0.20876826" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" sideWeight="0.4978261" visible="true" weight="0.20876826" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info id="Favorites" order="1" sideWeight="0.50432277" side_tool="true" weight="0.067391306" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -826,9 +838,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
           <caret line="16" column="1" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
-          <folding>
-            <element signature="e#609#3230#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1274,13 +1283,6 @@
     <entry file="file://$PROJECT_DIR$/src/test.cpp" />
     <entry file="file://$PROJECT_DIR$/src/test.h" />
     <entry file="file://$PROJECT_DIR$/src/rn_davinci_skills_base.h" />
-    <entry file="file:///opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="165" selection-start-line="165" selection-end-line="165" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/include/rn_skills_as/DavinciSkillsActionClient.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
@@ -1309,13 +1311,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="2" selection-start-line="23" selection-start-column="2" selection-end-line="23" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/include/rn_skills_as/DavinciSkillsActionServer.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="720">
@@ -1323,54 +1318,38 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/DavinciSkillsActionServer.cpp">
+    <entry file="file:///opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="1" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
-          <folding>
-            <element signature="e#609#3230#0" />
-          </folding>
+        <state relative-caret-position="222">
+          <caret line="101" selection-start-line="101" selection-end-line="101" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tests/rn_needle_driving_fncs_test_main.cpp">
+    <entry file="file://$PROJECT_DIR$/src/DavinciSkillsActionServer.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" selection-start-line="9" selection-end-line="9" />
+        <state relative-caret-position="555">
+          <caret line="37" selection-start-line="37" selection-end-line="37" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/include/rn_skills_as/rn_davinci_skills_base.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="8" column="19" lean-forward="true" selection-start-line="8" selection-start-column="19" selection-end-line="8" selection-end-column="19" />
+        <state relative-caret-position="-13">
+          <caret line="8" column="19" selection-start-line="8" selection-start-column="19" selection-end-line="8" selection-end-column="19" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/include/rn_skills_as/RnNeedleDrivingPlanner.h">
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1965">
-          <caret line="131" column="50" selection-start-line="131" selection-start-column="50" selection-end-line="131" selection-end-column="50" />
-          <folding>
-            <element signature="e#8075#8497#0" />
-            <element signature="e#8501#9172#0" />
-            <element signature="e#9176#9405#0" />
-            <element signature="e#9409#9696#0" />
-            <element signature="e#9700#9987#0" />
-            <element signature="e#9991#10296#0" />
-            <element signature="e#10300#10805#0" />
-            <element signature="e#10809#11129#0" />
-            <element signature="e#11157#11393#0" />
-            <element signature="e#11397#11639#0" />
-            <element signature="e#11643#11874#0" />
-          </folding>
+        <state relative-caret-position="178">
+          <caret line="133" column="1" lean-forward="true" selection-start-line="133" selection-start-column="1" selection-end-line="133" selection-end-column="1" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/RnNeedleDrivingPlanner.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="507">
-          <caret line="946" lean-forward="true" selection-start-line="946" selection-end-line="946" />
+        <state relative-caret-position="192">
+          <caret line="859" column="58" selection-start-line="859" selection-start-column="58" selection-end-line="859" selection-end-column="58" />
           <folding>
             <element signature="e#156#802#0" />
             <element signature="e#805#2945#0" />
@@ -1396,6 +1375,33 @@
             <element signature="e#34128#35273#0" />
             <element signature="e#38673#39277#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/rn_skills_as/RnNeedleDrivingPlanner.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1965">
+          <caret line="131" column="50" selection-start-line="131" selection-start-column="50" selection-end-line="131" selection-end-column="50" />
+          <folding>
+            <element signature="e#8075#8497#0" />
+            <element signature="e#8501#9172#0" />
+            <element signature="e#9176#9405#0" />
+            <element signature="e#9409#9696#0" />
+            <element signature="e#9700#9987#0" />
+            <element signature="e#9991#10296#0" />
+            <element signature="e#10300#10805#0" />
+            <element signature="e#10809#11129#0" />
+            <element signature="e#11157#11393#0" />
+            <element signature="e#11397#11639#0" />
+            <element signature="e#11643#11874#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/rn_needle_driving_fncs_test_main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
         </state>
       </provider>
     </entry>

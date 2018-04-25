@@ -142,6 +142,9 @@ add_library(RnNeedleDrivingPlanner src/RnNeedleDrivingPlanner.cpp)
 add_library(DavinciActionServer src/DavinciSkillsActionServer.cpp )
 add_library(DavinciActionClient src/DavinciSkillsActionClient.cpp )
 
+target_link_libraries(RnNeedleDrivingPlanner
+        ${catkin_LIBRARIES})
+
 target_link_libraries(DavinciActionServer
         RnNeedleDrivingPlanner ${catkin_LIBRARIES})
 

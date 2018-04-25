@@ -7,7 +7,8 @@
 #include "rn_skills_as/RnNeedleDrivingPlanner.h"
 
 
-RnNeedleDrivingPlanner::RnNeedleDrivingPlanner(const ros::NodeHandle &nodeHandle){
+RnNeedleDrivingPlanner::RnNeedleDrivingPlanner(const ros::NodeHandle &nodeHandle):
+    nh_(nodeHandle){
 
   ROS_INFO("Constructing a Needle Planner");
 

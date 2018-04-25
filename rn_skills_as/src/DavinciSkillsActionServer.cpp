@@ -35,6 +35,8 @@ void go(
     double t
 ){
   // Start at the last known position.
+
+
   sensor_msgs::JointState js;
   psm.get_fresh_psm_state(js);
   trajectory_msgs::JointTrajectoryPoint trajectory_point_prev;
