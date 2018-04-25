@@ -13,7 +13,7 @@ class RnNeedleDrivingPlanner {
  public:
 
   explicit RnNeedleDrivingPlanner(const ros::NodeHandle &nodeHandle);
-  ~RnNeedleDrivingPlanner();
+  // ~RnNeedleDrivingPlanner();
 
   /// Initialisations, normally only get called once.
   bool getNeedleParams();
