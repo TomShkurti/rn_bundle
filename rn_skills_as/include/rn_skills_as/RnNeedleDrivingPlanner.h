@@ -83,10 +83,10 @@ class RnNeedleDrivingPlanner {
    * @param needleDriveTraj
    * @return true only when the fraction of valid waypoints is 1.
    */
-  bool requestNeedleDrivingTrajctoryDefaultGrasp(const int arm_index,
-                                                 const geometry_msgs::PointStamped &needle_entry_pt,
-                                                 const geometry_msgs::PointStamped &needle_exit_pt,
-                                                 trajectory_msgs::JointTrajectory &needleDriveTraj);
+  bool requestNeedleDrivingTrajectoryDefaultGrasp(const int arm_index,
+                                                  const geometry_msgs::PointStamped &needle_entry_pt,
+                                                  const geometry_msgs::PointStamped &needle_exit_pt,
+                                                  trajectory_msgs::JointTrajectory &needleDriveTraj);
 
   /**
    * Use user defined grasp transform to attempt a needle driving trajectory
@@ -98,11 +98,11 @@ class RnNeedleDrivingPlanner {
    * @return true only when the fraction of valid waypoints is 1.
    * @return
    */
-  bool requestOneNeedleDrivingTrajctory(const int arm_index,
-                                        const geometry_msgs::PointStamped &needle_entry_pt,
-                                        const geometry_msgs::PointStamped &needle_exit_pt,
-                                        const geometry_msgs::TransformStamped &grasp_transform,
-                                        trajectory_msgs::JointTrajectory &needleDriveTraj);
+  bool requestOneNeedleDrivingTrajectory(const int arm_index,
+                                         const geometry_msgs::PointStamped &needle_entry_pt,
+                                         const geometry_msgs::PointStamped &needle_exit_pt,
+                                         const geometry_msgs::TransformStamped &grasp_transform,
+                                         trajectory_msgs::JointTrajectory &needleDriveTraj);
 
 
   /**
@@ -115,11 +115,11 @@ class RnNeedleDrivingPlanner {
    * @param grasp_transform
    * @return
    */
-  bool requestOneNeedleDrivingTrajctory(const int arm_index,
-                                        const geometry_msgs::PointStamped &needle_entry_pt,
-                                        const geometry_msgs::PointStamped &needle_exit_pt,
-                                        trajectory_msgs::JointTrajectory &needleDriveTraj,
-                                        geometry_msgs::TransformStamped &grasp_transform);
+  bool requestOneNeedleDrivingTrajectory(const int arm_index,
+                                         const geometry_msgs::PointStamped &needle_entry_pt,
+                                         const geometry_msgs::PointStamped &needle_exit_pt,
+                                         trajectory_msgs::JointTrajectory &needleDriveTraj,
+                                         geometry_msgs::TransformStamped &grasp_transform);
 
 
   /**
@@ -344,9 +344,47 @@ class RnNeedleDrivingPlanner {
   }
 
 
-  /// Camera Free Needle Drive Fncs
+  /// Camera Free Needle Drive Functions
+
+  /**
+   * Set hard coded transform of camera psm
+   * @param psm_one_affine_wrt_lt_camera: use this to replace the member variable
+   * @param psm_two_affine_wrt_lt_camera: use this to replace the member varibale
+   */
+  void setHardCodedTransforms(Eigen::Affine3d psm_one_affine_wrt_lt_camera,
+                              Eigen::Affine3d psm_two_affine_wrt_lt_camera);
+
+  void overlapLeftCamFrameAndPsmBase(int arm_index);
+
+  /// may not be of much use now
+  Eigen::Affine3d convertPsmBaseFrameCoordinateToCameraFrame(int arm_index,
+                                                             Eigen::Affine3d coord_base_frame);
+
+  // TODO Seems that we set the tf from cam to psm base to be identity matrix will do the job
+  // because if the cam_frame is the base_frame, whatever you order in the cam_frame is equivlent of
+  // having it ordered in the base frame in the first place. BUT, we have 2 pams.. So we have to
+  // do it once a time.
+
+  bool requestNeedleDrivingTrajctoryDefaultGraspInBaseFrame(const int arm_index,
+                                                            const geometry_msgs::PointStamped &needle_entry_pt_wrt_base,
+                                                            const geometry_msgs::PointStamped &needle_exit_pt_wrt_base,
+                                                            trajectory_msgs::JointTrajectory &needleDriveTraj);
 
 
+  bool requestOneNeedleDrivingTrajectoryInBaseFrame(const int arm_index,
+                                                    const geometry_msgs::PointStamped &needle_entry_pt,
+                                                    const geometry_msgs::PointStamped &needle_exit_pt,
+                                                    const geometry_msgs::TransformStamped &grasp_transform,
+                                                    trajectory_msgs::JointTrajectory &needleDriveTraj);
+
+
+  // TODO caution! This may not be that straight forward. Make sure the artificial cam frame is not going to affect it.
+
+  bool requestOneNeedleDrivingTrajectoryInBaseFrame(const int arm_index,
+                                                    const geometry_msgs::PointStamped &needle_entry_pt,
+                                                    const geometry_msgs::PointStamped &needle_exit_pt,
+                                                    trajectory_msgs::JointTrajectory &needleDriveTraj,
+                                                    geometry_msgs::TransformStamped &grasp_transform);
 
 
 

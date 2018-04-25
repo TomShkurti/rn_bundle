@@ -539,10 +539,10 @@ void RnNeedleDrivingPlanner::updateNeedleAndTissueParameters(const geometry_msgs
  * Use default grasp transform and attempt a needle driving trajectory
  * with given entry and exit points.
  */
-bool RnNeedleDrivingPlanner::requestNeedleDrivingTrajctoryDefaultGrasp(const int arm_index,
-                                                                       const geometry_msgs::PointStamped &needle_entry_pt,
-                                                                       const geometry_msgs::PointStamped &needle_exit_pt,
-                                                                       trajectory_msgs::JointTrajectory &needleDriveTraj) {
+bool RnNeedleDrivingPlanner::requestNeedleDrivingTrajectoryDefaultGrasp(const int arm_index,
+                                                                        const geometry_msgs::PointStamped &needle_entry_pt,
+                                                                        const geometry_msgs::PointStamped &needle_exit_pt,
+                                                                        trajectory_msgs::JointTrajectory &needleDriveTraj) {
 
   double ik_fraction;
 
@@ -567,11 +567,11 @@ bool RnNeedleDrivingPlanner::requestNeedleDrivingTrajctoryDefaultGrasp(const int
  * Use user defined grasp transform to attempt a needle driving trajectory
  * with given entry and exit points.
  */
-bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajctory(const int arm_index,
-                                                              const geometry_msgs::PointStamped &needle_entry_pt,
-                                                              const geometry_msgs::PointStamped &needle_exit_pt,
-                                                              const geometry_msgs::TransformStamped &grasp_transform,
-                                                              trajectory_msgs::JointTrajectory &needleDriveTraj) {
+bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectory(const int arm_index,
+                                                               const geometry_msgs::PointStamped &needle_entry_pt,
+                                                               const geometry_msgs::PointStamped &needle_exit_pt,
+                                                               const geometry_msgs::TransformStamped &grasp_transform,
+                                                               trajectory_msgs::JointTrajectory &needleDriveTraj) {
 
   double ik_fraction;
 
@@ -597,11 +597,11 @@ bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajctory(const int arm_inde
  * Find a trajectory which allows a needle driving from the entry to exit requested by the user
  * Auto-search for a grasp transform that works.
  */
-bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajctory(const int arm_index,
-                                                              const geometry_msgs::PointStamped &needle_entry_pt,
-                                                              const geometry_msgs::PointStamped &needle_exit_pt,
-                                                              trajectory_msgs::JointTrajectory &needleDriveTraj,
-                                                              geometry_msgs::TransformStamped &grasp_transform) {
+bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectory(const int arm_index,
+                                                               const geometry_msgs::PointStamped &needle_entry_pt,
+                                                               const geometry_msgs::PointStamped &needle_exit_pt,
+                                                               trajectory_msgs::JointTrajectory &needleDriveTraj,
+                                                               geometry_msgs::TransformStamped &grasp_transform) {
 
   cwru_davinci_msgs::ListOfTransformStamped potential_transform_list;
   cwru_davinci_msgs::ListOfTransformStamped valid_transform_list;
@@ -785,11 +785,11 @@ double RnNeedleDrivingPlanner::filterValidExitPoints(const int arm_index,
 
   for (int n = 0; n < n_candidates; n++) {
 
-    if (requestOneNeedleDrivingTrajctory(arm_index,
-                                         needle_entry_pt,
-                                         exit_points_array.stamped_point_list[n],
-                                         needleDriveTraj,
-                                         grasp_transform)) {
+    if (requestOneNeedleDrivingTrajectory(arm_index,
+                                          needle_entry_pt,
+                                          exit_points_array.stamped_point_list[n],
+                                          needleDriveTraj,
+                                          grasp_transform)) {
 
       valid_count ++;
       valid_exit_points_array.stamped_point_list.push_back(exit_points_array.stamped_point_list[n]);
@@ -828,7 +828,7 @@ double RnNeedleDrivingPlanner::filterValidExitPoints(const int arm_index,
 
   for (int n = 0; n < n_candidates; n++) {
 
-    if (requestOneNeedleDrivingTrajctory(arm_index,
+    if (requestOneNeedleDrivingTrajectory(arm_index,
                                          needle_entry_pt,
                                          exit_points_array.stamped_point_list[n],
                                          grasp_tf,
@@ -870,10 +870,10 @@ double RnNeedleDrivingPlanner::filterValidExitPointsDefaultGrasp(const int arm_i
 
   for (int n = 0; n < n_candidates; n++) {
 
-    if (requestNeedleDrivingTrajctoryDefaultGrasp(arm_index,
-                                                  needle_entry_pt,
-                                                  exit_points_array.stamped_point_list[n],
-                                                  needleDriveTraj)) {
+    if (requestNeedleDrivingTrajectoryDefaultGrasp(arm_index,
+                                                   needle_entry_pt,
+                                                   exit_points_array.stamped_point_list[n],
+                                                   needleDriveTraj)) {
 
       valid_count ++;
       valid_exit_points_array.stamped_point_list.push_back(exit_points_array.stamped_point_list[n]);

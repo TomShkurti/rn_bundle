@@ -205,7 +205,7 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5332168">
+    <splitter split-orientation="horizontal" split-proportion="0.51456875">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file leaf-file-name="DavinciSkillsActionServer.cpp" pinned="false" current-in-tab="false">
@@ -223,13 +223,13 @@
           <file leaf-file-name="RnNeedleDrivingPlanner.cpp" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/RnNeedleDrivingPlanner.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="195">
-                  <caret line="22" selection-start-line="22" selection-end-line="22" />
+                <state relative-caret-position="-1247">
+                  <caret line="791" column="39" selection-start-line="791" selection-start-column="39" selection-end-line="791" selection-end-column="39" />
                   <folding>
+                    <element signature="e#156#744#0" />
                     <element signature="e#747#2887#0" />
                     <element signature="e#2890#5797#0" />
                     <element signature="e#5800#5923#0" />
-                    <element signature="e#5926#7363#0" />
                     <element signature="e#8825#10074#0" />
                     <element signature="e#10077#11437#0" />
                     <element signature="e#11440#12807#0" />
@@ -239,9 +239,7 @@
                     <element signature="e#21718#24394#0" />
                     <element signature="e#24398#27048#0" />
                     <element signature="e#27052#28256#0" />
-                    <element signature="e#28261#29784#0" />
                     <element signature="e#29787#31405#0" />
-                    <element signature="e#31409#32956#0" />
                     <element signature="e#32960#34024#0" />
                   </folding>
                 </state>
@@ -251,8 +249,19 @@
           <file leaf-file-name="RnNeedleDrivingPlanner.h" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/include/rn_skills_as/RnNeedleDrivingPlanner.h">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="5220">
-                  <caret line="369" column="32" lean-forward="true" selection-start-line="369" selection-start-column="32" selection-end-line="369" selection-end-column="32" />
+                <state relative-caret-position="-345">
+                  <caret line="131" column="50" selection-start-line="131" selection-start-column="50" selection-end-line="131" selection-end-column="50" />
+                  <folding>
+                    <element signature="e#1671#1904#0" />
+                    <element signature="e#2117#2215#0" />
+                    <element signature="e#2177#2521#0" />
+                    <element signature="e#2897#3258#0" />
+                    <element signature="e#3695#4000#0" />
+                    <element signature="e#4431#4677#0" />
+                    <element signature="e#4886#5072#0" />
+                    <element signature="e#5302#5567#0" />
+                    <element signature="e#5897#6183#0" />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -264,8 +273,8 @@
           <file leaf-file-name="RnNeedleDrivingPlanner.h" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/include/rn_skills_as/RnNeedleDrivingPlanner.h">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="212">
-                  <caret line="326" lean-forward="true" selection-start-line="326" selection-end-line="326" />
+                <state relative-caret-position="362">
+                  <caret line="372" lean-forward="true" selection-start-line="372" selection-end-line="372" />
                   <folding>
                     <element signature="e#2120#2464#0" />
                     <element signature="e#2840#3201#0" />
@@ -292,8 +301,8 @@
           <file leaf-file-name="RnNeedleDrivingPlanner.cpp" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/RnNeedleDrivingPlanner.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-270">
-                  <caret line="32" column="27" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="27" />
+                <state relative-caret-position="345">
+                  <caret line="603" column="60" selection-start-line="603" selection-start-column="60" selection-end-line="603" selection-end-column="60" />
                   <folding>
                     <element signature="e#156#744#0" />
                     <element signature="e#747#2887#0" />
@@ -343,8 +352,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>needle_affine_wrt_grasp_one_frame_</find>
-      <find>trajectory_msgs::JointTrajectory</find>
       <find>updateNeedleWrtGripperTransforms</find>
       <find>v_entrance_to_exit_</find>
       <find>exit_pt_stamped_temp</find>
@@ -370,9 +377,11 @@
       <find>getbest</find>
       <find>update</find>
       <find>dist</find>
-      <find>dist_entrance_to_exit_</find>
       <find>gripper_one_affine_wrt_lt_camera_</find>
+      <find>dist_entrance_to_exit_</find>
       <find>getTransforms</find>
+      <find>psm_one_affine_wrt_lt_camera_</find>
+      <find>Trajctory</find>
     </findStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -388,8 +397,8 @@
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/src/DavinciSkillsActionServer.cpp" />
         <option value="$PROJECT_DIR$/include/rn_skills_as/DavinciSkillsActionServer.h" />
-        <option value="$PROJECT_DIR$/src/RnNeedleDrivingPlanner.cpp" />
         <option value="$PROJECT_DIR$/include/rn_skills_as/RnNeedleDrivingPlanner.h" />
+        <option value="$PROJECT_DIR$/src/RnNeedleDrivingPlanner.cpp" />
       </list>
     </option>
   </component>
@@ -756,12 +765,12 @@
       <workItem from="1524615904928" duration="1061000" />
       <workItem from="1524616988758" duration="146000" />
       <workItem from="1524618186141" duration="863000" />
-      <workItem from="1524619167645" duration="7319000" />
+      <workItem from="1524619167645" duration="9507000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="75866000" />
+    <option name="totallyTimeSpent" value="78054000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -774,16 +783,17 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1976" y="-14" width="1865" height="1095" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49567723" visible="true" weight="0.067391306" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49567723" visible="true" weight="0.067391306" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32881" />
-      <window_info anchor="bottom" id="CMake" order="7" weight="0.27557412" />
+      <window_info active="true" anchor="bottom" id="CMake" order="7" visible="true" weight="0.27557412" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5021739" side_tool="true" weight="0.24270834" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32916668" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info id="Structure" order="2" sideWeight="0.50432277" side_tool="true" weight="0.18423913" />
-      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.4978261" visible="true" weight="0.20876826" />
+      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.4978261" weight="0.20876826" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info id="Favorites" order="1" side_tool="true" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -803,7 +813,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="13" />
+      <option name="time" value="15" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -1340,8 +1350,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/RnNeedleDrivingPlanner.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-270">
-          <caret line="32" column="27" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="27" />
+        <state relative-caret-position="345">
+          <caret line="603" column="60" selection-start-line="603" selection-start-column="60" selection-end-line="603" selection-end-column="60" />
           <folding>
             <element signature="e#156#744#0" />
             <element signature="e#747#2887#0" />
@@ -1368,8 +1378,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/include/rn_skills_as/RnNeedleDrivingPlanner.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="212">
-          <caret line="326" lean-forward="true" selection-start-line="326" selection-end-line="326" />
+        <state relative-caret-position="362">
+          <caret line="372" lean-forward="true" selection-start-line="372" selection-end-line="372" />
           <folding>
             <element signature="e#2120#2464#0" />
             <element signature="e#2840#3201#0" />
