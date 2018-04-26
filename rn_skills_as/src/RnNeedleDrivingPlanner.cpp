@@ -14,6 +14,9 @@ RnNeedleDrivingPlanner::RnNeedleDrivingPlanner(const ros::NodeHandle &nodeHandle
 
   tissue_normal_ << 0, 0, -1;
 
+  ROS_INFO("Resizing ik_ok_array, there are %d path waypoints.", path_waypoints_);
+  ik_ok_array_.resize(path_waypoints_);
+
   if (!getNeedleParams()){
     throw std::runtime_error("Cannot load needle parameters");
   }
@@ -109,6 +112,7 @@ void RnNeedleDrivingPlanner::computeDefaultNeedleWrtGripperTransform(){
   needle_rotation_wrt_grasp_one_frame_.col(2) = bvec_needle_wrt_grasp_frame;
   needle_affine_wrt_grasp_one_frame_.linear() = needle_rotation_wrt_grasp_one_frame_;
   needle_affine_wrt_grasp_one_frame_.translation() = needle_origin_wrt_grasp_one_frame_;
+
   default_needle_affine_wrt_grasp_one_frame_ = needle_affine_wrt_grasp_one_frame_;
   default_preferred_grasp_one_tf_ = default_needle_affine_wrt_grasp_one_frame_;
   // Calculating Needle frame wrt Gripper frame
@@ -158,7 +162,7 @@ bool RnNeedleDrivingPlanner::getCameraToPSMsTransforms(){
   ROS_INFO("Attempting to get Camera PSMs transforms");
 
   while (!tf_acquired){
-    if (n_tries > 5) break;
+    if (n_tries > 2) break;
     tf_acquired = true;
     try {
       tfListener.lookupTransform("left_camera_optical_frame",
@@ -266,13 +270,14 @@ void RnNeedleDrivingPlanner::defineTissueFrameWrtLtCamera(Eigen::Vector3d entry_
   tvec_tissue_frame_wrt_camera = bvec_tissue_frame_wrt_camera.cross(nvec_tissue_frame_wrt_camera);
 
   tissue_rotation_wrt_lt_camera_.col(0) = nvec_tissue_frame_wrt_camera;
-  tissue_rotation_wrt_lt_camera_.col(0) = tvec_tissue_frame_wrt_camera;
-  tissue_rotation_wrt_lt_camera_.col(0) = bvec_tissue_frame_wrt_camera;
+  tissue_rotation_wrt_lt_camera_.col(1) = tvec_tissue_frame_wrt_camera;
+  tissue_rotation_wrt_lt_camera_.col(2) = bvec_tissue_frame_wrt_camera;
 
   tissue_affine_wrt_lt_camera_.linear() = tissue_rotation_wrt_lt_camera_;
   tissue_affine_wrt_lt_camera_.translation() = entry_pt;
 
   ROS_INFO("Tissue Frame has been defined with new entry and exit points.");
+
 
 }
 
@@ -359,6 +364,8 @@ void RnNeedleDrivingPlanner::computeGraspTransform(int arm_index,
 double RnNeedleDrivingPlanner::computeNeedleDriveGripperAffines(int arm_index,
                                                                 trajectory_msgs::JointTrajectory &needleDriveTraj){
 
+  ROS_INFO("Computing a needle drive trajectory/affines.");
+
   double fraction;
   /// whichever gripper the user has selected
   Eigen::Affine3d des_gripper_one_wrt_base;
@@ -410,16 +417,17 @@ double RnNeedleDrivingPlanner::computeNeedleDriveGripperAffines(int arm_index,
         des_gripper_one_wrt_base =
             psm_one_affine_wrt_lt_camera_.inverse() * des_gripper_one_affine_wrt_lt_camera;
 
-
-        if (ik_solver_.ik_solve(des_gripper_one_wrt_base)) {
+        if (ik_solver_.ik_solve(des_gripper_one_wrt_base)==1) {
           nsolns++;
           des_gripper_one_affines_wrt_lt_camera.push_back(des_gripper_one_wrt_base);
           ik_ok_array_(ipose) = 1;
         } else {
           ik_ok_array_(ipose) = 0;
         }
+
         phi_insertion += delta_phi;
       }
+
 
       convertAffinesToTrajectoryMsgs(des_gripper_one_affines_wrt_lt_camera, needleDriveTraj);
 
@@ -440,7 +448,7 @@ double RnNeedleDrivingPlanner::computeNeedleDriveGripperAffines(int arm_index,
             psm_two_affine_wrt_lt_camera_.inverse() * des_gripper_two_affine_wrt_lt_camera;
 
 
-        if (ik_solver_.ik_solve(des_gripper_two_wrt_base)) {
+        if (ik_solver_.ik_solve(des_gripper_two_wrt_base)==1) {
           nsolns++;
           des_gripper_two_affines_wrt_lt_camera.push_back(des_gripper_two_wrt_base);
           ik_ok_array_(ipose) = 1;
@@ -456,12 +464,19 @@ double RnNeedleDrivingPlanner::computeNeedleDriveGripperAffines(int arm_index,
 
   }
 
-  std::cout << "ik_ok_point:: " << ik_ok_array_.transpose() << std::endl;
+  std::cout << std::endl;
+  std::cout << "ik_ok_point:  " << ik_ok_array_.transpose() << std::endl;
+  std::cout << std::endl;
 
-  fraction = nsolns/path_waypoints_;
+  fraction = double(nsolns/path_waypoints_);
 
-  if (fraction != 0) {
-    ROS_ERROR("Fraction of IK solutions is: %f", fraction);
+  if (fraction != 1) {
+    ROS_ERROR("Fraction of IK solutions is: %f, with %d solutions, among %d waypoints.",
+              fraction, nsolns, path_waypoints_);
+  } else {
+    ROS_INFO("Needle driving trajectory (containing %d waypoints) computation succeeded with fraction: %f",
+             path_waypoints_,
+             fraction);
   }
 
   return fraction;
@@ -483,24 +498,41 @@ void RnNeedleDrivingPlanner::convertAffinesToTrajectoryMsgs(const std::vector<Ei
   joint_trajectory.joint_names.clear();
   joint_trajectory.header.stamp = ros::Time::now();
   joint_trajectory_point.positions.resize(7);
-  // size = gripper_affines_wrt_camera_.size();
+
   size = gripper_affines_wrt_portal.size();
+
   for (int n = 0; n < size; n++)
   {
+    Vectorq7x1 q_vec1;
     joint_trajectory_point.positions.clear();
-    ik_solver_.ik_solve(gripper_affines_wrt_portal[n]);
-    q_vec1 = ik_solver_.get_soln();
-    q_vec1(6) = 0;
+
+    if (ik_solver_.ik_solve(gripper_affines_wrt_portal[n])==1) {
+
+      q_vec1 = ik_solver_.get_soln();
+      q_vec1(6) = 0;
+    } else {
+      ROS_ERROR("Failed to solve IK while generating a trajectory from affines");
+    }
+
+
+    //TODO delete after debugging
+//    std::cout << " ============================================ " << std::endl;
+//    std::cout << "seq: " << n << std::endl;
+//    std::cout << "q_vec1: " << q_vec1 << std::endl;
+//    std::cout << "-------------" << std::endl;
+//    printEigenAffine(gripper_affines_wrt_portal[n]);
+
+
     for (int i = 0; i < 7; i++)
     {
-      joint_trajectory_point.positions[i] = q_vec1(i);
+      joint_trajectory_point.positions.push_back(q_vec1(i));
     }
     joint_trajectory_point.time_from_start = ros::Duration(n + 5);
     joint_trajectory.points.push_back(joint_trajectory_point);
+
   }
 
   ROS_INFO("Joint Trajectory Generated.");
-
 
 }
 
@@ -543,7 +575,7 @@ void RnNeedleDrivingPlanner::updateNeedleAndTissueParameters(const geometry_msgs
  * Use default grasp transform and attempt a needle driving trajectory
  * with given entry and exit points.
  */
-bool RnNeedleDrivingPlanner::requestNeedleDrivingTrajectoryDefaultGrasp(const int arm_index,
+bool RnNeedleDrivingPlanner::requestNeedleDrivingTrajectoryDefaultGrasp(const int &arm_index,
                                                                         const geometry_msgs::PointStamped &needle_entry_pt,
                                                                         const geometry_msgs::PointStamped &needle_exit_pt,
                                                                         trajectory_msgs::JointTrajectory &needleDriveTraj) {
@@ -553,7 +585,7 @@ bool RnNeedleDrivingPlanner::requestNeedleDrivingTrajectoryDefaultGrasp(const in
   updateNeedleAndTissueParameters(needle_entry_pt, needle_exit_pt);
   needle_affine_wrt_grasp_one_frame_ = default_needle_affine_wrt_grasp_one_frame_;
   needle_affine_wrt_grasp_two_frame_ = default_needle_affine_wrt_grasp_two_frame_;
-  updateNeedleWrtGripperTransforms();
+  updateNeedleWrtGripperTransforms(); // to get needle_affine_wrt_gripper_one_frame_ & needle_affine_wrt_gripper_two_frame_
   ik_fraction = computeNeedleDriveGripperAffines(arm_index, needleDriveTraj);
 
   if (ik_fraction == 1) {
@@ -571,7 +603,7 @@ bool RnNeedleDrivingPlanner::requestNeedleDrivingTrajectoryDefaultGrasp(const in
  * Use user defined grasp transform to attempt a needle driving trajectory
  * with given entry and exit points.
  */
-bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectory(const int arm_index,
+bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectory(const int &arm_index,
                                                                const geometry_msgs::PointStamped &needle_entry_pt,
                                                                const geometry_msgs::PointStamped &needle_exit_pt,
                                                                const geometry_msgs::TransformStamped &grasp_transform,
@@ -582,7 +614,7 @@ bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectory(const int arm_ind
   updateNeedleAndTissueParameters(needle_entry_pt, needle_exit_pt);
 
   computeGraspTransform(arm_index, grasp_transform);
-  updateNeedleWrtGripperTransforms();
+  updateNeedleWrtGripperTransforms(); // TODO not needed perhaps
 
   ik_fraction = computeNeedleDriveGripperAffines(arm_index, needleDriveTraj);
 
@@ -601,7 +633,7 @@ bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectory(const int arm_ind
  * Find a trajectory which allows a needle driving from the entry to exit requested by the user
  * Auto-search for a grasp transform that works.
  */
-bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectory(const int arm_index,
+bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectory(const int &arm_index,
                                                                const geometry_msgs::PointStamped &needle_entry_pt,
                                                                const geometry_msgs::PointStamped &needle_exit_pt,
                                                                trajectory_msgs::JointTrajectory &needleDriveTraj,
@@ -613,6 +645,7 @@ bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectory(const int arm_ind
   double ik_fraction;
   double grasp_trials_fraction;
   int ngrasps = 0;
+  bool has_solution;
 
   switch (arm_index) {
     case 1:
@@ -629,10 +662,19 @@ bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectory(const int arm_ind
 
   for (int i = 0; i < default_grasp_tf_search_resolution_; i++) {
 
-    computeGraspTransform(arm_index, potential_transform_list.stamped_transform_list[i]);
-    updateNeedleWrtGripperTransforms();
-    ik_fraction = computeNeedleDriveGripperAffines(arm_index, needleDriveTraj);
-    if (ik_fraction == 1) {
+    has_solution = requestOneNeedleDrivingTrajectory(arm_index,
+                                                     needle_entry_pt,
+                                                     needle_exit_pt,
+                                                     potential_transform_list.stamped_transform_list[i],
+                                                     needleDriveTraj);
+
+
+//    computeGraspTransform(arm_index, potential_transform_list.stamped_transform_list[i]);
+//    updateNeedleWrtGripperTransforms();
+//    ik_fraction = computeNeedleDriveGripperAffines(arm_index, needleDriveTraj);
+
+
+    if (has_solution == true) {
       valid_transform_list.stamped_transform_list.push_back(potential_transform_list.stamped_transform_list[i]);
       ngrasps ++;
     }
@@ -662,7 +704,7 @@ bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectory(const int arm_ind
 
   } else {
 
-    ROS_ERROR("Could not find any grasp transform that suffices the entry & exit pts to do a needle drive.");
+    ROS_ERROR("\nCould not find any grasp transform that suffices the entry & exit pts to do a needle drive.\n");
     return false;
 
   }
@@ -675,7 +717,7 @@ bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectory(const int arm_ind
 /*
  * Generate a list of grasp transforms (needle w/rt gripper) for further evaluation.
  */
-void RnNeedleDrivingPlanner::generateGraspTransformList(const int arm_index,
+void RnNeedleDrivingPlanner::generateGraspTransformList(const int &arm_index,
                                                         const int resolution,
                                                         cwru_davinci_msgs::ListOfTransformStamped &grasp_tf_array) {
 
@@ -686,16 +728,20 @@ void RnNeedleDrivingPlanner::generateGraspTransformList(const int arm_index,
   // for (needle_x = 0; needle_x < 0.7854; needle_x += 0.1)
   // for (needle_x = 0; needle_x < (2 * M_PI); needle_x += 0.1)
 
+  double needle_x_increment;
+
+  needle_x_increment = (2 * M_PI)/resolution;
+
   switch (arm_index) {
 
     case 1:
 
-      for (needle_x = 0; needle_x < (2 * M_PI); needle_x += 0.1) {
+      for (needle_x = 0; needle_x < (2 * M_PI); needle_x += needle_x_increment) {
         computeGraspTransform(1, needle_x, needle_y);
-        grasp_transform_temp.transform.translation.x = needle_affine_wrt_gripper_one_frame_(0, 3);
-        grasp_transform_temp.transform.translation.y = needle_affine_wrt_gripper_one_frame_(1, 3);
-        grasp_transform_temp.transform.translation.z = needle_affine_wrt_gripper_one_frame_(2, 3);
-        R = needle_affine_wrt_gripper_one_frame_.linear();
+        grasp_transform_temp.transform.translation.x = needle_affine_wrt_grasp_one_frame_(0, 3);
+        grasp_transform_temp.transform.translation.y = needle_affine_wrt_grasp_one_frame_(1, 3);
+        grasp_transform_temp.transform.translation.z = needle_affine_wrt_grasp_one_frame_(2, 3);
+        R = needle_affine_wrt_grasp_one_frame_.linear();
         Eigen::Quaterniond q1(R);
         grasp_transform_temp.transform.rotation.x = q1.x();
         grasp_transform_temp.transform.rotation.y = q1.y();
@@ -711,12 +757,12 @@ void RnNeedleDrivingPlanner::generateGraspTransformList(const int arm_index,
 
     case 2:
 
-      for (needle_x = 0; needle_x < (2 * M_PI); needle_x += 0.1) {
+      for (needle_x = 0; needle_x < (2 * M_PI); needle_x += needle_x_increment) {
         computeGraspTransform(2, needle_x, needle_y);
-        grasp_transform_temp.transform.translation.x = needle_affine_wrt_gripper_two_frame_(0, 3);
-        grasp_transform_temp.transform.translation.y = needle_affine_wrt_gripper_two_frame_(1, 3);
-        grasp_transform_temp.transform.translation.z = needle_affine_wrt_gripper_two_frame_(2, 3);
-        R = needle_affine_wrt_gripper_two_frame_.linear();
+        grasp_transform_temp.transform.translation.x = needle_affine_wrt_grasp_two_frame_(0, 3);
+        grasp_transform_temp.transform.translation.y = needle_affine_wrt_grasp_two_frame_(1, 3);
+        grasp_transform_temp.transform.translation.z = needle_affine_wrt_grasp_two_frame_(2, 3);
+        R = needle_affine_wrt_grasp_two_frame_.linear();
         Eigen::Quaterniond q2(R);
         grasp_transform_temp.transform.rotation.x = q2.x();
         grasp_transform_temp.transform.rotation.y = q2.y();
@@ -731,6 +777,13 @@ void RnNeedleDrivingPlanner::generateGraspTransformList(const int arm_index,
 
   }
 
+  int size_of_output_list = grasp_tf_array.stamped_transform_list.size();
+
+  ROS_INFO("Grasp transform list generated with %d point, step length: %f. There are %d items in the list",
+           resolution,
+           needle_x_increment,
+           size_of_output_list);
+
 
 }
 
@@ -740,7 +793,7 @@ void RnNeedleDrivingPlanner::generateGraspTransformList(const int arm_index,
  * Generate a list of exit points (w/rt left camera frame) for further evaluation.
  */
 void RnNeedleDrivingPlanner::generateExitPoints(const geometry_msgs::PointStamped &needle_entry_pt,
-                                                const double suture_depth,
+                                                const double &suture_depth,
                                                 cwru_davinci_msgs::ListOfPointStamped &potential_exit_points_array) {
 
   ROS_INFO("Generating Potential Exit Points.");
@@ -774,7 +827,7 @@ void RnNeedleDrivingPlanner::generateExitPoints(const geometry_msgs::PointStampe
 /*
  * Filter the valid exit points provided in an input array. Use multiple grasp transforms.
  */
-double RnNeedleDrivingPlanner::filterValidExitPoints(const int arm_index,
+double RnNeedleDrivingPlanner::filterValidExitPoints(const int &arm_index,
                                                      const geometry_msgs::PointStamped &needle_entry_pt,
                                                      const cwru_davinci_msgs::ListOfPointStamped &exit_points_array,
                                                      cwru_davinci_msgs::ListOfPointStamped &valid_exit_points_array) {
@@ -815,9 +868,9 @@ double RnNeedleDrivingPlanner::filterValidExitPoints(const int arm_index,
 /*
  * Filter the valid exit points provided in an input array. Use specified grasp transform.
  */
-double RnNeedleDrivingPlanner::filterValidExitPoints(const int arm_index,
+double RnNeedleDrivingPlanner::filterValidExitPoints(const int &arm_index,
                                                      const geometry_msgs::PointStamped &needle_entry_pt,
-                                                     const geometry_msgs::TransformStamped grasp_tf,
+                                                     const geometry_msgs::TransformStamped &grasp_tf,
                                                      const cwru_davinci_msgs::ListOfPointStamped &exit_points_array,
                                                      cwru_davinci_msgs::ListOfPointStamped &valid_exit_points_array) {
 
@@ -859,7 +912,7 @@ double RnNeedleDrivingPlanner::filterValidExitPoints(const int arm_index,
 /*
  * Filter the valid exit points provided in an input array. Use default grasp transform.
  */
-double RnNeedleDrivingPlanner::filterValidExitPointsDefaultGrasp(const int arm_index,
+double RnNeedleDrivingPlanner::filterValidExitPointsDefaultGrasp(const int &arm_index,
                                                                  const geometry_msgs::PointStamped &needle_entry_pt,
                                                                  const cwru_davinci_msgs::ListOfPointStamped &exit_points_array,
                                                                  cwru_davinci_msgs::ListOfPointStamped &valid_exit_points_array) {
@@ -912,6 +965,7 @@ void RnNeedleDrivingPlanner::setTrajectoryVelocity(double velocity,
   time_0 = 7;
   needleDriveTraj.points[0].time_from_start = ros::Duration(time_0);
 
+
   int waypoints = needleDriveTraj.points.size();
 
   for (int n = 0; n < (waypoints-1); n++) {
@@ -921,6 +975,7 @@ void RnNeedleDrivingPlanner::setTrajectoryVelocity(double velocity,
     }
 
     affine_gripper_wrt_base = fwd_solver_.fwd_kin_solve(q_vec0);
+
     pt0 = affine_gripper_wrt_base.translation();
 
     for (int i = 0; i < 7; i++) {
@@ -1042,7 +1097,7 @@ void RnNeedleDrivingPlanner::setHardCodedTransforms(Eigen::Affine3d psm_one_affi
 }
 
 
-void RnNeedleDrivingPlanner::overlapLeftCamFrameAndPsmBase(const int arm_index) {
+void RnNeedleDrivingPlanner::overlapLeftCamFrameAndPsmBase(const int &arm_index) {
 
 
   Eigen::Matrix3d R;
@@ -1071,7 +1126,7 @@ void RnNeedleDrivingPlanner::overlapLeftCamFrameAndPsmBase(const int arm_index) 
 }
 
 
-bool RnNeedleDrivingPlanner::requestNeedleDrivingTrajectoryDefaultGraspInBaseFrame(const int arm_index,
+bool RnNeedleDrivingPlanner::requestNeedleDrivingTrajectoryDefaultGraspInBaseFrame(const int &arm_index,
                                                                                    const geometry_msgs::PointStamped &needle_entry_pt_wrt_base,
                                                                                    const geometry_msgs::PointStamped &needle_exit_pt_wrt_base,
                                                                                    trajectory_msgs::JointTrajectory &needleDriveTraj) {
@@ -1098,7 +1153,7 @@ bool RnNeedleDrivingPlanner::requestNeedleDrivingTrajectoryDefaultGraspInBaseFra
 }
 
 
-bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryInBaseFrame(const int arm_index,
+bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryInBaseFrame(const int &arm_index,
                                                                           const geometry_msgs::PointStamped &needle_entry_pt,
                                                                           const geometry_msgs::PointStamped &needle_exit_pt,
                                                                           const geometry_msgs::TransformStamped &grasp_transform,
@@ -1126,7 +1181,7 @@ bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryInBaseFrame(const 
 }
 
 
-bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryInBaseFrame(const int arm_index,
+bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryInBaseFrame(const int &arm_index,
                                                                           const geometry_msgs::PointStamped &needle_entry_pt,
                                                                           const geometry_msgs::PointStamped &needle_exit_pt,
                                                                           trajectory_msgs::JointTrajectory &needleDriveTraj,
