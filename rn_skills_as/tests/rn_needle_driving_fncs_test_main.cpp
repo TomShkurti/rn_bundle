@@ -112,10 +112,8 @@ int main(int argc, char **argv){
     ROS_INFO("grasp_transform: ");
     rnNeedleDrivingPlanner.printEigenAffine(grasp_tf);
 
-    std::cout << std::endl;
-    std::cout << "needleDriveTraj: " << std::endl << needleDriveTraj << std::endl;
-
-
+//    std::cout << std::endl;
+//    std::cout << "needleDriveTraj: " << std::endl << needleDriveTraj << std::endl;
 
     ROS_INFO("TEST SUBJECT 2: setTrajectoryVelocity()");
 
@@ -127,8 +125,6 @@ int main(int argc, char **argv){
     Eigen::Affine3d result_tf;
     result_tf = rnNeedleDrivingPlanner.convertGeoTransformStampedToEigenAffine(grasp_transform);
     rnNeedleDrivingPlanner.printEigenAffine(result_tf);
-
-
 
   }
 
