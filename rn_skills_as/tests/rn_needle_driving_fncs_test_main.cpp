@@ -94,11 +94,11 @@ int main(int argc, char **argv){
                                                                              needleDriveTraj,
                                                                              grasp_transform);
 
-//  test = rnNeedleDrivingPlanner.requestOneNeedleDrivingTrajectoryInBaseFrame(arm,
-//                                                                             needle_entry_pt,
-//                                                                             needle_exit_pt,
-//                                                                             default_grasp_transform,
-//                                                                             needleDriveTraj);
+  test = rnNeedleDrivingPlanner.requestOneNeedleDrivingTrajectoryInBaseFrame(arm,
+                                                                             needle_entry_pt,
+                                                                             needle_exit_pt,
+                                                                             default_grasp_transform,
+                                                                             needleDriveTraj);
 
 
 
