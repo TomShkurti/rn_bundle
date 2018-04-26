@@ -514,15 +514,6 @@ void RnNeedleDrivingPlanner::convertAffinesToTrajectoryMsgs(const std::vector<Ei
       ROS_ERROR("Failed to solve IK while generating a trajectory from affines");
     }
 
-
-    //TODO delete after debugging
-//    std::cout << " ============================================ " << std::endl;
-//    std::cout << "seq: " << n << std::endl;
-//    std::cout << "q_vec1: " << q_vec1 << std::endl;
-//    std::cout << "-------------" << std::endl;
-//    printEigenAffine(gripper_affines_wrt_portal[n]);
-
-
     for (int i = 0; i < 7; i++)
     {
       joint_trajectory_point.positions.push_back(q_vec1(i));

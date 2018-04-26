@@ -168,6 +168,9 @@ add_dependencies(DavinciActionClient rn_skills_as_generate_messages_cpp)
 add_executable(rn_needle_driving_fncs_test tests/rn_needle_driving_fncs_test_main.cpp)
 target_link_libraries(rn_needle_driving_fncs_test ${catkin_LIBRARIES} RnNeedleDrivingPlanner)
 
+add_executable(demo_needle_planner_stand_alone examples/demo_needle_planner_stand_alone.cpp)
+target_link_libraries(demo_needle_planner_stand_alone ${catkin_LIBRARIES} RnNeedleDrivingPlanner)
+
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
