@@ -83,7 +83,7 @@ class RnNeedleDrivingPlanner {
    * @param needleDriveTraj
    * @return true only when the fraction of valid waypoints is 1.
    */
-  bool requestNeedleDrivingTrajectoryDefaultGrasp(const int arm_index,
+  bool requestNeedleDrivingTrajectoryDefaultGrasp(const int &arm_index,
                                                   const geometry_msgs::PointStamped &needle_entry_pt,
                                                   const geometry_msgs::PointStamped &needle_exit_pt,
                                                   trajectory_msgs::JointTrajectory &needleDriveTraj);
@@ -98,7 +98,7 @@ class RnNeedleDrivingPlanner {
    * @return true only when the fraction of valid waypoints is 1.
    * @return
    */
-  bool requestOneNeedleDrivingTrajectory(const int arm_index,
+  bool requestOneNeedleDrivingTrajectory(const int &arm_index,
                                          const geometry_msgs::PointStamped &needle_entry_pt,
                                          const geometry_msgs::PointStamped &needle_exit_pt,
                                          const geometry_msgs::TransformStamped &grasp_transform,
@@ -115,7 +115,7 @@ class RnNeedleDrivingPlanner {
    * @param grasp_transform
    * @return
    */
-  bool requestOneNeedleDrivingTrajectory(const int arm_index,
+  bool requestOneNeedleDrivingTrajectory(const int &arm_index,
                                          const geometry_msgs::PointStamped &needle_entry_pt,
                                          const geometry_msgs::PointStamped &needle_exit_pt,
                                          trajectory_msgs::JointTrajectory &needleDriveTraj,
@@ -128,7 +128,7 @@ class RnNeedleDrivingPlanner {
    * @param resolution: This many points that you want to insert in 2 PI.
    * @param grasp_tf_array: results are stored in it.
    */
-  void generateGraspTransformList(const int arm_index,
+  void generateGraspTransformList(const int &arm_index,
                                   const int resolution,
                                   cwru_davinci_msgs::ListOfTransformStamped &grasp_tf_array);
 
@@ -139,7 +139,7 @@ class RnNeedleDrivingPlanner {
    * @param potential_exit_points_array
    */
   void generateExitPoints(const geometry_msgs::PointStamped &needle_entry_pt,
-                          const double suture_depth,
+                          const double &suture_depth,
                           cwru_davinci_msgs::ListOfPointStamped &potential_exit_points_array);
 
   /**
@@ -150,7 +150,7 @@ class RnNeedleDrivingPlanner {
    * @param valid_exit_points_array
    * @return the fraction of valid exit points
    */
-  double filterValidExitPoints(const int arm_index,
+  double filterValidExitPoints(const int &arm_index,
                                const geometry_msgs::PointStamped &needle_entry_pt,
                                const cwru_davinci_msgs::ListOfPointStamped &exit_points_array,
                                cwru_davinci_msgs::ListOfPointStamped &valid_exit_points_array);
@@ -164,9 +164,9 @@ class RnNeedleDrivingPlanner {
    * @param valid_exit_points_array
    * @return the fraction of valid exit points
    */
-  double filterValidExitPoints(const int arm_index,
+  double filterValidExitPoints(const int &arm_index,
                                const geometry_msgs::PointStamped &needle_entry_pt,
-                               const geometry_msgs::TransformStamped grasp_tf,
+                               const geometry_msgs::TransformStamped &grasp_tf,
                                const cwru_davinci_msgs::ListOfPointStamped &exit_points_array,
                                cwru_davinci_msgs::ListOfPointStamped &valid_exit_points_array);
 
@@ -177,7 +177,7 @@ class RnNeedleDrivingPlanner {
    * @param valid_exit_points_array
    * @return the fraction of valid exit points
    */
-  double filterValidExitPointsDefaultGrasp(const int arm_index,
+  double filterValidExitPointsDefaultGrasp(const int &arm_index,
                                            const geometry_msgs::PointStamped &needle_entry_pt,
                                            const cwru_davinci_msgs::ListOfPointStamped &exit_points_array,
                                            cwru_davinci_msgs::ListOfPointStamped &valid_exit_points_array);
@@ -194,7 +194,7 @@ class RnNeedleDrivingPlanner {
   void convertAffinesToTrajectoryMsgs(const std::vector<Eigen::Affine3d> &gripper_affines_wrt_portal,
                                       trajectory_msgs::JointTrajectory &joint_trajectory);
 
-  inline Eigen::Vector3d convertPointStampedToEigenVector(const geometry_msgs::PointStamped pt)
+  inline Eigen::Vector3d convertPointStampedToEigenVector(const geometry_msgs::PointStamped &pt)
   {
     Eigen::Vector3d vec;
     vec << pt.point.x, pt.point.y, pt.point.z;
@@ -219,7 +219,7 @@ class RnNeedleDrivingPlanner {
     return e;
   }
 
-  inline Eigen::Affine3d convertGeoTransformStampedToEigenAffine(const geometry_msgs::TransformStamped geoTf) {
+  inline Eigen::Affine3d convertGeoTransformStampedToEigenAffine(const geometry_msgs::TransformStamped &geoTf) {
 
     Eigen::Affine3d e;
     Eigen::Vector3d origin;
@@ -231,7 +231,7 @@ class RnNeedleDrivingPlanner {
         geoTf.transform.translation.z;
 
     quaternion.x() = geoTf.transform.rotation.x;
-    quaternion.y() = geoTf.transform.rotation.z;
+    quaternion.y() = geoTf.transform.rotation.y;
     quaternion.z() = geoTf.transform.rotation.z;
     quaternion.w() = geoTf.transform.rotation.w;
 
@@ -241,6 +241,32 @@ class RnNeedleDrivingPlanner {
     e.translation() = origin;
 
     return e;
+  }
+
+  inline geometry_msgs::TransformStamped convertEigenAffineToGeoTransform(Eigen::Affine3d affine) {
+
+    geometry_msgs::TransformStamped geo_tf;
+
+    Eigen::Quaterniond quaternion;
+    Eigen::Matrix3d rotation;
+    Eigen::Vector3d origin;
+
+    rotation = affine.linear();
+    quaternion = rotation;
+
+    origin = affine.translation();
+
+    geo_tf.transform.rotation.x = quaternion.x();
+    geo_tf.transform.rotation.y = quaternion.y();
+    geo_tf.transform.rotation.z = quaternion.z();
+    geo_tf.transform.rotation.w = quaternion.w();
+
+    geo_tf.transform.translation.x = origin[0];
+    geo_tf.transform.translation.y = origin[1];
+    geo_tf.transform.translation.z = origin[2];
+
+    return geo_tf;
+
   }
 
   inline void printEigenAffine(Eigen::Affine3d affine)
@@ -348,6 +374,20 @@ class RnNeedleDrivingPlanner {
     ROS_INFO("Needle axis height has been updated locally and in the parameter server.");
   }
 
+  inline void setDefaultGraspTfSearchResolution(int resolution) {
+    default_grasp_tf_search_resolution_ = resolution;
+    ROS_INFO("default_grasp_tf_search_resolution_ has been updated.");
+  }
+
+
+  /// get() functions
+
+  inline Eigen::Affine3d getDefaultNeedleAffineWrtGraspOneFrame() {
+    return default_needle_affine_wrt_grasp_one_frame_;
+  }
+
+
+
 
   /// Camera Free Needle Drive Interface
 
@@ -359,7 +399,7 @@ class RnNeedleDrivingPlanner {
   void setHardCodedTransforms(Eigen::Affine3d psm_one_affine_wrt_lt_camera,
                               Eigen::Affine3d psm_two_affine_wrt_lt_camera);
 
-  void overlapLeftCamFrameAndPsmBase(const int arm_index);
+  void overlapLeftCamFrameAndPsmBase(const int &arm_index);
 
   /// may not be of much use now
   Eigen::Affine3d convertPsmBaseFrameCoordinateToCameraFrame(int arm_index,
@@ -370,13 +410,13 @@ class RnNeedleDrivingPlanner {
   // having it ordered in the base frame in the first place. BUT, we have 2 pams.. So we have to
   // do it once a time.
 
-  bool requestNeedleDrivingTrajectoryDefaultGraspInBaseFrame(const int arm_index,
+  bool requestNeedleDrivingTrajectoryDefaultGraspInBaseFrame(const int &arm_index,
                                                              const geometry_msgs::PointStamped &needle_entry_pt_wrt_base,
                                                              const geometry_msgs::PointStamped &needle_exit_pt_wrt_base,
                                                              trajectory_msgs::JointTrajectory &needleDriveTraj);
 
 
-  bool requestOneNeedleDrivingTrajectoryInBaseFrame(const int arm_index,
+  bool requestOneNeedleDrivingTrajectoryInBaseFrame(const int &arm_index,
                                                     const geometry_msgs::PointStamped &needle_entry_pt,
                                                     const geometry_msgs::PointStamped &needle_exit_pt,
                                                     const geometry_msgs::TransformStamped &grasp_transform,
@@ -385,7 +425,7 @@ class RnNeedleDrivingPlanner {
 
   // TODO caution! This may not be that straight forward. Make sure the artificial cam frame is not going to affect it.
 
-  bool requestOneNeedleDrivingTrajectoryInBaseFrame(const int arm_index,
+  bool requestOneNeedleDrivingTrajectoryInBaseFrame(const int &arm_index,
                                                     const geometry_msgs::PointStamped &needle_entry_pt,
                                                     const geometry_msgs::PointStamped &needle_exit_pt,
                                                     trajectory_msgs::JointTrajectory &needleDriveTraj,
