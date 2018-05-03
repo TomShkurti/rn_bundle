@@ -1,0 +1,12 @@
+<launch>
+    <!-- Load the config file first-->
+    <rosparam command="load" file="$(find rn_skills_as)/config/skill_params.yaml" />
+
+    <!-- The following statement launches a Gazebo world with a sticky-fingers and motion-enabled Da Vinci robot -->
+	<include file="$(find cwru_davinci_simulation)/launch/sticky_davinci_gazebo.launch"/>
+
+    <!-- Launch controller -->
+    <include file="$(find cwru_davinci_control)/launch/control_both.launch"/>
+
+
+</launch>

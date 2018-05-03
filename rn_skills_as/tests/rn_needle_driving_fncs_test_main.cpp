@@ -1,8 +1,11 @@
 //
-// Created by william on 28/03/18.
+// Created by william on 01/05/18.
+// @ HMS Prince of Wales
 //
 
 
+#include <cwru_davinci_kinematics/davinci_inv_kinematics.h>
+#include <cwru_davinci_control/psm_controller.h>
 #include "rn_skills_as/RnNeedleDrivingPlanner.h"
 
 
@@ -13,7 +16,7 @@ int main(int argc, char **argv){
 
   RnNeedleDrivingPlanner rnNeedleDrivingPlanner(node);
 
-  // nNeedleDrivingPlanner.runThisFun();
+  psm_controller psm(1, node);
 
   trajectory_msgs::JointTrajectory needleDriveTraj;
 
@@ -69,6 +72,42 @@ int main(int argc, char **argv){
 //  }
 
 
+
+  davinci_kinematics::Forward fwd_solver;
+  davinci_kinematics::Inverse ik_solver;
+
+  davinci_kinematics::Vectorq7x1 vec_test;
+  Eigen::Vector3d origin_test;
+  Eigen::Matrix3d rotation_test;
+  Eigen::Affine3d affine_test, affine_result;
+//  origin_test << 0.0117101, 0.0371173, -0.147376;
+//  rotation_test << -8.47482e-318,      0.939693,       0.34202,
+//                   -0.575319,      0.279748,     -0.768602,
+//                   -0.817929,     -0.196771,      0.540623;
+
+  origin_test << -0.0560296, -0.0576075, -0.0591862;
+
+  rotation_test <<   -0.890662,   0.451223, -0.0558522,
+      -0.106172,  -0.325855,  -0.939439,
+      -0.442096,  -0.830793,   0.338134;
+
+  affine_test.linear() = rotation_test;
+  affine_test.translation() = origin_test;
+
+  int count;
+  count = ik_solver.ik_solve(affine_test);
+  vec_test = ik_solver.get_soln();
+
+  affine_result = fwd_solver.fwd_kin_solve(vec_test);
+  ROS_WARN("RESULT(%d): ", count);
+  rnNeedleDrivingPlanner.printEigenAffine(affine_result);
+  std::cout << "vec_test" << std::endl << vec_test.transpose() << std::endl;
+
+
+
+
+
+
   std::cout << "Please type in a random char to proceed: ";
   std::cin >> random_char;
 
@@ -94,11 +133,11 @@ int main(int argc, char **argv){
                                                                              needleDriveTraj,
                                                                              grasp_transform);
 
-  test = rnNeedleDrivingPlanner.requestOneNeedleDrivingTrajectoryInBaseFrame(arm,
-                                                                             needle_entry_pt,
-                                                                             needle_exit_pt,
-                                                                             default_grasp_transform,
-                                                                             needleDriveTraj);
+//  test = rnNeedleDrivingPlanner.requestOneNeedleDrivingTrajectoryInBaseFrame(arm,
+//                                                                             needle_entry_pt,
+//                                                                             needle_exit_pt,
+//                                                                             default_grasp_transform,
+//                                                                             needleDriveTraj);
 
 
 

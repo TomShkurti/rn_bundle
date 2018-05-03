@@ -12,7 +12,7 @@ RnNeedleDrivingPlanner::RnNeedleDrivingPlanner(const ros::NodeHandle &nodeHandle
 
   ROS_INFO("Constructing a Needle Planner");
 
-  tissue_normal_ << 0, 0, -1;
+  tissue_normal_ << 0, 0, -1; // Note that the cam_z points down
 
   ROS_INFO("Resizing ik_ok_array, there are %d path waypoints.", path_waypoints_);
   ik_ok_array_.resize(path_waypoints_);
@@ -385,7 +385,8 @@ double RnNeedleDrivingPlanner::computeNeedleDriveGripperAffines(int arm_index,
   int nsolns = 0;
 
   /// phi is the angle rotated about the needle z axis while performing needle drives
-  double delta_phi = M_PI/(2*(path_waypoints_-1));
+//  double delta_phi = M_PI/(2*(path_waypoints_-1));
+  double delta_phi = M_PI/((path_waypoints_-1));
   double phi_insertion = 0;
 
   /// Needle calculation
@@ -408,6 +409,8 @@ double RnNeedleDrivingPlanner::computeNeedleDriveGripperAffines(int arm_index,
       for (int ipose = 0; ipose < path_waypoints_; ipose++){
         Rot_needle = Rot_k_phi(kvec_needle, phi_insertion);
         needle_affine_wrt_tissue_frame_.linear() = Rot_needle * needle_rotation_mat_wrt_tissue_frame_;
+
+
 
         /// Gripper Calculation
         des_gripper_one_affine_wrt_tissue =
@@ -510,6 +513,11 @@ void RnNeedleDrivingPlanner::convertAffinesToTrajectoryMsgs(const std::vector<Ei
 
       q_vec1 = ik_solver_.get_soln();
       q_vec1(6) = 0;
+
+      // TODO delete
+      std::cout << "q_vec1: " << q_vec1.transpose() << std::endl;
+
+
     } else {
       ROS_ERROR("Failed to solve IK while generating a trajectory from affines");
     }
@@ -955,7 +963,7 @@ void RnNeedleDrivingPlanner::setTrajectoryVelocity(double velocity,
 
   time_0 = 7;
   needleDriveTraj.points[0].time_from_start = ros::Duration(time_0);
-
+  time_from_start = time_0;
 
   int waypoints = needleDriveTraj.points.size();
 
@@ -979,7 +987,7 @@ void RnNeedleDrivingPlanner::setTrajectoryVelocity(double velocity,
     temp1 = pt0.transpose() * pt0;
     temp2 = pt1.transpose() * pt1;
     temp3 = temp1 - temp2;
-    euler_dist = sqrt(abs(temp3));
+    euler_dist = sqrt(fabs(temp3));
 
     delta_t = euler_dist/velocity;
 
@@ -987,7 +995,12 @@ void RnNeedleDrivingPlanner::setTrajectoryVelocity(double velocity,
 
     needleDriveTraj.points[n+1].time_from_start = ros::Duration(time_from_start);
 
+
+// TODO delete
+    std::cout  << pt0.transpose() << std::endl;
+
   }
+
 
   ROS_INFO("All points in this trajectory has their time_from_start set according to the given velocity %f",
            velocity);
@@ -1090,6 +1103,8 @@ void RnNeedleDrivingPlanner::setHardCodedTransforms(Eigen::Affine3d psm_one_affi
 
 void RnNeedleDrivingPlanner::overlapLeftCamFrameAndPsmBase(const int &arm_index) {
 
+  /// Fisrt thing should be setting the default tissue norm w/rt base frame
+  tissue_normal_ << 0, 0, 1;
 
   Eigen::Matrix3d R;
   R.setIdentity();

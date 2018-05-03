@@ -2,100 +2,103 @@
 <project version="4">
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true" buildAllGenerated="true">
     <generated>
-      <config projectName="rn_skills_as" targetName="rn_skills_as_geneus" />
-      <config projectName="rn_skills_as" targetName="cwru_davinci_msgs_generate_messages_py" />
-      <config projectName="rn_skills_as" targetName="std_msgs_generate_messages_lisp" />
-      <config projectName="rn_skills_as" targetName="tf2_msgs_generate_messages_lisp" />
-      <config projectName="rn_skills_as" targetName="roscpp_generate_messages_cpp" />
-      <config projectName="rn_skills_as" targetName="rn_skills_as_generate_messages_py" />
-      <config projectName="rn_skills_as" targetName="geometry_msgs_generate_messages_nodejs" />
-      <config projectName="rn_skills_as" targetName="tf_generate_messages_nodejs" />
-      <config projectName="rn_skills_as" targetName="tf_generate_messages_py" />
-      <config projectName="rn_skills_as" targetName="actionlib_msgs_generate_messages_nodejs" />
-      <config projectName="rn_skills_as" targetName="_catkin_empty_exported_target" />
-      <config projectName="rn_skills_as" targetName="geometry_msgs_generate_messages_py" />
-      <config projectName="rn_skills_as" targetName="run_tests" />
-      <config projectName="rn_skills_as" targetName="actionlib_generate_messages_lisp" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveAction" />
-      <config projectName="rn_skills_as" targetName="RnNeedleDrivingPlanner" />
-      <config projectName="rn_skills_as" targetName="actionlib_msgs_generate_messages_py" />
-      <config projectName="rn_skills_as" targetName="geometry_msgs_generate_messages_lisp" />
-      <config projectName="rn_skills_as" targetName="download_extra_data" />
-      <config projectName="rn_skills_as" targetName="sensor_msgs_generate_messages_eus" />
-      <config projectName="rn_skills_as" targetName="actionlib_msgs_generate_messages_eus" />
-      <config projectName="rn_skills_as" targetName="trajectory_msgs_generate_messages_py" />
-      <config projectName="rn_skills_as" targetName="actionlib_generate_messages_eus" />
-      <config projectName="rn_skills_as" targetName="cwru_davinci_msgs_generate_messages_nodejs" />
-      <config projectName="rn_skills_as" targetName="rosgraph_msgs_generate_messages_nodejs" />
-      <config projectName="rn_skills_as" targetName="rn_skills_as_generate_messages_nodejs" />
-      <config projectName="rn_skills_as" targetName="tf2_msgs_generate_messages_nodejs" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteActionFeedback" />
-      <config projectName="rn_skills_as" targetName="rn_skills_as_generate_messages_cpp" />
-      <config projectName="rn_skills_as" targetName="rn_skills_as_gencpp" />
-      <config projectName="rn_skills_as" targetName="tf2_msgs_generate_messages_py" />
-      <config projectName="rn_skills_as" targetName="clean_test_results" />
-      <config projectName="rn_skills_as" targetName="gtest" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteActionGoal" />
-      <config projectName="rn_skills_as" targetName="trajectory_msgs_generate_messages_lisp" />
-      <config projectName="rn_skills_as" targetName="rosgraph_msgs_generate_messages_eus" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveResult" />
-      <config projectName="rn_skills_as" targetName="gmock" />
-      <config projectName="rn_skills_as" targetName="rn_skills_as_generate_messages" />
-      <config projectName="rn_skills_as" targetName="gtest_main" />
-      <config projectName="rn_skills_as" targetName="tf_generate_messages_cpp" />
-      <config projectName="rn_skills_as" targetName="roscpp_generate_messages_py" />
-      <config projectName="rn_skills_as" targetName="tf2_msgs_generate_messages_eus" />
-      <config projectName="rn_skills_as" targetName="DavinciActionClient" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteActionResult" />
-      <config projectName="rn_skills_as" targetName="std_msgs_generate_messages_nodejs" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveGoal" />
-      <config projectName="rn_skills_as" targetName="rosgraph_msgs_generate_messages_py" />
-      <config projectName="rn_skills_as" targetName="sensor_msgs_generate_messages_lisp" />
-      <config projectName="rn_skills_as" targetName="geometry_msgs_generate_messages_cpp" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveActionGoal" />
-      <config projectName="rn_skills_as" targetName="trajectory_msgs_generate_messages_cpp" />
-      <config projectName="rn_skills_as" targetName="cwru_davinci_msgs_generate_messages_lisp" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteGoal" />
-      <config projectName="rn_skills_as" targetName="trajectory_msgs_generate_messages_nodejs" />
-      <config projectName="rn_skills_as" targetName="std_msgs_generate_messages_eus" />
-      <config projectName="rn_skills_as" targetName="actionlib_generate_messages_nodejs" />
-      <config projectName="rn_skills_as" targetName="rosgraph_msgs_generate_messages_cpp" />
       <config projectName="rn_skills_as" targetName="DavinciActionServer" />
-      <config projectName="rn_skills_as" targetName="tf_generate_messages_eus" />
-      <config projectName="rn_skills_as" targetName="rn_skills_as_generate_messages_lisp" />
-      <config projectName="rn_skills_as" targetName="roscpp_generate_messages_nodejs" />
-      <config projectName="rn_skills_as" targetName="rn_skills_as_genpy" />
-      <config projectName="rn_skills_as" targetName="cwru_davinci_msgs_generate_messages_cpp" />
-      <config projectName="rn_skills_as" targetName="tf2_msgs_generate_messages_cpp" />
-      <config projectName="rn_skills_as" targetName="rn_skills_as_genlisp" />
-      <config projectName="rn_skills_as" targetName="actionlib_msgs_generate_messages_lisp" />
-      <config projectName="rn_skills_as" targetName="geometry_msgs_generate_messages_eus" />
+      <config projectName="rn_skills_as" targetName="rn_skills_as_gencpp" />
+      <config projectName="rn_skills_as" targetName="roscpp_generate_messages_cpp" />
       <config projectName="rn_skills_as" targetName="actionlib_generate_messages_py" />
-      <config projectName="rn_skills_as" targetName="std_msgs_generate_messages_py" />
-      <config projectName="rn_skills_as" targetName="trajectory_msgs_generate_messages_eus" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteResult" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveActionResult" />
-      <config projectName="rn_skills_as" targetName="doxygen" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveFeedback" />
-      <config projectName="rn_skills_as" targetName="roscpp_generate_messages_eus" />
-      <config projectName="rn_skills_as" targetName="std_msgs_generate_messages_cpp" />
-      <config projectName="rn_skills_as" targetName="tf_generate_messages_lisp" />
-      <config projectName="rn_skills_as" targetName="tests" />
-      <config projectName="rn_skills_as" targetName="roscpp_generate_messages_lisp" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteFeedback" />
-      <config projectName="rn_skills_as" targetName="cwru_davinci_msgs_generate_messages_eus" />
-      <config projectName="rn_skills_as" targetName="rosgraph_msgs_generate_messages_lisp" />
       <config projectName="rn_skills_as" targetName="sensor_msgs_generate_messages_py" />
-      <config projectName="rn_skills_as" targetName="sensor_msgs_generate_messages_cpp" />
-      <config projectName="rn_skills_as" targetName="gmock_main" />
-      <config projectName="rn_skills_as" targetName="sensor_msgs_generate_messages_nodejs" />
-      <config projectName="rn_skills_as" targetName="actionlib_msgs_generate_messages_cpp" />
-      <config projectName="rn_skills_as" targetName="actionlib_generate_messages_cpp" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveActionFeedback" />
+      <config projectName="rn_skills_as" targetName="doxygen" />
+      <config projectName="rn_skills_as" targetName="tf_generate_messages_nodejs" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteFeedback" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveActionGoal" />
+      <config projectName="rn_skills_as" targetName="rosgraph_msgs_generate_messages_py" />
+      <config projectName="rn_skills_as" targetName="actionlib_generate_messages_nodejs" />
+      <config projectName="rn_skills_as" targetName="rn_skills_as_generate_messages_py" />
+      <config projectName="rn_skills_as" targetName="std_msgs_generate_messages_nodejs" />
+      <config projectName="rn_skills_as" targetName="std_msgs_generate_messages_cpp" />
       <config projectName="rn_skills_as" targetName="rn_needle_driving_fncs_test" />
+      <config projectName="rn_skills_as" targetName="roscpp_generate_messages_eus" />
+      <config projectName="rn_skills_as" targetName="std_msgs_generate_messages_eus" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveResult" />
+      <config projectName="rn_skills_as" targetName="rosgraph_msgs_generate_messages_cpp" />
+      <config projectName="rn_skills_as" targetName="geometry_msgs_generate_messages_eus" />
+      <config projectName="rn_skills_as" targetName="tf2_msgs_generate_messages_eus" />
+      <config projectName="rn_skills_as" targetName="std_msgs_generate_messages_py" />
+      <config projectName="rn_skills_as" targetName="cwru_davinci_msgs_generate_messages_cpp" />
+      <config projectName="rn_skills_as" targetName="rn_skills_as_geneus" />
+      <config projectName="rn_skills_as" targetName="geometry_msgs_generate_messages_py" />
+      <config projectName="rn_skills_as" targetName="sensor_msgs_generate_messages_cpp" />
+      <config projectName="rn_skills_as" targetName="tf_generate_messages_lisp" />
+      <config projectName="rn_skills_as" targetName="tf2_msgs_generate_messages_nodejs" />
+      <config projectName="rn_skills_as" targetName="trajectory_msgs_generate_messages_cpp" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteActionResult" />
+      <config projectName="rn_skills_as" targetName="geometry_msgs_generate_messages_nodejs" />
+      <config projectName="rn_skills_as" targetName="geometry_msgs_generate_messages_lisp" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveActionFeedback" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteResult" />
+      <config projectName="rn_skills_as" targetName="DavinciActionClient" />
+      <config projectName="rn_skills_as" targetName="tf_generate_messages_cpp" />
+      <config projectName="rn_skills_as" targetName="trajectory_msgs_generate_messages_eus" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteActionGoal" />
+      <config projectName="rn_skills_as" targetName="rn_skills_as_generate_messages_cpp" />
+      <config projectName="rn_skills_as" targetName="roscpp_generate_messages_nodejs" />
+      <config projectName="rn_skills_as" targetName="trajectory_msgs_generate_messages_nodejs" />
+      <config projectName="rn_skills_as" targetName="cwru_davinci_msgs_generate_messages_nodejs" />
+      <config projectName="rn_skills_as" targetName="cwru_davinci_msgs_generate_messages_eus" />
+      <config projectName="rn_skills_as" targetName="rosgraph_msgs_generate_messages_nodejs" />
+      <config projectName="rn_skills_as" targetName="cwru_davinci_msgs_generate_messages_py" />
+      <config projectName="rn_skills_as" targetName="gmock" />
+      <config projectName="rn_skills_as" targetName="sensor_msgs_generate_messages_eus" />
+      <config projectName="rn_skills_as" targetName="tf_generate_messages_py" />
+      <config projectName="rn_skills_as" targetName="tf2_msgs_generate_messages_cpp" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveAction" />
       <config projectName="rn_skills_as" targetName="rn_skills_as_gennodejs" />
+      <config projectName="rn_skills_as" targetName="actionlib_msgs_generate_messages_nodejs" />
+      <config projectName="rn_skills_as" targetName="gmock_main" />
+      <config projectName="rn_skills_as" targetName="trajectory_msgs_generate_messages_lisp" />
+      <config projectName="rn_skills_as" targetName="std_msgs_generate_messages_lisp" />
+      <config projectName="rn_skills_as" targetName="actionlib_msgs_generate_messages_lisp" />
+      <config projectName="rn_skills_as" targetName="rosgraph_msgs_generate_messages_eus" />
+      <config projectName="rn_skills_as" targetName="rosgraph_msgs_generate_messages_lisp" />
+      <config projectName="rn_skills_as" targetName="tf2_msgs_generate_messages_lisp" />
+      <config projectName="rn_skills_as" targetName="run_tests" />
+      <config projectName="rn_skills_as" targetName="download_extra_data" />
+      <config projectName="rn_skills_as" targetName="test_2" />
+      <config projectName="rn_skills_as" targetName="rn_skills_as_generate_messages_lisp" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveGoal" />
+      <config projectName="rn_skills_as" targetName="actionlib_msgs_generate_messages_py" />
+      <config projectName="rn_skills_as" targetName="actionlib_msgs_generate_messages_eus" />
       <config projectName="rn_skills_as" targetName="rn_skills_as_generate_messages_eus" />
+      <config projectName="rn_skills_as" targetName="gtest_main" />
+      <config projectName="rn_skills_as" targetName="rn_skills_as_generate_messages_nodejs" />
+      <config projectName="rn_skills_as" targetName="tests" />
+      <config projectName="rn_skills_as" targetName="sensor_msgs_generate_messages_nodejs" />
+      <config projectName="rn_skills_as" targetName="roscpp_generate_messages_lisp" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveFeedback" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveActionResult" />
+      <config projectName="rn_skills_as" targetName="trajectory_msgs_generate_messages_py" />
+      <config projectName="rn_skills_as" targetName="rn_skills_as_generate_messages" />
+      <config projectName="rn_skills_as" targetName="cwru_davinci_msgs_generate_messages_lisp" />
+      <config projectName="rn_skills_as" targetName="test_controller" />
+      <config projectName="rn_skills_as" targetName="tf2_msgs_generate_messages_py" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteGoal" />
+      <config projectName="rn_skills_as" targetName="roscpp_generate_messages_py" />
+      <config projectName="rn_skills_as" targetName="tf_generate_messages_eus" />
+      <config projectName="rn_skills_as" targetName="actionlib_generate_messages_cpp" />
       <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteAction" />
+      <config projectName="rn_skills_as" targetName="actionlib_msgs_generate_messages_cpp" />
+      <config projectName="rn_skills_as" targetName="actionlib_generate_messages_eus" />
+      <config projectName="rn_skills_as" targetName="clean_test_results" />
+      <config projectName="rn_skills_as" targetName="RnNeedleDrivingPlanner" />
+      <config projectName="rn_skills_as" targetName="sensor_msgs_generate_messages_lisp" />
+      <config projectName="rn_skills_as" targetName="rn_skills_as_genlisp" />
+      <config projectName="rn_skills_as" targetName="rn_skills_as_genpy" />
+      <config projectName="rn_skills_as" targetName="demo_needle_planner_stand_alone" />
+      <config projectName="rn_skills_as" targetName="geometry_msgs_generate_messages_cpp" />
+      <config projectName="rn_skills_as" targetName="_catkin_empty_exported_target" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteActionFeedback" />
+      <config projectName="rn_skills_as" targetName="gtest" />
+      <config projectName="rn_skills_as" targetName="actionlib_generate_messages_lisp" />
     </generated>
   </component>
   <component name="CMakeSettings">
@@ -124,8 +127,8 @@
                 <file leaf-file-name="rn_needle_driving_fncs_test_main.cpp" pinned="false" current-in-tab="false">
                   <entry file="file://$PROJECT_DIR$/tests/rn_needle_driving_fncs_test_main.cpp">
                     <provider selected="true" editor-type-id="text-editor">
-                      <state>
-                        <caret line="9" selection-start-line="9" selection-end-line="9" />
+                      <state relative-caret-position="180">
+                        <caret line="12" selection-start-line="12" selection-end-line="12" />
                       </state>
                     </provider>
                   </entry>
@@ -133,8 +136,8 @@
                 <file leaf-file-name="RnNeedleDrivingPlanner.cpp" pinned="false" current-in-tab="true">
                   <entry file="file://$PROJECT_DIR$/src/RnNeedleDrivingPlanner.cpp">
                     <provider selected="true" editor-type-id="text-editor">
-                      <state relative-caret-position="-1971">
-                        <caret line="688" column="15" selection-start-line="688" selection-start-column="15" selection-end-line="688" selection-end-column="15" />
+                      <state relative-caret-position="15">
+                        <caret line="696" column="15" selection-start-line="696" selection-start-column="15" selection-end-line="696" selection-end-column="15" />
                       </state>
                     </provider>
                   </entry>
@@ -146,8 +149,8 @@
                 <file leaf-file-name="RnNeedleDrivingPlanner.cpp" pinned="false" current-in-tab="true">
                   <entry file="file://$PROJECT_DIR$/src/RnNeedleDrivingPlanner.cpp">
                     <provider selected="true" editor-type-id="text-editor">
-                      <state relative-caret-position="24">
-                        <caret line="696" selection-start-line="696" selection-end-line="696" />
+                      <state relative-caret-position="219">
+                        <caret line="717" column="3" lean-forward="true" selection-start-line="717" selection-start-column="3" selection-end-line="717" selection-end-column="3" />
                       </state>
                     </provider>
                   </entry>
@@ -164,23 +167,47 @@
     <favorites_list name="rn_skills_as" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.20048751">
+    <splitter split-orientation="horizontal" split-proportion="0.48641303">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="rn_needle_driving_fncs_test_main.cpp" pinned="false" current-in-tab="true">
+          <file leaf-file-name="rn_needle_driving_fncs_test_main.cpp" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/tests/rn_needle_driving_fncs_test_main.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="480">
-                  <caret line="80" column="83" selection-start-line="80" selection-start-column="51" selection-end-line="80" selection-end-column="83" />
+                <state relative-caret-position="300">
+                  <caret line="124" selection-start-line="124" selection-end-line="127" selection-end-column="104" />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="RnNeedleDrivingPlanner.cpp" pinned="false" current-in-tab="false">
+          <file leaf-file-name="test_2.cpp" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/tests/test_2.cpp">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="221">
+                  <caret line="25" column="12" selection-start-line="25" selection-start-column="9" selection-end-line="25" selection-end-column="12" />
+                  <folding>
+                    <element signature="e#43#102#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="RnNeedleDrivingPlanner.cpp" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/RnNeedleDrivingPlanner.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="515">
-                  <caret line="515" selection-start-line="515" selection-end-line="515" />
+                <state relative-caret-position="506">
+                  <caret line="517" column="65" selection-start-line="517" selection-start-column="65" selection-end-line="517" selection-end-column="65" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="test_controller.cpp" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/tests/test_controller.cpp">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="2055">
+                  <caret line="139" selection-start-line="139" selection-end-line="139" />
+                  <folding>
+                    <element signature="e#67#126#0" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -188,7 +215,7 @@
           <file leaf-file-name="RnNeedleDrivingPlanner.h" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/include/rn_skills_as/RnNeedleDrivingPlanner.h">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="15">
+                <state relative-caret-position="615">
                   <caret line="41" column="46" selection-start-line="41" selection-start-column="14" selection-end-line="41" selection-end-column="46" />
                 </state>
               </provider>
@@ -198,11 +225,32 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="RnNeedleDrivingPlanner.h" pinned="false" current-in-tab="true">
+          <file leaf-file-name="RnNeedleDrivingPlanner.cpp" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/RnNeedleDrivingPlanner.cpp">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="39">
+                  <caret line="1092" column="38" lean-forward="true" selection-start-line="1092" selection-start-column="38" selection-end-line="1092" selection-end-column="38" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="test_controller.cpp" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/tests/test_controller.cpp">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="2760">
+                  <caret line="184" column="27" selection-start-line="184" selection-start-column="27" selection-end-line="184" selection-end-column="27" />
+                  <folding>
+                    <element signature="e#67#126#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="RnNeedleDrivingPlanner.h" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/include/rn_skills_as/RnNeedleDrivingPlanner.h">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="246">
-                  <caret line="358" column="29" selection-start-line="358" selection-start-column="14" selection-end-line="358" selection-end-column="29" />
+                <state relative-caret-position="194">
+                  <caret line="482" column="45" selection-start-line="482" selection-start-column="12" selection-end-line="482" selection-end-column="45" />
                 </state>
               </provider>
             </entry>
@@ -210,20 +258,8 @@
           <file leaf-file-name="rn_davinci_skills_base.h" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/include/rn_skills_as/rn_davinci_skills_base.h">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="66">
-                  <caret line="8" column="19" selection-start-line="8" selection-start-column="19" selection-end-line="8" selection-end-column="19" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="RnNeedleDrivingPlanner.cpp" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/RnNeedleDrivingPlanner.cpp">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="4430">
-                  <caret line="982" lean-forward="true" selection-start-line="982" selection-end-line="982" />
-                  <folding>
-                    <element signature="e#37260#38405#0" />
-                  </folding>
+                <state relative-caret-position="225">
+                  <caret line="15" selection-start-line="15" selection-end-line="15" />
                 </state>
               </provider>
             </entry>
@@ -231,8 +267,8 @@
           <file leaf-file-name="CMakeLists.txt" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="147">
-                  <caret line="187" lean-forward="true" selection-start-line="187" selection-end-line="187" />
+                <state relative-caret-position="2520">
+                  <caret line="168" column="92" selection-start-line="168" selection-start-column="70" selection-end-line="168" selection-end-column="92" />
                 </state>
               </provider>
             </entry>
@@ -240,7 +276,7 @@
           <file leaf-file-name="package.xml" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/package.xml">
               <provider selected="true" editor-type-id="text-editor">
-                <state>
+                <state relative-caret-position="330">
                   <caret line="22" selection-start-line="22" selection-end-line="22" />
                 </state>
               </provider>
@@ -252,36 +288,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>col(</find>
-      <find>davinci_fwd_solver_</find>
-      <find>ik_ok_array_</find>
+      <find>math</find>
+      <find>computeNeedleDriveGripperAffines</find>
+      <find>tissue</find>
+      <find>tissue_normal</find>
+      <find>needleDriveTraj</find>
+      <find>computeneed</find>
+      <find>todo</find>
+      <find>requestOneNeedleDrivingTrajectoryInBaseFrame</find>
+      <find>resol</find>
       <find>path_waypoints_</find>
-      <find>Fraction of IK solutions is</find>
       <find>convertAffinesToTrajectoryMsgs</find>
-      <find>VELO</find>
-      <find>ik_solver_.ik_solve(des_gripper_one_wrt_base</find>
-      <find>des_gripper_one_affines_wrt_lt_camera</find>
-      <find>updateNeedleWrtGripperTransforms()</find>
-      <find>default_grasp_tf_search_resolution_</find>
-      <find>olution 0 has errors of</find>
-      <find>Cannot acquire Camera PSMs transforms transform. Will NOT use default</find>
+      <find>pt0</find>
+      <find>kinemat</find>
+      <find>fwd</find>
+      <find>ik_solve</find>
+      <find>==1</find>
       <find>ik_solver_.ik_solve</find>
-      <find>generateGraspTransformList</find>
-      <find>Vectorq7x1</find>
       <find>default_preferred_grasp_one_tf_</find>
-      <find>printEigenAffine</find>
-      <find>needle_affine_wrt_gripper_one_frame_</find>
-      <find>updateNeedleWrtGripperTransforms</find>
       <find>default_needle_affine_wrt_grasp_one_frame_</find>
-      <find>const</find>
-      <find>convertGeoTransformStampedToEigenAffine</find>
-      <find>k_ok_point::</find>
-      <find>convertEigenAffineToGeoTransform</find>
-      <find>computeGraspTransform</find>
-      <find>ros_warn(&quot;Default Eigen Affine</find>
-      <find>grasp_transform</find>
-      <find>needle_affine_wrt_grasp_one_frame_</find>
-      <find>needle_affine_wrt_grasp_one_frame</find>
+      <find>ik</find>
+      <find>grab_needle_plus_minus_y_</find>
+      <find>tissue_nor</find>
+      <find>tissue_normal_</find>
+      <find>defineTissueFrameWrtLtCamera</find>
+      <find>overlapLeftCamFrameAndPsmBase</find>
+      <find>psm_one_affine_wrt_lt_camera_</find>
+      <find>velocity</find>
+      <find>tissue_norm</find>
+      <find>vec</find>
+      <find>computeneedle</find>
     </findStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -295,11 +331,14 @@
         <option value="$PROJECT_DIR$/package.xml" />
         <option value="$PROJECT_DIR$/include/rn_skills_as/DavinciSkillsActionServer.h" />
         <option value="$PROJECT_DIR$/src/DavinciSkillsActionServer.cpp" />
-        <option value="$PROJECT_DIR$/include/rn_skills_as/RnNeedleDrivingPlanner.h" />
-        <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/examples/demo_needle_planner_stand_alone.cpp" />
-        <option value="$PROJECT_DIR$/src/RnNeedleDrivingPlanner.cpp" />
+        <option value="$PROJECT_DIR$/launch/test_controller.launch" />
+        <option value="$PROJECT_DIR$/CMakeLists.txt" />
+        <option value="$PROJECT_DIR$/tests/test_controller.cpp" />
+        <option value="$PROJECT_DIR$/include/rn_skills_as/RnNeedleDrivingPlanner.h" />
         <option value="$PROJECT_DIR$/tests/rn_needle_driving_fncs_test_main.cpp" />
+        <option value="$PROJECT_DIR$/tests/test_2.cpp" />
+        <option value="$PROJECT_DIR$/src/RnNeedleDrivingPlanner.cpp" />
       </list>
     </option>
   </component>
@@ -313,66 +352,17 @@
     <packageJsonPaths />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="2041" />
-    <option name="y" value="45" />
-    <option name="width" value="1859" />
-    <option name="height" value="1062" />
-  </component>
-  <component name="ProjectInspectionProfilesVisibleTreeState">
-    <entry key="Project Default">
-      <profile-state>
-        <expanded-state>
-          <State>
-            <id />
-          </State>
-          <State>
-            <id>C/C++</id>
-          </State>
-          <State>
-            <id>CSS</id>
-          </State>
-          <State>
-            <id>Code style issuesCSS</id>
-          </State>
-          <State>
-            <id>Control flow issuesJavaScript</id>
-          </State>
-          <State>
-            <id>DOM issuesJavaScript</id>
-          </State>
-          <State>
-            <id>General</id>
-          </State>
-          <State>
-            <id>GeneralC/C++</id>
-          </State>
-          <State>
-            <id>GeneralJavaScript</id>
-          </State>
-          <State>
-            <id>Invalid elementsCSS</id>
-          </State>
-          <State>
-            <id>JavaScript</id>
-          </State>
-          <State>
-            <id>Probable bugsCSS</id>
-          </State>
-          <State>
-            <id>Python</id>
-          </State>
-          <State>
-            <id>Unused codeC/C++</id>
-          </State>
-        </expanded-state>
-      </profile-state>
-    </entry>
+    <option name="x" value="2202" />
+    <option name="y" value="120" />
+    <option name="width" value="1855" />
+    <option name="height" value="1040" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -395,8 +385,7 @@
               <item name="rn_skills_as" type="b2602c69:ProjectViewProjectNode" />
               <item name="rn_skills_as" type="47feb1d3:ProjectViewModuleNode" />
               <item name="rn_skills_as" type="462c0819:PsiDirectoryNode" />
-              <item name="include" type="462c0819:PsiDirectoryNode" />
-              <item name="rn_skills_as" type="462c0819:PsiDirectoryNode" />
+              <item name="launch" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="rn_skills_as" type="b2602c69:ProjectViewProjectNode" />
@@ -414,14 +403,13 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$USER_HOME$/clion_cmake_generation_paths/Epsom_catkin_ws/cmake-build-debug" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
-    <property name="settings.editor.selected.configurable" value="CMakeSettings" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.XML" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -476,6 +464,7 @@
     <configuration name="cwru_davinci_msgs_generate_messages_lisp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="rn_skills_as" TARGET_NAME="cwru_davinci_msgs_generate_messages_lisp" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="rn_skills_as" RUN_TARGET_NAME="rn_needle_driving_fncs_test" />
     <configuration name="cwru_davinci_msgs_generate_messages_nodejs" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="rn_skills_as" TARGET_NAME="cwru_davinci_msgs_generate_messages_nodejs" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="rn_skills_as" RUN_TARGET_NAME="rn_needle_driving_fncs_test" />
     <configuration name="cwru_davinci_msgs_generate_messages_py" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="rn_skills_as" TARGET_NAME="cwru_davinci_msgs_generate_messages_py" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="rn_skills_as" RUN_TARGET_NAME="rn_needle_driving_fncs_test" />
+    <configuration name="demo_needle_planner_stand_alone" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="rn_skills_as" TARGET_NAME="demo_needle_planner_stand_alone" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="rn_skills_as" RUN_TARGET_NAME="rn_needle_driving_fncs_test" />
     <configuration name="download_extra_data" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="rn_skills_as" TARGET_NAME="download_extra_data" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="rn_skills_as" RUN_TARGET_NAME="rn_needle_driving_fncs_test" />
     <configuration name="doxygen" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="rn_skills_as" TARGET_NAME="doxygen" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="rn_skills_as" RUN_TARGET_NAME="rn_needle_driving_fncs_test" />
     <configuration name="geometry_msgs_generate_messages_cpp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="rn_skills_as" TARGET_NAME="geometry_msgs_generate_messages_cpp" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="rn_skills_as" RUN_TARGET_NAME="rn_needle_driving_fncs_test" />
@@ -520,6 +509,8 @@
     <configuration name="std_msgs_generate_messages_lisp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="rn_skills_as" TARGET_NAME="std_msgs_generate_messages_lisp" CONFIG_NAME="Debug" />
     <configuration name="std_msgs_generate_messages_nodejs" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="rn_skills_as" TARGET_NAME="std_msgs_generate_messages_nodejs" CONFIG_NAME="Debug" />
     <configuration name="std_msgs_generate_messages_py" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="rn_skills_as" TARGET_NAME="std_msgs_generate_messages_py" CONFIG_NAME="Debug" />
+    <configuration name="test_2" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="rn_skills_as" TARGET_NAME="test_2" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="rn_skills_as" RUN_TARGET_NAME="test_2" />
+    <configuration name="test_controller" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="rn_skills_as" TARGET_NAME="test_controller" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="rn_skills_as" RUN_TARGET_NAME="test_controller" />
     <configuration name="tests" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="rn_skills_as" TARGET_NAME="tests" CONFIG_NAME="Debug" />
     <configuration name="tf2_msgs_generate_messages_cpp" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="rn_skills_as" TARGET_NAME="tf2_msgs_generate_messages_cpp" CONFIG_NAME="Debug" />
     <configuration name="tf2_msgs_generate_messages_eus" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="rn_skills_as" TARGET_NAME="tf2_msgs_generate_messages_eus" CONFIG_NAME="Debug" />
@@ -571,6 +562,7 @@
       <item itemvalue="Application.cwru_davinci_msgs_generate_messages_py" />
       <item itemvalue="Application.DavinciActionClient" />
       <item itemvalue="Application.DavinciActionServer" />
+      <item itemvalue="Application.demo_needle_planner_stand_alone" />
       <item itemvalue="Application.download_extra_data" />
       <item itemvalue="Application.doxygen" />
       <item itemvalue="Application.geometry_msgs_generate_messages_cpp" />
@@ -612,6 +604,8 @@
       <item itemvalue="Application.std_msgs_generate_messages_lisp" />
       <item itemvalue="Application.std_msgs_generate_messages_nodejs" />
       <item itemvalue="Application.std_msgs_generate_messages_py" />
+      <item itemvalue="Application.test_2" />
+      <item itemvalue="Application.test_controller" />
       <item itemvalue="Application.tests" />
       <item itemvalue="Application.tf2_msgs_generate_messages_cpp" />
       <item itemvalue="Application.tf2_msgs_generate_messages_eus" />
@@ -662,12 +656,17 @@
       <workItem from="1524618186141" duration="863000" />
       <workItem from="1524619167645" duration="9507000" />
       <workItem from="1524664754401" duration="35138000" />
-      <workItem from="1524751087536" duration="7649000" />
+      <workItem from="1524751087536" duration="8301000" />
+      <workItem from="1524975156431" duration="1186000" />
+      <workItem from="1524976615262" duration="4239000" />
+      <workItem from="1525143288288" duration="14077000" />
+      <workItem from="1525170452446" duration="10145000" />
+      <workItem from="1525317810222" duration="7303000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="120841000" />
+    <option name="totallyTimeSpent" value="158443000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -682,15 +681,15 @@
     <frame x="1976" y="-14" width="1865" height="1095" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49567723" visible="true" weight="0.10815217" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.2223382" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49567723" weight="0.16413043" />
+      <window_info active="true" anchor="bottom" id="TODO" order="6" visible="true" weight="0.2223382" />
       <window_info anchor="bottom" id="CMake" order="7" weight="0.27557412" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5021739" side_tool="true" weight="0.24270834" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.14718163" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32881" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
-      <window_info id="Structure" order="2" sideWeight="0.50432277" weight="0.09347826" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="7" sideWeight="0.4978261" visible="true" weight="0.15762004" />
+      <window_info id="Structure" order="2" sideWeight="0.50432277" side_tool="true" weight="0.09347826" />
+      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.4978261" weight="0.15762004" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info id="Favorites" order="1" sideWeight="0.50432277" side_tool="true" weight="0.067391306" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -710,31 +709,10 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="25" />
+      <option name="time" value="27" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/package.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="22" selection-start-line="22" selection-end-line="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/DavinciSkillsActionServer.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="1" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/include/rn_skills_as/DavinciSkillsActionServer.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="900">
-          <caret line="60" column="15" selection-start-line="60" selection-start-column="15" selection-end-line="60" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/include/rn_skills_as/RnNeedleDrivingPlanner.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="990">
@@ -746,9 +724,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="450">
           <caret line="30" column="27" selection-start-line="30" selection-start-column="5" selection-end-line="30" selection-end-column="27" />
-          <folding>
-            <element signature="e#37260#38405#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -784,9 +759,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="12" selection-start-line="12" selection-end-line="12" />
-          <folding>
-            <element signature="e#37260#38405#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -815,9 +787,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="12" selection-start-line="12" selection-end-line="12" />
-          <folding>
-            <element signature="e#37260#38405#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -860,9 +829,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="12" selection-start-line="12" selection-end-line="12" />
-          <folding>
-            <element signature="e#37260#38405#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -905,9 +871,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
-          <folding>
-            <element signature="e#37260#38405#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -950,9 +913,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="12" selection-start-line="12" selection-end-line="12" />
-          <folding>
-            <element signature="e#37260#38405#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -996,7 +956,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/package.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
+        <state relative-caret-position="330">
           <caret line="22" selection-start-line="22" selection-end-line="22" />
         </state>
       </provider>
@@ -1005,13 +965,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="720">
           <caret line="48" lean-forward="true" selection-start-line="48" selection-end-line="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="101" selection-start-line="101" selection-end-line="101" />
         </state>
       </provider>
     </entry>
@@ -1029,48 +982,79 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+    <entry file="file://$PROJECT_DIR$/launch/test_controller.launch">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="187" lean-forward="true" selection-start-line="187" selection-end-line="187" />
+        <state relative-caret-position="180">
+          <caret line="12" selection-start-line="12" selection-end-line="12" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/examples/demo_needle_planner_stand_alone.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1200">
-          <caret line="80" lean-forward="true" selection-start-line="80" selection-end-line="80" />
+        <state relative-caret-position="690">
+          <caret line="46" column="18" selection-start-line="46" selection-start-column="18" selection-end-line="46" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2520">
+          <caret line="168" column="92" selection-start-line="168" selection-start-column="70" selection-end-line="168" selection-end-column="92" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///opt/ros/kinetic/share/catkin/cmake/catkin_package.cmake">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="222">
+          <caret line="101" selection-start-line="101" selection-end-line="101" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/include/rn_skills_as/rn_davinci_skills_base.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="8" column="19" selection-start-line="8" selection-start-column="19" selection-end-line="8" selection-end-column="19" />
+        <state relative-caret-position="225">
+          <caret line="15" selection-start-line="15" selection-end-line="15" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/RnNeedleDrivingPlanner.cpp">
+    <entry file="file://$PROJECT_DIR$/include/rn_skills_as/RnNeedleDrivingPlanner.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4430">
-          <caret line="982" lean-forward="true" selection-start-line="982" selection-end-line="982" />
+        <state relative-caret-position="615">
+          <caret line="41" column="46" selection-start-line="41" selection-start-column="14" selection-end-line="41" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_controller.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2055">
+          <caret line="139" selection-start-line="139" selection-end-line="139" />
           <folding>
-            <element signature="e#37260#38405#0" />
+            <element signature="e#67#126#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/rn_needle_driving_fncs_test_main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="80" column="83" selection-start-line="80" selection-start-column="51" selection-end-line="80" selection-end-column="83" />
+        <state relative-caret-position="300">
+          <caret line="124" selection-start-line="124" selection-end-line="127" selection-end-column="104" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/include/rn_skills_as/RnNeedleDrivingPlanner.h">
+    <entry file="file://$PROJECT_DIR$/tests/test_2.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
-          <caret line="358" column="29" selection-start-line="358" selection-start-column="14" selection-end-line="358" selection-end-column="29" />
+        <state relative-caret-position="221">
+          <caret line="25" column="12" selection-start-line="25" selection-start-column="9" selection-end-line="25" selection-end-column="12" />
+          <folding>
+            <element signature="e#43#102#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/RnNeedleDrivingPlanner.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="506">
+          <caret line="517" column="65" selection-start-line="517" selection-start-column="65" selection-end-line="517" selection-end-column="65" />
         </state>
       </provider>
     </entry>
