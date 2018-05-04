@@ -11,6 +11,11 @@
 void executeTrajectory(psm_controller &psm,
                        trajectory_msgs::JointTrajectory &needleDriveTraj);
 
+void goToLocationPointingDown(psm_controller &psm,
+                              double x,
+                              double y,
+                              double z);
+
 int main(int argc, char **argv){
 
   ros::init(argc, argv, "test_2");
@@ -94,10 +99,99 @@ void executeTrajectory(psm_controller &psm,
 
   psm.move_psm(needleDriveTraj);
 
-  duration.sleep();
+  // duration.sleep();
 
   ROS_WARN("Done");
 
+
+
+}
+
+
+///
+void goToLocationPointingDown(psm_controller &psm,
+                              double x,
+                              double y,
+                              double z) {
+
+
+  davinci_kinematics::Inverse ik_solver;
+  davinci_kinematics::Vectorq7x1 q_vec;
+
+  Eigen::Vector3d tip_origin;
+  Eigen::Vector3d x_vec, y_vec, z_vec;
+  Eigen::Matrix3d tip_rotation;
+  Eigen::Affine3d des_affine;
+  double norm;
+
+  double time = 7;
+
+  trajectory_msgs::JointTrajectoryPoint trajPoint_0;
+  trajectory_msgs::JointTrajectoryPoint trajPoint;
+  trajectory_msgs::JointTrajectoryPoint trajPoint_2;
+  trajectory_msgs::JointTrajectory traj;
+
+  trajPoint.positions.resize(7);
+  trajPoint_2.positions.resize(7);
+
+
+  // FIXME this will cause bug: it never gets and the process got stuck here,
+  // rostopic echo joint states worked well.
+  sensor_msgs::JointState js;
+  psm.get_fresh_psm_state(js);
+
+  trajPoint_0.time_from_start = ros::Duration(0);
+  trajPoint_0.velocities = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+  trajPoint_0.positions = js.position;
+
+  std::cout << "trajPoint_0:" << std::endl << trajPoint_0 << std::endl;
+
+  // Deduce the gripper rotation w/rt base frame first
+  norm = sqrt(x*x + y*y);
+  x_vec << x/norm, y/norm, 0;
+  z_vec << 0, 0, -1;
+  y_vec = z_vec.cross(x_vec);
+  tip_rotation.col(0) = x_vec;
+  tip_rotation.col(1) = y_vec;
+  tip_rotation.col(2) = z_vec;
+
+
+  // Fill in the affine
+  tip_origin << x, y, z;
+  des_affine.linear() = tip_rotation;
+  des_affine.translation() = tip_origin;
+
+
+  // Sent to the IK solver
+  ik_solver.ik_solve(des_affine);
+  q_vec = ik_solver.get_soln();
+
+
+  // Fill in the traj msgs
+  for (int i = 0; i < 7; i++) {
+    trajPoint.positions[i] = q_vec[i];
+    // trajPoint.positions[i+7] = 0; // TODO do we need this for PSM2? (so the size is 14?)
+    trajPoint_2.positions[i] = q_vec[i];
+    // trajPoint_2.positions[i+7] = 0; // TODO do we need this for PSM2? (so the size is 14?)
+  }
+  trajPoint.time_from_start = ros::Duration(time);
+  trajPoint_2.time_from_start = ros::Duration(time+1);
+  traj.points.clear();
+  traj.joint_names.clear();
+  traj.header.stamp = ros::Time::now();
+  // traj.points.push_back(trajPoint_0);
+  traj.points.push_back(trajPoint);
+  // traj.points.push_back(trajPoint_2);
+  //
+
+  std::cout << "traj: " << std::endl << traj << std::endl;
+
+
+  // Order the PSM to move
+  ROS_INFO("Going to (%f, %f, %f)", x, y, z);
+  psm.move_psm(traj);
+  ros::Duration(time).sleep(); // TODO is this necessary?
+  ROS_INFO("Done");
 
 
 }

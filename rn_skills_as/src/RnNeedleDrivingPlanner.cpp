@@ -1216,4 +1216,45 @@ bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryInBaseFrame(const 
 
 
 
+/// Debugging Functions
+
+Eigen::Vector3d RnNeedleDrivingPlanner::transformPointFromBaseToLtCamFrame(const int & arm_index,
+                                                                           const Eigen::Vector3d &point) {
+
+  Eigen::Matrix3d point_rotation;
+  Eigen::Affine3d point_affine;
+  point_rotation.setIdentity();
+  point_affine.translation() = point;
+  point_affine.linear() = point_rotation;
+
+  Eigen::Affine3d result_affine;
+  Eigen::Vector3d result_point;
+
+  switch (arm_index) {
+
+    case 1:
+
+      // base wrt cam affine
+      result_affine = psm_one_affine_wrt_lt_camera_*point_affine;
+      result_point = result_affine.translation();
+
+      break;
+
+    case 2:
+      // base wrt cam affine
+      result_affine = psm_two_affine_wrt_lt_camera_*point_affine;
+      result_point = result_affine.translation();
+
+      break;
+
+  }
+
+  std::cout << "transformPointFromBaseToLtCamFrame: " << std::endl <<
+           "Point in base frame: " << point.transpose() << std::endl <<
+           "Point in cam frame: " << result_point.transpose() << std::endl;
+
+  return result_point;
+
+}
+
 

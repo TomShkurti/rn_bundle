@@ -433,6 +433,13 @@ class RnNeedleDrivingPlanner {
 
 
 
+  /// Debugging functions
+
+  Eigen::Vector3d transformPointFromBaseToLtCamFrame(const int & arm_index,
+                                                     const Eigen::Vector3d &point);
+
+
+
   /// TODO finish
   void outputPspPlayfile(std::string path);
 
