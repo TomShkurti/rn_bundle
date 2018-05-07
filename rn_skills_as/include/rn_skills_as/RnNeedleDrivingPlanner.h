@@ -191,6 +191,8 @@ class RnNeedleDrivingPlanner {
 
   /// Auxiliary Utility Functions
 
+  double approximateTrajectoryDist(trajectory_msgs::JointTrajectory &joint_trajectory);
+
   void convertAffinesToTrajectoryMsgs(const std::vector<Eigen::Affine3d> &gripper_affines_wrt_portal,
                                       trajectory_msgs::JointTrajectory &joint_trajectory);
 
@@ -379,6 +381,17 @@ class RnNeedleDrivingPlanner {
     ROS_INFO("default_grasp_tf_search_resolution_ has been updated.");
   }
 
+  inline void setPathWaypoints (int number) {
+    path_waypoints_ = number;
+    ik_ok_array_.resize(path_waypoints_);
+    ROS_INFO("path_waypoints_ has been updated.");
+  }
+
+  inline void setAccelerationRate (double acc) {
+    acceleration_ = acc; // m/s^2
+    ROS_INFO("acceleration_ has been updated.");
+  }
+
 
   /// get() functions
 
@@ -437,6 +450,17 @@ class RnNeedleDrivingPlanner {
 
   Eigen::Vector3d transformPointFromBaseToLtCamFrame(const int & arm_index,
                                                      const Eigen::Vector3d &point);
+
+  inline void printPsmBaseToCamTransfomrs() {
+
+    ROS_WARN("DEBUG -- printing psm_one_affine_wrt_lt_camera_: ");
+    printEigenAffine(psm_one_affine_wrt_lt_camera_);
+    ROS_WARN("DEBUG -- printing psm_two_affine_wrt_lt_camera_: ");
+    printEigenAffine(psm_two_affine_wrt_lt_camera_);
+
+  }
+
+
 
 
 
@@ -512,6 +536,10 @@ class RnNeedleDrivingPlanner {
 
   Eigen::Matrix3d tissue_rotation_wrt_lt_camera_;
   Eigen::Affine3d tissue_affine_wrt_lt_camera_;
+
+  // Speed and acceleration
+  double acceleration_ = 0.001; // m/s^2
+
 
   // solution storage
   // TODO delete if never used

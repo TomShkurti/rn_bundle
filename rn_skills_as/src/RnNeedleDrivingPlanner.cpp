@@ -162,15 +162,15 @@ bool RnNeedleDrivingPlanner::getCameraToPSMsTransforms(){
   ROS_INFO("Attempting to get Camera PSMs transforms");
 
   while (!tf_acquired){
-    if (n_tries > 2) break;
+    if (n_tries > 5) break;
     tf_acquired = true;
     try {
-      tfListener.lookupTransform("left_camera_optical_frame",
-                                 "one_psm_base_link",
+      tfListener.lookupTransform("left_camera_link",
+                                 "PSM1psm_base_link",
                                  ros::Time(0),
                                  tfResult_one);
-      tfListener.lookupTransform("left_camera_optical_frame",
-                                 "two_psm_base_link",
+      tfListener.lookupTransform("left_camera_link",
+                                 "PSM2psm_base_link",
                                  ros::Time(0),
                                  tfResult_two);
     } catch (tf::TransformException &exception){
@@ -191,8 +191,9 @@ bool RnNeedleDrivingPlanner::getCameraToPSMsTransforms(){
     psm_one_affine_wrt_lt_camera_ = convertTFToEigen(tfResult_one);
     psm_two_affine_wrt_lt_camera_ = convertTFToEigen(tfResult_two);
 
-    ROS_WARN("Checking the transforms:");
+    ROS_WARN("Checking the transforms(psm_one_affine_wrt_lt_camera_):");
     printEigenAffine(psm_one_affine_wrt_lt_camera_);
+    ROS_WARN("Checking the transforms(psm_two_affine_wrt_lt_camera_):");
     printEigenAffine(psm_two_affine_wrt_lt_camera_);
 
   }
@@ -215,12 +216,12 @@ bool RnNeedleDrivingPlanner::getCameraToGripperTransforms(){
     if (n_tries > 5) break;
     tf_acquired = true;
     try {
-      tfListener.lookupTransform("left_camera_optical_frame",
-                                 "one_tool_tip_link",
+      tfListener.lookupTransform("left_camera_link",
+                                 "PSM1fingertip1",
                                  ros::Time(0),
                                  tfResult_one);
-      tfListener.lookupTransform("left_camera_optical_frame",
-                                 "two_tool_tip_link",
+      tfListener.lookupTransform("left_camera_link",
+                                 "PSM2fingertip1",
                                  ros::Time(0),
                                  tfResult_two);
     } catch (tf::TransformException &exception){
@@ -241,8 +242,9 @@ bool RnNeedleDrivingPlanner::getCameraToGripperTransforms(){
     gripper_one_affine_wrt_lt_camera_ = convertTFToEigen(tfResult_one);
     gripper_two_affine_wrt_lt_camera_ = convertTFToEigen(tfResult_two);
 
-    ROS_WARN("Checking the transforms:");
+    ROS_WARN("Checking the transforms(gripper_one_affine_wrt_lt_camera_):");
     printEigenAffine(gripper_one_affine_wrt_lt_camera_);
+    ROS_WARN("Checking the transforms(gripper_two_affine_wrt_lt_camera_):");
     printEigenAffine(gripper_two_affine_wrt_lt_camera_);
 
   }
@@ -423,6 +425,12 @@ double RnNeedleDrivingPlanner::computeNeedleDriveGripperAffines(int arm_index,
         if (ik_solver_.ik_solve(des_gripper_one_wrt_base)==1) {
           nsolns++;
           des_gripper_one_affines_wrt_lt_camera.push_back(des_gripper_one_wrt_base);
+
+          if ((ipose == 0) || (ipose == (path_waypoints_ - 1)) ) {
+            ROS_WARN("DEBUG 22");
+            des_gripper_one_affines_wrt_lt_camera.push_back(des_gripper_one_wrt_base);
+          }
+
           ik_ok_array_(ipose) = 1;
         } else {
           ik_ok_array_(ipose) = 0;
@@ -515,7 +523,7 @@ void RnNeedleDrivingPlanner::convertAffinesToTrajectoryMsgs(const std::vector<Ei
       q_vec1(6) = 0;
 
       // TODO delete
-      std::cout << "q_vec1: " << q_vec1.transpose() << std::endl;
+//      std::cout << "q_vec1: " << q_vec1.transpose() << std::endl;
 
 
     } else {
@@ -746,7 +754,7 @@ void RnNeedleDrivingPlanner::generateGraspTransformList(const int &arm_index,
         grasp_transform_temp.transform.rotation.y = q1.y();
         grasp_transform_temp.transform.rotation.z = q1.z();
         grasp_transform_temp.transform.rotation.w = q1.w();
-        grasp_transform_temp.child_frame_id = "left_camera_optical_frame";
+        grasp_transform_temp.child_frame_id = "left_camera_link";
         grasp_transform_temp.header.stamp = ros::Time::now();
         grasp_tf_array.stamped_transform_list.push_back(grasp_transform_temp);
       }
@@ -767,7 +775,7 @@ void RnNeedleDrivingPlanner::generateGraspTransformList(const int &arm_index,
         grasp_transform_temp.transform.rotation.y = q2.y();
         grasp_transform_temp.transform.rotation.z = q2.z();
         grasp_transform_temp.transform.rotation.w = q2.w();
-        grasp_transform_temp.child_frame_id = "left_camera_optical_frame";
+        grasp_transform_temp.child_frame_id = "left_camera_link";
         grasp_transform_temp.header.stamp = ros::Time::now();
         grasp_tf_array.stamped_transform_list.push_back(grasp_transform_temp);
       }
@@ -955,13 +963,43 @@ void RnNeedleDrivingPlanner::setTrajectoryVelocity(double velocity,
   // Use Linear Estimation to get the time set according to requested velocity.
 
   double euler_dist;
+  double total_dist;
+
+  double max_actual_velocity;
+
+  double acceleration_time, dcceleration_start_time, time_count, temp_t;
+
+  double current_vel, next_vel, average_vel;
   Eigen::Affine3d affine_gripper_wrt_base;
   Eigen::Vector3d pt0, pt1;
-  double temp1, temp2, temp3;
+  Eigen::Vector3d temp_vec;
+  double temp;
   Vectorq7x1 q_vec0, q_vec1;
   double time_from_start, time_0, delta_t;
 
   time_0 = 7;
+  current_vel = 0;
+  time_count = 0;
+  total_dist = approximateTrajectoryDist(needleDriveTraj);
+  temp_t = velocity/acceleration_;
+
+  if (temp_t*velocity < total_dist) {
+    acceleration_time = temp_t;
+    temp_t = (total_dist/velocity) - acceleration_time;
+    dcceleration_start_time = acceleration_time + temp_t;
+  } else {
+    acceleration_time = sqrt(total_dist/acceleration_);
+    dcceleration_start_time = acceleration_time;
+    ROS_WARN("Unable to reach the maximum speed due to the short distance.");
+  }
+
+  // TODO delete
+  std::cout << "acceleration_time: " << acceleration_time << std::endl;
+  std::cout << "dcceleration_start_time:" << dcceleration_start_time << std::endl;
+
+
+
+
   needleDriveTraj.points[0].time_from_start = ros::Duration(time_0);
   time_from_start = time_0;
 
@@ -984,17 +1022,78 @@ void RnNeedleDrivingPlanner::setTrajectoryVelocity(double velocity,
     affine_gripper_wrt_base = fwd_solver_.fwd_kin_solve(q_vec1);
     pt1 = affine_gripper_wrt_base.translation();
 
-    temp1 = pt0.transpose() * pt0;
-    temp2 = pt1.transpose() * pt1;
-    temp3 = temp1 - temp2;
-    euler_dist = sqrt(fabs(temp3));
+    temp_vec = pt0 - pt1;
+    temp = temp_vec.transpose() * temp_vec;
+    euler_dist = sqrt(fabs(temp));
 
-    delta_t = euler_dist/velocity;
+    /// Consier the acceleration period
+
+    if (euler_dist == 0) {
+
+      // If the euler_dist is 0, meaning the point is the meant to be a stop-and-check point
+      // therefore a 2-second halt is added for that point.
+      delta_t = 4;
+
+    } else {
+
+      // Acceleration process
+      if (time_count < acceleration_time) {
+
+        // TODO delete
+        ROS_WARN("accelerating");
+
+        // calculate the velocity at the end of the movement
+        next_vel = sqrt(current_vel*current_vel + 2*euler_dist*acceleration_);
+
+        if (next_vel > velocity) {
+          next_vel = velocity;
+        }
+
+        average_vel = 0.5*(next_vel + current_vel);
+
+        // update the current vel for the next loop
+        current_vel = next_vel;
+
+
+      } else if (time_count > dcceleration_start_time) {
+
+        // TODO delete
+        ROS_WARN("decelerating");
+
+        // calculate the velocity at the end of the movement
+        if (current_vel*current_vel - 2*euler_dist*acceleration_ > 0) {
+          next_vel = sqrt(current_vel*current_vel - 2*euler_dist*acceleration_);
+        } else {
+          next_vel = 0;
+        }
+
+        average_vel = 0.5*(next_vel + current_vel);
+
+        // update the current vel for the next loop
+        current_vel = next_vel;
+
+
+      } else {
+          average_vel = velocity;
+        }
+
+
+      delta_t = euler_dist/average_vel;
+
+      time_count = time_count + delta_t; // Should not be the same as time_from_start due to possible halt periods.
+
+      // TODO delete
+      std::cout << "time_count: " << time_count << std::endl;
+
+    }
+
+    // TODO delete
+    std::cout << "current_vel: " << current_vel << std::endl;
+    std::cout << "delta_t: " << delta_t << std::endl;
 
     time_from_start = time_from_start + delta_t;
 
     needleDriveTraj.points[n+1].time_from_start = ros::Duration(time_from_start);
-
 
 // TODO delete
     std::cout  << pt0.transpose() << std::endl;
@@ -1006,6 +1105,56 @@ void RnNeedleDrivingPlanner::setTrajectoryVelocity(double velocity,
            velocity);
 
 }
+
+
+double RnNeedleDrivingPlanner::approximateTrajectoryDist(trajectory_msgs::JointTrajectory &joint_trajectory) {
+
+
+  double euler_dist;
+  double total_dist;
+
+  Eigen::Affine3d affine_gripper_wrt_base;
+  Eigen::Vector3d pt0, pt1;
+  Eigen::Vector3d temp_vec;
+  double temp;
+  Vectorq7x1 q_vec0, q_vec1;
+
+  total_dist = 0;
+
+  int waypoints = joint_trajectory.points.size();
+
+  for (int n = 0; n < (waypoints-1); n++) {
+
+    for (int i = 0; i < 7; i++) {
+      q_vec0(i) = joint_trajectory.points[n].positions[i];
+    }
+
+    affine_gripper_wrt_base = fwd_solver_.fwd_kin_solve(q_vec0);
+
+    pt0 = affine_gripper_wrt_base.translation();
+
+    for (int i = 0; i < 7; i++) {
+      q_vec1(i) = joint_trajectory.points[n+1].positions[i];
+    }
+
+    affine_gripper_wrt_base = fwd_solver_.fwd_kin_solve(q_vec1);
+    pt1 = affine_gripper_wrt_base.translation();
+
+    temp_vec = pt0 - pt1;
+    temp = temp_vec.transpose() * temp_vec;
+    euler_dist = sqrt(fabs(temp));
+
+    total_dist = total_dist + euler_dist;
+
+  }
+
+  // TODO delete
+  std::cout << "total_dist: " << total_dist << std::endl;
+
+  return total_dist;
+}
+
+
 
 
 
