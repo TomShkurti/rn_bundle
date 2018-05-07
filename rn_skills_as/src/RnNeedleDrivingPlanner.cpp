@@ -8,7 +8,9 @@
 
 
 RnNeedleDrivingPlanner::RnNeedleDrivingPlanner(const ros::NodeHandle &nodeHandle):
-    nh_(nodeHandle){
+    nh_(nodeHandle),
+    psm_one_(1, nh_),
+    psm_two_(2, nh_){
 
   ROS_INFO("Constructing a Needle Planner");
 
@@ -721,6 +723,24 @@ bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectory(const int &arm_in
 
 
 
+bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectory(const int &arm_index,
+                                                               const geometry_msgs::PointStamped &needle_entry_pt,
+                                                               const geometry_msgs::PointStamped &needle_exit_pt,
+                                                               const geometry_msgs::TransformStamped &user_grasp_transform,
+                                                               const double &perturbation,
+                                                               trajectory_msgs::JointTrajectory &needleDriveTraj,
+                                                               geometry_msgs::TransformStamped &final_grasp_transform) {
+
+
+
+
+
+}
+
+
+
+
+
 /*
  * Generate a list of grasp transforms (needle w/rt gripper) for further evaluation.
  */
@@ -794,6 +814,17 @@ void RnNeedleDrivingPlanner::generateGraspTransformList(const int &arm_index,
 
 }
 
+
+
+
+void RnNeedleDrivingPlanner::generateGraspTransformListWithPerturbation (const int &arm_index,
+                                                                         const geometry_msgs::TransformStamped &user_grasp_transform,
+                                                                         const double &perturbation,
+                                                                         cwru_davinci_msgs::ListOfTransformStamped &grasp_tf_array) {
+
+
+
+}
 
 
 /*
@@ -990,15 +1021,10 @@ void RnNeedleDrivingPlanner::setTrajectoryVelocity(double velocity,
   } else {
     acceleration_time = sqrt(total_dist/acceleration_);
     dcceleration_start_time = acceleration_time;
-    ROS_WARN("Unable to reach the maximum speed due to the short distance.");
+    max_actual_velocity = dcceleration_start_time*acceleration_;
+    ROS_WARN("Unable to reach the requested speed due to the short distance. The actual maximum speed will be: %f",
+             max_actual_velocity);
   }
-
-  // TODO delete
-  std::cout << "acceleration_time: " << acceleration_time << std::endl;
-  std::cout << "dcceleration_start_time:" << dcceleration_start_time << std::endl;
-
-
-
 
   needleDriveTraj.points[0].time_from_start = ros::Duration(time_0);
   time_from_start = time_0;
@@ -1039,8 +1065,6 @@ void RnNeedleDrivingPlanner::setTrajectoryVelocity(double velocity,
       // Acceleration process
       if (time_count < acceleration_time) {
 
-        // TODO delete
-        ROS_WARN("accelerating");
 
         // calculate the velocity at the end of the movement
         next_vel = sqrt(current_vel*current_vel + 2*euler_dist*acceleration_);
@@ -1057,8 +1081,6 @@ void RnNeedleDrivingPlanner::setTrajectoryVelocity(double velocity,
 
       } else if (time_count > dcceleration_start_time) {
 
-        // TODO delete
-        ROS_WARN("decelerating");
 
         // calculate the velocity at the end of the movement
         if (current_vel*current_vel - 2*euler_dist*acceleration_ > 0) {
@@ -1077,19 +1099,10 @@ void RnNeedleDrivingPlanner::setTrajectoryVelocity(double velocity,
           average_vel = velocity;
         }
 
-
       delta_t = euler_dist/average_vel;
-
       time_count = time_count + delta_t; // Should not be the same as time_from_start due to possible halt periods.
 
-      // TODO delete
-      std::cout << "time_count: " << time_count << std::endl;
-
     }
-
-    // TODO delete
-    std::cout << "current_vel: " << current_vel << std::endl;
-    std::cout << "delta_t: " << delta_t << std::endl;
 
     time_from_start = time_from_start + delta_t;
 
@@ -1362,6 +1375,111 @@ bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryInBaseFrame(const 
   }
 
 }
+
+
+
+/// PSM controllers
+
+void RnNeedleDrivingPlanner::executeTrajectory(psm_controller &psm,
+                                               const trajectory_msgs::JointTrajectory &needleDriveTraj) {
+
+  ROS_WARN("Reviewing Plan");
+
+  trajectory_msgs::JointTrajectory trajectory;
+  trajectory = needleDriveTraj;
+
+  int size = needleDriveTraj.points.size();
+
+  ros::Duration duration = needleDriveTraj.points[size-1].time_from_start;
+  double secs = duration.toSec();
+
+  ROS_INFO("secs: %f", secs);
+
+  ROS_WARN("Executing Plan!");
+
+  psm.move_psm(trajectory);
+
+  duration.sleep();
+
+  ROS_WARN("Execution Complete!");
+
+}
+
+
+void RnNeedleDrivingPlanner::goToLocationPointingDown(psm_controller &psm,
+                                                      const double &x,
+                                                      const double &y,
+                                                      const double &z) {
+
+  davinci_kinematics::Vectorq7x1 q_vec;
+
+  Eigen::Vector3d tip_origin;
+  Eigen::Vector3d x_vec, y_vec, z_vec;
+  Eigen::Matrix3d tip_rotation;
+  Eigen::Affine3d des_affine;
+  double norm;
+
+  double time = 7;
+
+  trajectory_msgs::JointTrajectoryPoint trajPoint_0;
+  trajectory_msgs::JointTrajectoryPoint trajPoint;
+  trajectory_msgs::JointTrajectoryPoint trajPoint_2;
+  trajectory_msgs::JointTrajectory traj;
+
+  trajPoint.positions.resize(7);
+  trajPoint_2.positions.resize(7);
+
+
+  // Deduce the gripper rotation w/rt base frame first
+
+  if (x==0 && y==0) {
+    x_vec << 0, 1, 0;
+  } else {
+    norm = sqrt(x*x + y*y);
+    x_vec << x/norm, y/norm, 0;
+  }
+  z_vec << 0, 0, -1;
+  y_vec = z_vec.cross(x_vec);
+  tip_rotation.col(0) = x_vec;
+  tip_rotation.col(1) = y_vec;
+  tip_rotation.col(2) = z_vec;
+
+  // Fill in the affine
+  tip_origin << x, y, z;
+  des_affine.linear() = tip_rotation;
+  des_affine.translation() = tip_origin;
+
+  // Sent to the IK solver
+  ik_solver_.ik_solve(des_affine);
+  q_vec = ik_solver_.get_soln();
+
+  // TODO delete
+  std::cout << "q_vec: " << q_vec.transpose() << std::endl;
+
+  // Fill in the traj msgs
+  for (int i = 0; i < 7; i++) {
+    trajPoint.positions[i] = q_vec[i];
+    trajPoint_2.positions[i] = q_vec[i];
+  }
+
+  trajPoint.time_from_start = ros::Duration(time);
+  trajPoint_2.time_from_start = ros::Duration(time+1);
+  traj.points.clear();
+  traj.joint_names.clear();
+  traj.header.stamp = ros::Time::now();
+  // traj.points.push_back(trajPoint_0);
+  traj.points.push_back(trajPoint);
+  // traj.points.push_back(trajPoint_2);
+
+  // Order the PSM to move
+  ROS_INFO("Going to (%f, %f, %f)", x, y, z);
+  psm.move_psm(traj);
+  ros::Duration(time).sleep(); // TODO is this necessary?
+  ROS_INFO("Done");
+
+}
+
+
 
 
 

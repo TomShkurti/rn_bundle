@@ -24,6 +24,7 @@ class RnNeedleDrivingPlanner {
 
 
   /// Needle Driving Related Functions
+
   void defineTissueFrameWrtLtCamera(Eigen::Vector3d entry_pt,
                                     Eigen::Vector3d exit_pt,
                                     Eigen::Vector3d tissue_normal);
@@ -122,6 +123,20 @@ class RnNeedleDrivingPlanner {
                                          geometry_msgs::TransformStamped &grasp_transform);
 
 
+  // TODO finish
+  bool getNeedleExtractionTrajectory(const int &arm_index);
+
+
+
+  // should be using needle wrt cam.
+  bool getNeedlePickingTrajectory();
+
+
+
+  // should generate 2 psms' trajectories in a synchronised manner.
+  bool getNeedleHandoverTrajectory();
+
+
   /**
    * Generate a list of grasp transforms (needle w/rt gripper) for further evaluation.
    * @param arm_index
@@ -187,6 +202,33 @@ class RnNeedleDrivingPlanner {
   // with the velocity provided te "time from start" field can be filled
   void setTrajectoryVelocity(double velocity, trajectory_msgs::JointTrajectory &needleDriveTraj);
 
+
+  // TODO finish
+
+  /**
+   * Try to find a grasp transform with an allowed perturbation from the user specified grasp transform, which allows
+   * a valid trajectory for needle driving.
+   * @param arm_index
+   * @param needle_entry_pt
+   * @param needle_exit_pt
+   * @param user_grasp_transform
+   * @param perturbation: Ranging from 0 to 1
+   * @param needleDriveTraj
+   * @param final_grasp_transform
+   * @return
+   */
+  bool requestOneNeedleDrivingTrajectory(const int &arm_index,
+                                         const geometry_msgs::PointStamped &needle_entry_pt,
+                                         const geometry_msgs::PointStamped &needle_exit_pt,
+                                         const geometry_msgs::TransformStamped &user_grasp_transform,
+                                         const double &perturbation,
+                                         trajectory_msgs::JointTrajectory &needleDriveTraj,
+                                         geometry_msgs::TransformStamped &final_grasp_transform);
+
+  void generateGraspTransformListWithPerturbation (const int &arm_index,
+                                                   const geometry_msgs::TransformStamped &user_grasp_transform,
+                                                   const double &perturbation,
+                                                   cwru_davinci_msgs::ListOfTransformStamped &grasp_tf_array);
 
 
   /// Auxiliary Utility Functions
@@ -462,6 +504,16 @@ class RnNeedleDrivingPlanner {
 
 
 
+  /// Temporary PSM controller functions
+  void executeTrajectory(psm_controller &psm,
+                         const trajectory_msgs::JointTrajectory &needleDriveTraj);
+
+
+  void goToLocationPointingDown(psm_controller &psm,
+                                const double &x,
+                                const double &y,
+                                const double &z);
+
 
 
   /// TODO finish
@@ -538,7 +590,7 @@ class RnNeedleDrivingPlanner {
   Eigen::Affine3d tissue_affine_wrt_lt_camera_;
 
   // Speed and acceleration
-  double acceleration_ = 0.001; // m/s^2
+  double acceleration_ = 0.0008; // m/s^2
 
 
   // solution storage
@@ -560,6 +612,11 @@ class RnNeedleDrivingPlanner {
   /// Kinematics Solvers
   davinci_kinematics::Forward fwd_solver_;
   davinci_kinematics::Inverse ik_solver_;
+
+
+  /// Temporary PSM controllers
+  psm_controller psm_one_;
+  psm_controller psm_two_;
 
 };
 

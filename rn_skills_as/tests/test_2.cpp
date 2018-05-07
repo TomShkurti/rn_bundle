@@ -8,8 +8,7 @@
 #include "rn_skills_as/RnNeedleDrivingPlanner.h"
 
 
-void executeTrajectory(psm_controller &psm,
-                       trajectory_msgs::JointTrajectory &needleDriveTraj);
+
 
 void goToLocationPointingDown(psm_controller &psm,
                               double x,
@@ -62,15 +61,15 @@ int main(int argc, char **argv) {
 //                                                                             needleDriveTraj,
 //                                                                             grasp_transform);
 
-  test = rnNeedleDrivingPlanner.requestNeedleDrivingTrajectoryDefaultGraspInBaseFrame(arm,
-                                                                                      needle_entry_pt,
-                                                                                      needle_exit_pt,
-                                                                                      needleDriveTraj);
-
-//  test = rnNeedleDrivingPlanner.requestNeedleDrivingTrajectoryDefaultGrasp(arm,
-//                                                                           needle_entry_pt_cam,
-//                                                                           needle_exit_pt_cam,
+//  test = rnNeedleDrivingPlanner.requestNeedleDrivingTrajectoryDefaultGraspInBaseFrame(arm,
+//                                                                                      needle_entry_pt,
+//                                                                                      needle_exit_pt,
 //                                                                                      needleDriveTraj);
+
+  test = rnNeedleDrivingPlanner.requestNeedleDrivingTrajectoryDefaultGrasp(arm,
+                                                                           needle_entry_pt_cam,
+                                                                           needle_exit_pt_cam,
+                                                                                      needleDriveTraj);
 
 //  {
 //    Eigen::Quaterniond q;
@@ -94,7 +93,9 @@ int main(int argc, char **argv) {
 
     ROS_WARN("Will execute the plan in 1 sec.");
     ros::Duration(1).sleep();
-    executeTrajectory(psm, needleDriveTraj);
+    rnNeedleDrivingPlanner.executeTrajectory(psm, needleDriveTraj);
+
+    rnNeedleDrivingPlanner.goToLocationPointingDown(psm, 0.01,0.01,-0.1);
   } else {
     ROS_ERROR("FAILED TO GET A TRAJECTORY!");
   }
@@ -107,32 +108,6 @@ int main(int argc, char **argv) {
 }
 
 
-void executeTrajectory(psm_controller &psm,
-                       trajectory_msgs::JointTrajectory &needleDriveTraj) {
-
-  ROS_WARN("Reviewing Plan");
-
-  int size = needleDriveTraj.points.size();
-
-  ros::Duration duration = needleDriveTraj.points[size-1].time_from_start;
-  double secs = duration.toSec();
-
-  ROS_INFO("secs: %f", secs);
-
-//  ros::Duration(5).sleep();
-
-  ROS_WARN("Execute Plan");
-//  ros::Duration(1).sleep();
-
-  psm.move_psm(needleDriveTraj);
-
-  duration.sleep();
-
-  ROS_WARN("Done");
-
-
-
-}
 
 
 /////
