@@ -55,6 +55,14 @@ int main(int argc, char **argv) {
   rnNeedleDrivingPlanner.setDefaultGraspTfSearchResolution(36);
   rnNeedleDrivingPlanner.setPathWaypoints(72);
 
+  rnNeedleDrivingPlanner.goToLocationPointingDownFaceForward(psm,  0, 0, -0.1);
+
+  ros::Duration(1).sleep();
+
+  ROS_WARN("Needle grasped.");
+
+//  rnNeedleDrivingPlanner.goToLocationPointingDownFaceForward(psm, 0.01,0.01,-0.1);
+
 //  test = rnNeedleDrivingPlanner.requestOneNeedleDrivingTrajectoryInBaseFrame(arm,
 //                                                                             needle_entry_pt,
 //                                                                             needle_exit_pt,
@@ -95,7 +103,9 @@ int main(int argc, char **argv) {
     ros::Duration(1).sleep();
     rnNeedleDrivingPlanner.executeTrajectory(psm, needleDriveTraj);
 
-    rnNeedleDrivingPlanner.goToLocationPointingDown(psm, 0.01,0.01,-0.1);
+//    rnNeedleDrivingPlanner.goToLocationPointingDownFaceVector(psm, 0.01,0.01,-0.1);
+
+//    rnNeedleDrivingPlanner.goToLocationPointingDownFaceForward(psm, 0.01,0.01,-0.1);
   } else {
     ROS_ERROR("FAILED TO GET A TRAJECTORY!");
   }

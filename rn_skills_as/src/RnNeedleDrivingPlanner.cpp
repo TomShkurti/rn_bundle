@@ -1406,7 +1406,7 @@ void RnNeedleDrivingPlanner::executeTrajectory(psm_controller &psm,
 }
 
 
-void RnNeedleDrivingPlanner::goToLocationPointingDown(psm_controller &psm,
+void RnNeedleDrivingPlanner::goToLocationPointingDownFaceVector(psm_controller &psm,
                                                       const double &x,
                                                       const double &y,
                                                       const double &z) {
@@ -1421,14 +1421,9 @@ void RnNeedleDrivingPlanner::goToLocationPointingDown(psm_controller &psm,
 
   double time = 7;
 
-  trajectory_msgs::JointTrajectoryPoint trajPoint_0;
   trajectory_msgs::JointTrajectoryPoint trajPoint;
-  trajectory_msgs::JointTrajectoryPoint trajPoint_2;
   trajectory_msgs::JointTrajectory traj;
-
   trajPoint.positions.resize(7);
-  trajPoint_2.positions.resize(7);
-
 
   // Deduce the gripper rotation w/rt base frame first
 
@@ -1459,23 +1454,92 @@ void RnNeedleDrivingPlanner::goToLocationPointingDown(psm_controller &psm,
   // Fill in the traj msgs
   for (int i = 0; i < 7; i++) {
     trajPoint.positions[i] = q_vec[i];
-    trajPoint_2.positions[i] = q_vec[i];
   }
 
   trajPoint.time_from_start = ros::Duration(time);
-  trajPoint_2.time_from_start = ros::Duration(time+1);
+
   traj.points.clear();
   traj.joint_names.clear();
   traj.header.stamp = ros::Time::now();
-  // traj.points.push_back(trajPoint_0);
+
   traj.points.push_back(trajPoint);
-  // traj.points.push_back(trajPoint_2);
+
 
   // Order the PSM to move
   ROS_INFO("Going to (%f, %f, %f)", x, y, z);
   psm.move_psm(traj);
   ros::Duration(time).sleep(); // TODO is this necessary?
   ROS_INFO("Done");
+
+}
+
+
+
+void RnNeedleDrivingPlanner::goToLocationPointingDownFaceForward(psm_controller &psm,
+                                                                 const double &x,
+                                                                 const double &y,
+                                                                 const double &z) {
+
+  davinci_kinematics::Vectorq7x1 q_vec;
+
+  Eigen::Vector3d tip_origin;
+  Eigen::Vector3d x_vec, y_vec, z_vec;
+  Eigen::Matrix3d tip_rotation;
+  Eigen::Affine3d des_affine;
+  double norm;
+
+  double time = 7;
+
+  trajectory_msgs::JointTrajectoryPoint trajPoint;
+  trajectory_msgs::JointTrajectory traj;
+  trajPoint.positions.resize(7);
+
+
+  // Gripper x faces forward
+  z_vec << 0, 0, -1;
+  x_vec << 0, 1, 0;
+  y_vec = z_vec.cross(x_vec);
+  tip_rotation.col(0) = x_vec;
+  tip_rotation.col(1) = y_vec;
+  tip_rotation.col(2) = z_vec;
+
+  // Fill in the affine
+  tip_origin << x, y, z;
+  des_affine.linear() = tip_rotation;
+  des_affine.translation() = tip_origin;
+
+  // Sent to the IK solver
+  ik_solver_.ik_solve(des_affine);
+  q_vec = ik_solver_.get_soln();
+
+
+  // Fill in the traj msgs
+  for (int i = 0; i < 7; i++) {
+    trajPoint.positions[i] = q_vec[i];
+  }
+
+  trajPoint.time_from_start = ros::Duration(time);
+
+  traj.points.clear();
+  traj.joint_names.clear();
+  traj.header.stamp = ros::Time::now();
+
+  traj.points.push_back(trajPoint);
+
+  // Order the PSM to move
+  ROS_INFO("Going to (%f, %f, %f)", x, y, z);
+  psm.move_psm(traj);
+  ros::Duration(time).sleep(); // TODO is this necessary?
+  ROS_INFO("Done");
+
+}
+
+
+// TODO complete
+void RnNeedleDrivingPlanner::openGripper(psm_controller &psm, const double &angle) {
+
+  davinci_kinematics::Vectorq7x1 q_vec;
+
 
 }
 

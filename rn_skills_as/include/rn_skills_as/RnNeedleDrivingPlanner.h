@@ -509,10 +509,18 @@ class RnNeedleDrivingPlanner {
                          const trajectory_msgs::JointTrajectory &needleDriveTraj);
 
 
-  void goToLocationPointingDown(psm_controller &psm,
-                                const double &x,
-                                const double &y,
-                                const double &z);
+  void goToLocationPointingDownFaceVector(psm_controller &psm,
+                                          const double &x,
+                                          const double &y,
+                                          const double &z);
+
+  void goToLocationPointingDownFaceForward(psm_controller &psm,
+                                          const double &x,
+                                          const double &y,
+                                          const double &z);
+
+  // TODO complete
+  void openGripper(psm_controller &psm, const double &angle);
 
 
 
