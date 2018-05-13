@@ -124,6 +124,18 @@ class RnNeedleDrivingPlanner {
 
 
   // TODO finish
+
+  /// Needle Extraction related functions
+
+  void updateNeedleAndTissueParametersWithExitAndTip(const geometry_msgs::PointStamped &needle_exit_pt,
+                                       const geometry_msgs::PointStamped &needle_tip_pt);
+
+  void defineTissueFrameWrtLtCameraViaExitAndTip(const Eigen::Vector3d &exit_pt,
+                                                 const Eigen::Vector3d &tip_pt,
+                                                 const Eigen::Vector3d &tissue_normal,
+                                                 Eigen::Vector3d & entry_pt);
+
+
   bool getNeedleExtractionTrajectory(const int &arm_index);
 
 
@@ -397,6 +409,16 @@ class RnNeedleDrivingPlanner {
     return pt;
   }
 
+  void solveBinaryQuadraticCircleEquation(double x1,
+                                          double y1,
+                                          double x2,
+                                          double y2,
+                                          double r,
+                                          double &origin_x1,
+                                          double &origin_y1,
+                                          double &origin_x2,
+                                          double &origin_y2);
+
 
   /// set() functions
 
@@ -502,11 +524,22 @@ class RnNeedleDrivingPlanner {
 
   }
 
+  ///
 
 
-  /// Temporary PSM controller functions
+
+  /// Temporary PSM Controller & Execution functions
+  /**
+   * An execution function.
+   * @param psm
+   * @param needleDriveTraj
+   */
   void executeTrajectory(psm_controller &psm,
                          const trajectory_msgs::JointTrajectory &needleDriveTraj);
+
+  void executeTrajectory(psm_controller &psm,
+                         const cwru_davinci_msgs::ListOfJointTrajectory &list_of_joint_traj);
+
 
 
   void goToLocationPointingDownFaceVector(psm_controller &psm,
@@ -612,9 +645,13 @@ class RnNeedleDrivingPlanner {
   Eigen::Vector3d needle_exit_point_;
   // Eigen::Vector3d v_entrance_to_exit_;
   // Eigen::Vector3d v_entrance_to_exit0_;
-  Eigen::Vector3d tissue_normal_;
+  Eigen::Vector3d tissue_normal_; // w/rt CAMERA frame!
 
   Eigen::VectorXi ik_ok_array_;
+
+  // Trajectory storage
+  cwru_davinci_msgs::ListOfJointTrajectory list_of_trajectory_;
+  trajectory_msgs::JointTrajectory trajectory_;
 
 
   /// Kinematics Solvers

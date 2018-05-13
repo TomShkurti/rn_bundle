@@ -85,87 +85,115 @@ int main(int argc, char **argv){
 //                   -0.575319,      0.279748,     -0.768602,
 //                   -0.817929,     -0.196771,      0.540623;
 
-  origin_test << -0.0560296, -0.0576075, -0.0591862;
-
-  rotation_test <<   -0.890662,   0.451223, -0.0558522,
-      -0.106172,  -0.325855,  -0.939439,
-      -0.442096,  -0.830793,   0.338134;
-
-  affine_test.linear() = rotation_test;
-  affine_test.translation() = origin_test;
-
-  int count;
-  count = ik_solver.ik_solve(affine_test);
-  vec_test = ik_solver.get_soln();
-
-  affine_result = fwd_solver.fwd_kin_solve(vec_test);
-  ROS_WARN("RESULT(%d): ", count);
-  rnNeedleDrivingPlanner.printEigenAffine(affine_result);
-  std::cout << "vec_test" << std::endl << vec_test.transpose() << std::endl;
-
-
-
-
-
-
-  std::cout << "Please type in a random char to proceed: ";
-  std::cin >> random_char;
-
-  eigen_grasp_transform = rnNeedleDrivingPlanner.getDefaultNeedleAffineWrtGraspOneFrame();
-
-  // TODO delete
-  ROS_WARN("Default Eigen Affine");
-  rnNeedleDrivingPlanner.printEigenAffine(eigen_grasp_transform);
-
-  default_grasp_transform = rnNeedleDrivingPlanner.convertEigenAffineToGeoTransform(eigen_grasp_transform);
-
-
-  rnNeedleDrivingPlanner.setDefaultGraspTfSearchResolution(36);
-
-//    test = rnNeedleDrivingPlanner.requestNeedleDrivingTrajectoryDefaultGraspInBaseFrame(arm,
-//                                                                                      needle_entry_pt,
-//                                                                                      needle_exit_pt,
-//                                                                                      needleDriveTraj);
-
-  test = rnNeedleDrivingPlanner.requestOneNeedleDrivingTrajectoryInBaseFrame(arm,
-                                                                             needle_entry_pt,
-                                                                             needle_exit_pt,
-                                                                             needleDriveTraj,
-                                                                             grasp_transform);
-
+//  origin_test << -0.0560296, -0.0576075, -0.0591862;
+//
+//  rotation_test <<   -0.890662,   0.451223, -0.0558522,
+//      -0.106172,  -0.325855,  -0.939439,
+//      -0.442096,  -0.830793,   0.338134;
+//
+//  affine_test.linear() = rotation_test;
+//  affine_test.translation() = origin_test;
+//
+//  int count;
+//  count = ik_solver.ik_solve(affine_test);
+//  vec_test = ik_solver.get_soln();
+//
+//  affine_result = fwd_solver.fwd_kin_solve(vec_test);
+//  ROS_WARN("RESULT(%d): ", count);
+//  rnNeedleDrivingPlanner.printEigenAffine(affine_result);
+//  std::cout << "vec_test" << std::endl << vec_test.transpose() << std::endl;
+//
+//
+//
+//
+//
+//
+//  std::cout << "Please type in a random char to proceed: ";
+//  std::cin >> random_char;
+//
+//  eigen_grasp_transform = rnNeedleDrivingPlanner.getDefaultNeedleAffineWrtGraspOneFrame();
+//
+//  // TODO delete
+//  ROS_WARN("Default Eigen Affine");
+//  rnNeedleDrivingPlanner.printEigenAffine(eigen_grasp_transform);
+//
+//  default_grasp_transform = rnNeedleDrivingPlanner.convertEigenAffineToGeoTransform(eigen_grasp_transform);
+//
+//
+//  rnNeedleDrivingPlanner.setDefaultGraspTfSearchResolution(36);
+//
+////    test = rnNeedleDrivingPlanner.requestNeedleDrivingTrajectoryDefaultGraspInBaseFrame(arm,
+////                                                                                      needle_entry_pt,
+////                                                                                      needle_exit_pt,
+////                                                                                      needleDriveTraj);
+//
 //  test = rnNeedleDrivingPlanner.requestOneNeedleDrivingTrajectoryInBaseFrame(arm,
 //                                                                             needle_entry_pt,
 //                                                                             needle_exit_pt,
-//                                                                             default_grasp_transform,
-//                                                                             needleDriveTraj);
+//                                                                             needleDriveTraj,
+//                                                                             grasp_transform);
+//
+////  test = rnNeedleDrivingPlanner.requestOneNeedleDrivingTrajectoryInBaseFrame(arm,
+////                                                                             needle_entry_pt,
+////                                                                             needle_exit_pt,
+////                                                                             default_grasp_transform,
+////                                                                             needleDriveTraj);
+//
+//
+//
+//
+//  ROS_INFO("test result: %d", int(test));
+//
+//  if (test) {
+//
+//    grasp_tf = rnNeedleDrivingPlanner.convertGeoTransformStampedToEigenAffine(grasp_transform);
+//
+//    ROS_INFO("grasp_transform: ");
+//    rnNeedleDrivingPlanner.printEigenAffine(grasp_tf);
+//
+////    std::cout << std::endl;
+////    std::cout << "needleDriveTraj: " << std::endl << needleDriveTraj << std::endl;
+//
+//    ROS_INFO("TEST SUBJECT 2: setTrajectoryVelocity()");
+//
+//    double velocity = 0.01; // meter/sec
+//
+//    rnNeedleDrivingPlanner.setTrajectoryVelocity(0.01, needleDriveTraj);
+//
+//    ROS_WARN("\nINSPECT GRASP_TF");
+//    Eigen::Affine3d result_tf;
+//    result_tf = rnNeedleDrivingPlanner.convertGeoTransformStampedToEigenAffine(grasp_transform);
+//    rnNeedleDrivingPlanner.printEigenAffine(result_tf);
+//
+//  }
+
+  double x1 = 0;
+  double y1 = 0;
+  double x2 = 1;
+  double y2 = 1;
+  double r = 1;
+  double origin_x1, origin_y1, origin_x2, origin_y2;
+
+//  rnNeedleDrivingPlanner.solveBinaryQuadraticCircleEquation( x1, y1, x2, y2, r,
+//                                                             origin_x1, origin_y1,
+//                                                             origin_x2, origin_y2);
+//
+//  std::cout << std::endl << "origin_x1: " << origin_x1 << std::endl
+//            << "origin_y1: " << origin_y1 << std::endl
+//            << "origin_x2: " << origin_x2 << std::endl
+//            << "origin_y2: " << origin_y2 << std::endl;
+
+  Eigen::Vector3d exit_pt, entry_pt;
+  Eigen::Vector3d tip_pt;
+  Eigen::Vector3d tissue_normal;
 
 
+  exit_pt << 0, 0, 0.5;
+  tip_pt << 0, 0.001, 0.499;
+  tissue_normal << 0, 0, -1; // Note that the cam_z points down
 
 
-  ROS_INFO("test result: %d", int(test));
-
-  if (test) {
-
-    grasp_tf = rnNeedleDrivingPlanner.convertGeoTransformStampedToEigenAffine(grasp_transform);
-
-    ROS_INFO("grasp_transform: ");
-    rnNeedleDrivingPlanner.printEigenAffine(grasp_tf);
-
-//    std::cout << std::endl;
-//    std::cout << "needleDriveTraj: " << std::endl << needleDriveTraj << std::endl;
-
-    ROS_INFO("TEST SUBJECT 2: setTrajectoryVelocity()");
-
-    double velocity = 0.01; // meter/sec
-
-    rnNeedleDrivingPlanner.setTrajectoryVelocity(0.01, needleDriveTraj);
-
-    ROS_WARN("\nINSPECT GRASP_TF");
-    Eigen::Affine3d result_tf;
-    result_tf = rnNeedleDrivingPlanner.convertGeoTransformStampedToEigenAffine(grasp_transform);
-    rnNeedleDrivingPlanner.printEigenAffine(result_tf);
-
-  }
+  rnNeedleDrivingPlanner.defineTissueFrameWrtLtCameraViaExitAndTip(exit_pt, tip_pt, tissue_normal, entry_pt);
 
 
   return 0;

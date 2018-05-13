@@ -254,7 +254,7 @@ bool RnNeedleDrivingPlanner::getCameraToGripperTransforms(){
 
 }
 
-
+// used by updateNeedleAndTissueParameters()
 void RnNeedleDrivingPlanner::defineTissueFrameWrtLtCamera(Eigen::Vector3d entry_pt,
                                                           Eigen::Vector3d exit_pt,
                                                           Eigen::Vector3d tissue_normal){
@@ -284,6 +284,105 @@ void RnNeedleDrivingPlanner::defineTissueFrameWrtLtCamera(Eigen::Vector3d entry_
 
 
 }
+
+
+// Will give back the entry_pt wrt cam frame. This is only useful when the tip_pt is below needle centre.
+void RnNeedleDrivingPlanner::defineTissueFrameWrtLtCameraViaExitAndTip(const Eigen::Vector3d &exit_pt,
+                                                                       const Eigen::Vector3d &tip_pt,
+                                                                       const Eigen::Vector3d &tissue_normal,
+                                                                       Eigen::Vector3d & entry_pt) {
+
+  Eigen::Vector3d temp_vec;
+  Eigen::Affine3d temp_frame;
+  Eigen::Matrix3d temp_rot;
+  Eigen::Affine3d temp_exit_pt_affine;
+  Eigen::Affine3d temp_tip_pt_affine;
+  Eigen::Affine3d temp_entry_pt_affine;
+  Eigen::Affine3d temp_result;
+  Eigen::Matrix3d temp_frame_rot;
+  Eigen::Vector3d temp_frame_exit_pt;
+  Eigen::Vector3d temp_frame_tip_pt;
+  Eigen::Vector3d temp_frame_entry_pt;
+  Eigen::Vector3d temp_frame_origin;
+
+  Eigen::Affine3d entry_pt_affine_wrt_cam_frame;
+
+  Eigen::Vector3d nvec_tissue_frame_wrt_camera;
+  Eigen::Vector3d tvec_tissue_frame_wrt_camera;
+  Eigen::Vector3d bvec_tissue_frame_wrt_camera;
+
+
+  // 1.1 First get the temp frame rotation mat w/rt lt cam frame
+  temp_vec = tip_pt - exit_pt;
+  bvec_tissue_frame_wrt_camera = tissue_normal;
+  tvec_tissue_frame_wrt_camera = bvec_tissue_frame_wrt_camera.cross(temp_vec);
+  tvec_tissue_frame_wrt_camera = tvec_tissue_frame_wrt_camera/tvec_tissue_frame_wrt_camera.norm();
+  nvec_tissue_frame_wrt_camera = tvec_tissue_frame_wrt_camera.cross(bvec_tissue_frame_wrt_camera);
+
+  temp_frame_rot.col(0) = nvec_tissue_frame_wrt_camera;
+  temp_frame_rot.col(1) = tvec_tissue_frame_wrt_camera;
+  temp_frame_rot.col(2) = bvec_tissue_frame_wrt_camera;
+
+  // 1.2 define a temp coordinate frame wrt cam frame as follows
+  temp_frame.linear() = temp_frame_rot;
+  temp_frame.translation() = exit_pt;
+
+  // 2.1 Then deduce the entry point in the temp frame
+  temp_rot.setIdentity();
+  temp_exit_pt_affine.linear() = temp_rot;
+  temp_exit_pt_affine.translation() = exit_pt;
+  temp_tip_pt_affine.linear() = temp_rot;
+  temp_tip_pt_affine.translation() = tip_pt;
+
+  temp_result = temp_frame * temp_exit_pt_affine;
+  temp_frame_exit_pt = temp_result.translation();
+  temp_result = temp_frame * temp_tip_pt_affine;
+  temp_frame_tip_pt = temp_result.translation();
+
+  // TODO delete
+  {
+    std::cout << "temp_frame_exit_pt: " << temp_frame_exit_pt.transpose() << std::endl;
+    std::cout << "temp_frame_tip_pt: " << temp_frame_tip_pt.transpose() << std::endl;
+
+  }
+
+
+  if (temp_frame_tip_pt(1) != 0) {
+    ROS_ERROR("Error from defineTissueFrameWrtLtCameraViaExitAndTip() calculation! 001");
+  }
+
+
+  double x1 = temp_frame_exit_pt(0);
+  double y1 = temp_frame_exit_pt(2);
+  double x2 = temp_frame_tip_pt(0);
+  double y2 = temp_frame_tip_pt(2);
+  double ori_x1, ori_y1, ori_x2, ori_y2;
+
+  solveBinaryQuadraticCircleEquation(x1, y1, x2, y2, needle_radius_, ori_x1, ori_y1, ori_x2, ori_y2);
+
+  if (ori_y1 > 0 && ori_y2 < 0 && ori_x1 < 0) {
+    temp_frame_origin << ori_x1, 0 , ori_y1;
+    setNeedleAxisHt(y1);
+  } else if (ori_y1 < 0 && ori_y2 > 0 && ori_x2 < 0) {
+    temp_frame_origin << ori_x2, 0 , ori_y2;
+    setNeedleAxisHt(y2);
+  } else {
+    ROS_ERROR("Error from defineTissueFrameWrtLtCameraViaExitAndTip() calculation! 002");
+  }
+
+  temp_frame_entry_pt << 2*temp_frame_origin(0), 0, 0;
+  temp_entry_pt_affine.linear() = temp_rot;
+  temp_entry_pt_affine.translation() = temp_frame_entry_pt;
+
+  entry_pt_affine_wrt_cam_frame = temp_frame.inverse() * temp_entry_pt_affine;
+  entry_pt = entry_pt_affine_wrt_cam_frame.translation();
+
+  defineTissueFrameWrtLtCamera(entry_pt, exit_pt, tissue_normal); // NOT necessary
+  printEigenAffine(tissue_affine_wrt_lt_camera_);
+
+
+}
+
 
 
 void RnNeedleDrivingPlanner::computeGraspTransform(int arm_index, double phi_x, double phi_y){
@@ -549,7 +648,6 @@ void RnNeedleDrivingPlanner::convertAffinesToTrajectoryMsgs(const std::vector<Ei
 void RnNeedleDrivingPlanner::updateNeedleAndTissueParameters(const geometry_msgs::PointStamped &needle_entry_pt,
                                                              const geometry_msgs::PointStamped &needle_exit_pt) {
 
-  double temp1, temp2, temp3;
   Eigen::Vector3d needle_origin_wrt_tissue_frame;
   Eigen::Quaterniond q;
   Eigen::Matrix3d R;
@@ -575,6 +673,39 @@ void RnNeedleDrivingPlanner::updateNeedleAndTissueParameters(const geometry_msgs
   ROS_INFO("Needle Tissue Transform has been updated.");
 
 }
+
+
+// This is only useful when the tip_pt is below needle centre.
+void RnNeedleDrivingPlanner::updateNeedleAndTissueParametersWithExitAndTip(const geometry_msgs::PointStamped &needle_exit_pt,
+                                                                           const geometry_msgs::PointStamped &needle_tip_pt) {
+
+  Eigen::Vector3d tip_pt;
+  Eigen::Vector3d needle_origin_wrt_tissue_frame;
+
+  tip_pt = convertPointStampedToEigenVector(needle_tip_pt);
+
+  needle_exit_point_ = convertPointStampedToEigenVector(needle_exit_pt);
+  ROS_INFO("Needle exit point has been updated.");
+
+  // needle_entry_point_ will be set by the following function
+  defineTissueFrameWrtLtCameraViaExitAndTip(needle_exit_point_, tip_pt, tissue_normal_, needle_entry_point_);
+  ROS_INFO("Needle entry point has been updated.");
+  ROS_INFO("Tissue Frame definition has been updated.");
+
+  checkExitPoint(needle_entry_point_, needle_exit_point_, dist_entrance_to_exit_);
+
+  needle_axis_ht_ = sqrt(needle_radius_ * needle_radius_ - (dist_entrance_to_exit_ / 2) * (dist_entrance_to_exit_ / 2));
+  suture_depth_ = needle_radius_ - needle_axis_ht_;
+  ROS_INFO("Needle axis height/suture depth has been updated.");
+
+  needle_origin_wrt_tissue_frame << 0.5 * dist_entrance_to_exit_, 0, needle_axis_ht_;
+  initial_needle_affine_wrt_tissue_frame_.translation() = needle_origin_wrt_tissue_frame;
+  ROS_INFO("Needle Tissue Transform has been updated.");
+
+
+}
+
+
 
 
 
@@ -1381,16 +1512,16 @@ bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryInBaseFrame(const 
 /// PSM controllers
 
 void RnNeedleDrivingPlanner::executeTrajectory(psm_controller &psm,
-                                               const trajectory_msgs::JointTrajectory &needleDriveTraj) {
+                                               const trajectory_msgs::JointTrajectory &needle_drive_traj) {
 
   ROS_WARN("Reviewing Plan");
 
   trajectory_msgs::JointTrajectory trajectory;
-  trajectory = needleDriveTraj;
+  trajectory = needle_drive_traj;
 
-  int size = needleDriveTraj.points.size();
+  int size = needle_drive_traj.points.size();
 
-  ros::Duration duration = needleDriveTraj.points[size-1].time_from_start;
+  ros::Duration duration = needle_drive_traj.points[size-1].time_from_start;
   double secs = duration.toSec();
 
   ROS_INFO("secs: %f", secs);
@@ -1404,6 +1535,28 @@ void RnNeedleDrivingPlanner::executeTrajectory(psm_controller &psm,
   ROS_WARN("Execution Complete!");
 
 }
+
+
+void RnNeedleDrivingPlanner::executeTrajectory(psm_controller &psm,
+                                               const cwru_davinci_msgs::ListOfJointTrajectory &list_of_joint_traj) {
+
+  ROS_WARN("Receiving a Trajectory List");
+
+  int list_size;
+
+  list_size =  list_of_joint_traj.joint_trajectory_list.size();
+
+  for (int n = 0; n < list_size; n++) {
+
+    executeTrajectory(psm, list_of_joint_traj.joint_trajectory_list[n]);
+
+  }
+
+  ROS_WARN("A total of %d trajectories have been exectued!", list_size);
+
+}
+
+
 
 
 void RnNeedleDrivingPlanner::goToLocationPointingDownFaceVector(psm_controller &psm,
@@ -1589,3 +1742,39 @@ Eigen::Vector3d RnNeedleDrivingPlanner::transformPointFromBaseToLtCamFrame(const
 }
 
 
+
+/// Auxiliary Functions
+
+
+void RnNeedleDrivingPlanner::solveBinaryQuadraticCircleEquation(double x1,
+                                                                double y1,
+                                                                double x2,
+                                                                double y2,
+                                                                double r,
+                                                                double &origin_x1,
+                                                                double &origin_y1,
+                                                                double &origin_x2,
+                                                                double &origin_y2) {
+
+  double k = (x1 - x2)/(y2 - y1);
+  double j = (-x1*x1 + x2*x2 - y1*y1 + y2*y2)/2*(y2 - y1);
+  double a = (1 + k*k);
+  double b = 2*k*j;
+  double c = (j*j - r*r);
+
+  origin_x1 = (-b + sqrt(b*b - 4*a*c))/(2*a);
+  origin_x2 = (-b - sqrt(b*b - 4*a*c))/(2*a);
+
+  origin_y1 = ((x1 - x2)/(y2 - y1))*(origin_x1 - (x1 + x2)/2) + (y1 + y2)/2;
+  origin_y2 = ((x1 - x2)/(y2 - y1))*(origin_x2 - (x1 + x2)/2) + (y1 + y2)/2;
+
+  // TODO delete
+  {
+    std::cout << "origin_x1: " << origin_x1 << std::endl;
+    std::cout << "origin_y1: " << origin_y1 << std::endl;
+    std::cout << "origin_x2: " << origin_x2 << std::endl;
+    std::cout << "origin_y2: " << origin_y2 << std::endl;
+  }
+
+
+}
