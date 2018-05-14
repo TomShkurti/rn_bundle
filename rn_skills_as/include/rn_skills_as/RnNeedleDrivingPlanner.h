@@ -34,6 +34,11 @@ class RnNeedleDrivingPlanner {
   void computeGraspTransform(int arm_index,
                              const geometry_msgs::TransformStamped &grasp_transform);
 
+  /// TODO add & finish (to accommodate Orhan's usage)
+  void computeGraspTransfrom(int arm_index,
+                             const geometry_msgs::TransformStamped &gripper_to_needle_transform);
+
+
   double computeNeedleDriveGripperAffines(int arm_index,
                                           trajectory_msgs::JointTrajectory &needleDriveTraj);
 
@@ -127,9 +132,11 @@ class RnNeedleDrivingPlanner {
 
   /// Needle Extraction related functions
 
+  // This is only useful when the tip_pt is below needle centre.
   void updateNeedleAndTissueParametersWithExitAndTip(const geometry_msgs::PointStamped &needle_exit_pt,
-                                       const geometry_msgs::PointStamped &needle_tip_pt);
+                                                     const geometry_msgs::PointStamped &needle_tip_pt);
 
+// This is only useful when the tip_pt is below needle centre.
   void defineTissueFrameWrtLtCameraViaExitAndTip(const Eigen::Vector3d &exit_pt,
                                                  const Eigen::Vector3d &tip_pt,
                                                  const Eigen::Vector3d &tissue_normal,
@@ -515,6 +522,10 @@ class RnNeedleDrivingPlanner {
   Eigen::Vector3d transformPointFromBaseToLtCamFrame(const int & arm_index,
                                                      const Eigen::Vector3d &point);
 
+
+  Eigen::Vector3d transformPointFromLtCamFrameToBase(const int & arm_index,
+                                                     const Eigen::Vector3d &point);
+
   inline void printPsmBaseToCamTransfomrs() {
 
     ROS_WARN("DEBUG -- printing psm_one_affine_wrt_lt_camera_: ");
@@ -522,6 +533,37 @@ class RnNeedleDrivingPlanner {
     ROS_WARN("DEBUG -- printing psm_two_affine_wrt_lt_camera_: ");
     printEigenAffine(psm_two_affine_wrt_lt_camera_);
 
+  }
+
+  // psi_needle_axis_tilt_wrt_tissue_
+  inline void printPsiNeedleAxisTiltWrtTissue () {
+
+    std::cout << "psi_needle_axis_tilt_wrt_tissue_: " << psi_needle_axis_tilt_wrt_tissue_ << std::endl;
+
+  }
+
+
+  // needle_affine_wrt_gripper_one_frame_
+  inline void printNeedleAffineWrtGripperFrames() {
+
+    std::cout << "needle_affine_wrt_gripper_one_frame_: " << std::endl;
+    printEigenAffine(needle_affine_wrt_gripper_one_frame_);
+
+    std::cout << "needle_affine_wrt_gripper_two_frame_: " << std::endl;
+    printEigenAffine(needle_affine_wrt_gripper_two_frame_);
+
+  }
+
+  inline void printDebugAffineVessel() {
+
+    std::cout << "debug_affine_vessel_: " << std::endl;
+    printEigenAffine(debug_affine_vessel_);
+
+  }
+
+  // TODO delete
+  inline void printGraspDepth () {
+    std::cout << "grasp_depth_: " << grasp_depth_ << std::endl;
   }
 
   ///
@@ -552,6 +594,16 @@ class RnNeedleDrivingPlanner {
                                           const double &y,
                                           const double &z);
 
+  void goToLocationPointingPsmLeft(psm_controller &psm,
+                                           const double &x,
+                                           const double &y,
+                                           const double &z);
+
+  void goToLocationPointingPsmRight(psm_controller &psm,
+                                   const double &x,
+                                   const double &y,
+                                   const double &z);
+
   // TODO complete
   void openGripper(psm_controller &psm, const double &angle);
 
@@ -577,7 +629,7 @@ class RnNeedleDrivingPlanner {
   double dist_entrance_to_exit_;
   int grab_needle_plus_minus_y_;
   int grab_needle_plus_minus_z_;
-  double psi_needle_axis_tilt_wrt_tissue_; // Not implemented
+  double psi_needle_axis_tilt_wrt_tissue_ = 0; // Not implemented, set to be 0
 
   Eigen::Vector3d needle_origin_wrt_tissue_frame_;
   Eigen::Matrix3d needle_rotation_mat_wrt_tissue_frame_;
@@ -662,6 +714,10 @@ class RnNeedleDrivingPlanner {
   /// Temporary PSM controllers
   psm_controller psm_one_;
   psm_controller psm_two_;
+
+
+  /// Debug Auxiliary
+  Eigen::Affine3d debug_affine_vessel_;
 
 };
 

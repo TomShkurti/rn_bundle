@@ -495,6 +495,7 @@ double RnNeedleDrivingPlanner::computeNeedleDriveGripperAffines(int arm_index,
   /// Needle calculation
   needle_affine_wrt_tissue_frame_ = initial_needle_affine_wrt_tissue_frame_;
 
+  // Not that  psi_needle_axis_tilt_wrt_tissue_ = 0 as a constant for now.
   needle_affine_wrt_tissue_frame_.linear() =
       Rotx(psi_needle_axis_tilt_wrt_tissue_) * needle_affine_wrt_tissue_frame_.linear();
   needle_affine_wrt_tissue_frame_.translation() =
@@ -523,12 +524,16 @@ double RnNeedleDrivingPlanner::computeNeedleDriveGripperAffines(int arm_index,
         des_gripper_one_wrt_base =
             psm_one_affine_wrt_lt_camera_.inverse() * des_gripper_one_affine_wrt_lt_camera;
 
+        // TODO delete after debugging
+        ROS_WARN("PSM1");
+        debug_affine_vessel_ = des_gripper_one_affine_wrt_tissue;
+
         if (ik_solver_.ik_solve(des_gripper_one_wrt_base)==1) {
           nsolns++;
           des_gripper_one_affines_wrt_lt_camera.push_back(des_gripper_one_wrt_base);
 
           if ((ipose == 0) || (ipose == (path_waypoints_ - 1)) ) {
-            ROS_WARN("DEBUG 22");
+
             des_gripper_one_affines_wrt_lt_camera.push_back(des_gripper_one_wrt_base);
           }
 
@@ -559,6 +564,10 @@ double RnNeedleDrivingPlanner::computeNeedleDriveGripperAffines(int arm_index,
         des_gripper_two_wrt_base =
             psm_two_affine_wrt_lt_camera_.inverse() * des_gripper_two_affine_wrt_lt_camera;
 
+        // TODO delete after debugging
+        ROS_WARN("PSM2");
+        debug_affine_vessel_ = des_gripper_two_affine_wrt_tissue;
+
 
         if (ik_solver_.ik_solve(des_gripper_two_wrt_base)==1) {
           nsolns++;
@@ -579,6 +588,9 @@ double RnNeedleDrivingPlanner::computeNeedleDriveGripperAffines(int arm_index,
   std::cout << std::endl;
   std::cout << "ik_ok_point:  " << ik_ok_array_.transpose() << std::endl;
   std::cout << std::endl;
+
+
+
 
   fraction = double(nsolns/path_waypoints_);
 
@@ -1688,6 +1700,135 @@ void RnNeedleDrivingPlanner::goToLocationPointingDownFaceForward(psm_controller 
 }
 
 
+
+void RnNeedleDrivingPlanner::goToLocationPointingPsmLeft(psm_controller &psm,
+                                                      const double &x,
+                                                      const double &y,
+                                                      const double &z) {
+
+  davinci_kinematics::Vectorq7x1 q_vec;
+
+  Eigen::Vector3d tip_origin;
+  Eigen::Vector3d x_vec, y_vec, z_vec;
+  Eigen::Matrix3d tip_rotation;
+  Eigen::Affine3d des_affine;
+  Eigen::Affine3d debug_affine;
+  double norm;
+
+  double time = 7;
+
+  trajectory_msgs::JointTrajectoryPoint trajPoint;
+  trajectory_msgs::JointTrajectory traj;
+  trajPoint.positions.resize(7);
+
+
+  // Gripper x faces Up
+  z_vec << -1, 0, 0;
+  x_vec << 0, 0, 1;
+  y_vec = z_vec.cross(x_vec);
+  tip_rotation.col(0) = x_vec;
+  tip_rotation.col(1) = y_vec;
+  tip_rotation.col(2) = z_vec;
+
+  // Fill in the affine
+  tip_origin << x, y, z;
+  des_affine.linear() = tip_rotation;
+  des_affine.translation() = tip_origin;
+
+  // Sent to the IK solver
+  ik_solver_.ik_solve(des_affine);
+  q_vec = ik_solver_.get_soln();
+  debug_affine = fwd_solver_.fwd_kin_solve(q_vec);
+
+  // Fill in the traj msgs
+  for (int i = 0; i < 7; i++) {
+    trajPoint.positions[i] = q_vec[i];
+  }
+
+  trajPoint.time_from_start = ros::Duration(time);
+
+  traj.points.clear();
+  traj.joint_names.clear();
+  traj.header.stamp = ros::Time::now();
+
+  traj.points.push_back(trajPoint);
+
+  // Order the PSM to move
+  ROS_INFO("Going to (%f, %f, %f)", x, y, z);
+  std::cout << "q_vec: " << q_vec.transpose();
+  std::cout << "debug_affine:" << std::endl;
+  printEigenAffine(debug_affine);
+  psm.move_psm(traj);
+  ros::Duration(time).sleep(); // TODO is this necessary?
+  ROS_INFO("Done");
+
+}
+
+void RnNeedleDrivingPlanner::goToLocationPointingPsmRight(psm_controller &psm,
+                                                      const double &x,
+                                                      const double &y,
+                                                      const double &z) {
+
+  davinci_kinematics::Vectorq7x1 q_vec;
+
+  Eigen::Vector3d tip_origin;
+  Eigen::Vector3d x_vec, y_vec, z_vec;
+  Eigen::Matrix3d tip_rotation;
+  Eigen::Affine3d des_affine;
+  Eigen::Affine3d debug_affine;
+  double norm;
+
+  double time = 7;
+
+  trajectory_msgs::JointTrajectoryPoint trajPoint;
+  trajectory_msgs::JointTrajectory traj;
+  trajPoint.positions.resize(7);
+
+
+  // Gripper x faces Down
+  z_vec << -1, 0, 0;
+  x_vec << 0, 0, -1;
+  y_vec = z_vec.cross(x_vec);
+  tip_rotation.col(0) = x_vec;
+  tip_rotation.col(1) = y_vec;
+  tip_rotation.col(2) = z_vec;
+
+  // Fill in the affine
+  tip_origin << x, y, z;
+  des_affine.linear() = tip_rotation;
+  des_affine.translation() = tip_origin;
+
+  // Sent to the IK solver
+  ik_solver_.ik_solve(des_affine);
+  q_vec = ik_solver_.get_soln();
+  debug_affine = fwd_solver_.fwd_kin_solve(q_vec);
+
+
+  // Fill in the traj msgs
+  for (int i = 0; i < 7; i++) {
+    trajPoint.positions[i] = q_vec[i];
+  }
+
+  trajPoint.time_from_start = ros::Duration(time);
+
+  traj.points.clear();
+  traj.joint_names.clear();
+  traj.header.stamp = ros::Time::now();
+
+  traj.points.push_back(trajPoint);
+
+  // Order the PSM to move
+  ROS_INFO("Going to (%f, %f, %f)", x, y, z);
+  std::cout << "q_vec: " << q_vec.transpose();
+  std::cout << "debug_affine:" << std::endl;
+  printEigenAffine(debug_affine);
+  psm.move_psm(traj);
+  ros::Duration(time).sleep(); // TODO is this necessary?
+  ROS_INFO("Done");
+
+}
+
+
 // TODO complete
 void RnNeedleDrivingPlanner::openGripper(psm_controller &psm, const double &angle) {
 
@@ -1736,6 +1877,46 @@ Eigen::Vector3d RnNeedleDrivingPlanner::transformPointFromBaseToLtCamFrame(const
   std::cout << "transformPointFromBaseToLtCamFrame: " << std::endl <<
            "Point in base frame: " << point.transpose() << std::endl <<
            "Point in cam frame: " << result_point.transpose() << std::endl;
+
+  return result_point;
+
+}
+
+
+Eigen::Vector3d RnNeedleDrivingPlanner::transformPointFromLtCamFrameToBase(const int & arm_index,
+                                                                           const Eigen::Vector3d &point) {
+
+  Eigen::Matrix3d point_rotation;
+  Eigen::Affine3d point_affine;
+  point_rotation.setIdentity();
+  point_affine.translation() = point;
+  point_affine.linear() = point_rotation;
+
+  Eigen::Affine3d result_affine;
+  Eigen::Vector3d result_point;
+
+  switch (arm_index) {
+
+    case 1:
+
+      // base wrt cam affine
+      result_affine = psm_one_affine_wrt_lt_camera_.inverse()*point_affine;
+      result_point = result_affine.translation();
+
+      break;
+
+    case 2:
+      // base wrt cam affine
+      result_affine = psm_two_affine_wrt_lt_camera_.inverse()*point_affine;
+      result_point = result_affine.translation();
+
+      break;
+
+  }
+
+  std::cout << "transformPointFromBaseToLtCamFrame: " << std::endl <<
+            "Point in cam frame: " << point.transpose() << std::endl <<
+            "Point in base frame: " << result_point.transpose() << std::endl;
 
   return result_point;
 
