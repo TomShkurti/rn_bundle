@@ -213,20 +213,23 @@ int main(int argc, char **argv){
   std::cout << "pt_in_psm2: " << pt_in_psm2.transpose() << std::endl << std::endl;
 
   rnNeedleDrivingPlanner.goToLocationPointingDownFaceForward(psm1,  -0.12, 0.01, -0.1);
-  rnNeedleDrivingPlanner.goToLocationPointingDownFaceForward(psm2,  0.12, -0.01, -0.1);
+//  rnNeedleDrivingPlanner.goToLocationPointingDownFaceForward(psm2,  0.12, -0.01, -0.1);
 
   while (ros::ok()) {
-    double x1, x2;
+    double x1, x2, z2;
 
-    std::cout << "input psm1 x: (-)";
-    std::cin >> x1;
-    x1 = - x1;
+//    std::cout << "input psm1 x: (-)";
+//    std::cin >> x1;
+//    x1 = - x1;
     std::cout << std::endl << "input psm2 x: (+)";
     std::cin >> x2;
+    std::cout << std::endl << "input psm2 z: (-)";
+    std::cin >> z2;
+    z2 = -z2;
 
-    rnNeedleDrivingPlanner.goToLocationPointingPsmLeft(psm1,  x1, 0.01, -0.1);
-    rnNeedleDrivingPlanner.goToLocationPointingPsmRight(psm2,  x2, -0.01, -0.1);
-
+//    rnNeedleDrivingPlanner.goToLocationPointingPsmLeft(psm1,  x1, 0.01, -0.1);
+    rnNeedleDrivingPlanner.goToLocationPointingPsmRight(psm2,  x2, -0.01, z2);
+//    rnNeedleDrivingPlanner.goToLocationPointingPsmLeft(psm2,  x2, -0.01, z2);
   }
 
 

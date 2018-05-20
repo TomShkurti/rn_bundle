@@ -416,6 +416,18 @@ class RnNeedleDrivingPlanner {
     return pt;
   }
 
+  /**
+   * Solves circle equations with known 2 pts and radius.
+   * @param x1
+   * @param y1
+   * @param x2
+   * @param y2
+   * @param r
+   * @param origin_x1
+   * @param origin_y1
+   * @param origin_x2
+   * @param origin_y2
+   */
   void solveBinaryQuadraticCircleEquation(double x1,
                                           double y1,
                                           double x2,

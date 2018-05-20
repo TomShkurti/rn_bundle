@@ -66,7 +66,7 @@ int main(int argc, char **argv) {
   bool test = false;
 
   rnNeedleDrivingPlanner.setDefaultGraspTfSearchResolution(36);
-  rnNeedleDrivingPlanner.setPathWaypoints(1);
+  rnNeedleDrivingPlanner.setPathWaypoints(24);
 
 //  rnNeedleDrivingPlanner.goToLocationPointingDownFaceForward(psm1,  0, 0, -0.1);
 
@@ -85,16 +85,16 @@ int main(int argc, char **argv) {
 //                                                                                      needle_exit_pt,
 //                                                                                      needleDriveTraj);
 
-  test = rnNeedleDrivingPlanner.requestNeedleDrivingTrajectoryDefaultGrasp(arm1,
-                                                                           needle_entry_pt_cam,
-                                                                           needle_exit_pt_cam,
-                                                                           needleDriveTraj);
+//  test = rnNeedleDrivingPlanner.requestNeedleDrivingTrajectoryDefaultGrasp(arm1,
+//                                                                           needle_entry_pt_cam,
+//                                                                           needle_exit_pt_cam,
+//                                                                           needleDriveTraj);
 
-//  test = rnNeedleDrivingPlanner.requestOneNeedleDrivingTrajectory(arm1,
-//                                                                  needle_entry_pt_cam,
-//                                                                  needle_exit_pt_cam,
-//                                                                  needleDriveTraj,
-//                                                                  grasp_transform);
+  test = rnNeedleDrivingPlanner.requestOneNeedleDrivingTrajectory(arm1,
+                                                                  needle_entry_pt_cam,
+                                                                  needle_exit_pt_cam,
+                                                                  needleDriveTraj,
+                                                                  grasp_transform);
 
 //  {
 //    Eigen::Quaterniond q;
@@ -127,16 +127,16 @@ int main(int argc, char **argv) {
 
   /////
 
-  test = rnNeedleDrivingPlanner.requestNeedleDrivingTrajectoryDefaultGrasp(arm2,
-                                                                           needle_entry_pt_cam,
-                                                                           needle_exit_pt_cam,
-                                                                           needleDriveTraj);
+//  test = rnNeedleDrivingPlanner.requestNeedleDrivingTrajectoryDefaultGrasp(arm2,
+//                                                                           needle_entry_pt_cam,
+//                                                                           needle_exit_pt_cam,
+//                                                                           needleDriveTraj);
 
-//    test = rnNeedleDrivingPlanner.requestOneNeedleDrivingTrajectory(arm2,
-//                                                                    needle_entry_pt_cam,
-//                                                                    needle_exit_pt_cam,
-//                                                                    needleDriveTraj,
-//                                                                    grasp_transform);
+    test = rnNeedleDrivingPlanner.requestOneNeedleDrivingTrajectory(arm2,
+                                                                    needle_entry_pt_cam,
+                                                                    needle_exit_pt_cam,
+                                                                    needleDriveTraj,
+                                                                    grasp_transform);
 
   if (test) {
     double velocity = 0.01; // meter/sec

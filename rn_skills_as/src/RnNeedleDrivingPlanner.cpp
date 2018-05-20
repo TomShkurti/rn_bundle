@@ -106,7 +106,7 @@ void RnNeedleDrivingPlanner::computeDefaultNeedleWrtGripperTransform(){
   /// PSM 1
   // Calculating Needle frame wrt Grasp frame
   needle_origin_wrt_grasp_one_frame_ << 0, grab_needle_plus_minus_y_ * needle_radius_, 0;
-  bvec_needle_wrt_grasp_frame << 0, 0, grab_needle_plus_minus_z_; // z
+  bvec_needle_wrt_grasp_frame << 0, 0, -grab_needle_plus_minus_z_; // z
   nvec_needle_wrt_grasp_frame << 0, grab_needle_plus_minus_y_, 0; // x
   tvec_needle_wrt_grasp_frame = bvec_needle_wrt_grasp_frame.cross(nvec_needle_wrt_grasp_frame); // y
   needle_rotation_wrt_grasp_one_frame_.col(0) = nvec_needle_wrt_grasp_frame;
@@ -126,7 +126,7 @@ void RnNeedleDrivingPlanner::computeDefaultNeedleWrtGripperTransform(){
   // TODO Or should it be exactly the same as the PSM1?
   // Calculating Needle frame wrt Grasp frame
   needle_origin_wrt_grasp_two_frame_ << 0, -grab_needle_plus_minus_y_ * needle_radius_, 0;
-  bvec_needle_wrt_grasp_frame << 0, 0, -grab_needle_plus_minus_z_; // z
+  bvec_needle_wrt_grasp_frame << 0, 0, grab_needle_plus_minus_z_; // z
   nvec_needle_wrt_grasp_frame << 0, -grab_needle_plus_minus_y_, 0; // x
   tvec_needle_wrt_grasp_frame = bvec_needle_wrt_grasp_frame.cross(nvec_needle_wrt_grasp_frame); // y
   needle_rotation_wrt_grasp_two_frame_.col(0) = nvec_needle_wrt_grasp_frame;
@@ -470,6 +470,7 @@ double RnNeedleDrivingPlanner::computeNeedleDriveGripperAffines(int arm_index,
   ROS_INFO("Computing a needle drive trajectory/affines.");
 
   double fraction;
+
   /// whichever gripper the user has selected
   Eigen::Affine3d des_gripper_one_wrt_base;
   Eigen::Affine3d des_gripper_two_wrt_base;
@@ -511,9 +512,10 @@ double RnNeedleDrivingPlanner::computeNeedleDriveGripperAffines(int arm_index,
     case 1:
 
       for (int ipose = 0; ipose < path_waypoints_; ipose++){
+
+        // Update needle frame rotation wrt tissue each step
         Rot_needle = Rot_k_phi(kvec_needle, phi_insertion);
         needle_affine_wrt_tissue_frame_.linear() = Rot_needle * needle_rotation_mat_wrt_tissue_frame_;
-
 
 
         /// Gripper Calculation
@@ -524,8 +526,6 @@ double RnNeedleDrivingPlanner::computeNeedleDriveGripperAffines(int arm_index,
         des_gripper_one_wrt_base =
             psm_one_affine_wrt_lt_camera_.inverse() * des_gripper_one_affine_wrt_lt_camera;
 
-        // TODO delete after debugging
-        ROS_WARN("PSM1");
         debug_affine_vessel_ = des_gripper_one_affine_wrt_tissue;
 
         if (ik_solver_.ik_solve(des_gripper_one_wrt_base)==1) {
@@ -553,6 +553,8 @@ double RnNeedleDrivingPlanner::computeNeedleDriveGripperAffines(int arm_index,
     case 2:
 
       for (int ipose = 0; ipose < path_waypoints_; ipose++){
+
+        // Update needle frame rotation wrt tissue each step
         Rot_needle = Rot_k_phi(kvec_needle, phi_insertion);
         needle_affine_wrt_tissue_frame_.linear() = Rot_needle * needle_rotation_mat_wrt_tissue_frame_;
 
@@ -564,8 +566,6 @@ double RnNeedleDrivingPlanner::computeNeedleDriveGripperAffines(int arm_index,
         des_gripper_two_wrt_base =
             psm_two_affine_wrt_lt_camera_.inverse() * des_gripper_two_affine_wrt_lt_camera;
 
-        // TODO delete after debugging
-        ROS_WARN("PSM2");
         debug_affine_vessel_ = des_gripper_two_affine_wrt_tissue;
 
 
@@ -1786,7 +1786,7 @@ void RnNeedleDrivingPlanner::goToLocationPointingPsmRight(psm_controller &psm,
 
 
   // Gripper x faces Down
-  z_vec << -1, 0, 0;
+  z_vec << 1, 0, 0;
   x_vec << 0, 0, -1;
   y_vec = z_vec.cross(x_vec);
   tip_rotation.col(0) = x_vec;
