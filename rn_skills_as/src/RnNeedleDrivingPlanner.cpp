@@ -608,6 +608,251 @@ double RnNeedleDrivingPlanner::computeNeedleDriveGripperAffines(int arm_index,
 }
 
 
+
+
+double RnNeedleDrivingPlanner::computeNeedleDriveGripperAffines(int arm_index,
+                                                                double phi_from_initial_0,
+                                                                double phi_from_initial_t,
+                                                                trajectory_msgs::JointTrajectory &needleDriveTraj) {
+
+
+  ROS_INFO("Computing a needle drive trajectory/affines.");
+
+  double fraction;
+
+  /// whichever gripper the user has selected
+  Eigen::Affine3d des_gripper_one_wrt_base;
+  Eigen::Affine3d des_gripper_two_wrt_base;
+
+  Eigen::Affine3d des_gripper_one_affine_wrt_lt_camera;
+  Eigen::Affine3d des_gripper_two_affine_wrt_lt_camera;
+  Eigen::Affine3d des_gripper_one_affine_wrt_tissue;
+  Eigen::Affine3d des_gripper_two_affine_wrt_tissue;
+
+  std::vector<Eigen::Affine3d> des_gripper_one_affines_wrt_lt_camera;
+  std::vector<Eigen::Affine3d> des_gripper_two_affines_wrt_lt_camera;
+
+  Eigen::Vector3d kvec_needle; // needle rotation axis w/rt tissue frame after needle tilting
+  Eigen::Matrix3d Rot_needle;
+
+  int nsolns = 0;
+
+  /// phi is the angle rotated about the needle z axis while performing needle drives
+  double delta_phi = (phi_from_initial_t - phi_from_initial_0)/((path_waypoints_-1));
+
+  double phi_insertion = phi_from_initial_0;
+
+  /// Needle calculation
+  needle_affine_wrt_tissue_frame_ = initial_needle_affine_wrt_tissue_frame_;
+
+  // Not that  psi_needle_axis_tilt_wrt_tissue_ = 0 as a constant for now.
+  needle_affine_wrt_tissue_frame_.linear() =
+      Rotx(psi_needle_axis_tilt_wrt_tissue_) * needle_affine_wrt_tissue_frame_.linear();
+  needle_affine_wrt_tissue_frame_.translation() =
+      Rotx(psi_needle_axis_tilt_wrt_tissue_) * needle_affine_wrt_tissue_frame_.translation();
+
+  needle_origin_wrt_tissue_frame_ = needle_affine_wrt_tissue_frame_.translation();
+  needle_rotation_mat_wrt_tissue_frame_ = needle_affine_wrt_tissue_frame_.linear();
+
+  kvec_needle = needle_affine_wrt_tissue_frame_.linear().col(2);
+
+  switch (arm_index) {
+
+    case 1:
+
+      for (int ipose = 0; ipose < path_waypoints_; ipose++){
+
+        // Update needle frame rotation wrt tissue each step
+        Rot_needle = Rot_k_phi(kvec_needle, phi_insertion);
+        needle_affine_wrt_tissue_frame_.linear() = Rot_needle * needle_rotation_mat_wrt_tissue_frame_;
+
+        /// Gripper Calculation
+        des_gripper_one_affine_wrt_tissue =
+            needle_affine_wrt_tissue_frame_ * needle_affine_wrt_gripper_one_frame_.inverse();
+        des_gripper_one_affine_wrt_lt_camera =
+            tissue_affine_wrt_lt_camera_ * des_gripper_one_affine_wrt_tissue;
+        des_gripper_one_wrt_base =
+            psm_one_affine_wrt_lt_camera_.inverse() * des_gripper_one_affine_wrt_lt_camera;
+
+        debug_affine_vessel_ = des_gripper_one_affine_wrt_tissue;
+
+        if (ik_solver_.ik_solve(des_gripper_one_wrt_base)==1) {
+          nsolns++;
+          des_gripper_one_affines_wrt_lt_camera.push_back(des_gripper_one_wrt_base);
+
+          if ((ipose == 0) || (ipose == (path_waypoints_ - 1)) ) {
+
+            des_gripper_one_affines_wrt_lt_camera.push_back(des_gripper_one_wrt_base);
+          }
+
+          ik_ok_array_(ipose) = 1;
+        } else {
+          ik_ok_array_(ipose) = 0;
+        }
+
+        phi_insertion += delta_phi;
+      }
+
+
+      convertAffinesToTrajectoryMsgs(des_gripper_one_affines_wrt_lt_camera, needleDriveTraj);
+
+      break;
+
+    case 2:
+
+      for (int ipose = 0; ipose < path_waypoints_; ipose++){
+
+        // Update needle frame rotation wrt tissue each step
+        Rot_needle = Rot_k_phi(kvec_needle, phi_insertion);
+        needle_affine_wrt_tissue_frame_.linear() = Rot_needle * needle_rotation_mat_wrt_tissue_frame_;
+
+        /// Gripper Calculation
+        des_gripper_two_affine_wrt_tissue =
+            needle_affine_wrt_tissue_frame_ * needle_affine_wrt_gripper_two_frame_.inverse();
+        des_gripper_two_affine_wrt_lt_camera =
+            tissue_affine_wrt_lt_camera_ * des_gripper_two_affine_wrt_tissue;
+        des_gripper_two_wrt_base =
+            psm_two_affine_wrt_lt_camera_.inverse() * des_gripper_two_affine_wrt_lt_camera;
+
+        debug_affine_vessel_ = des_gripper_two_affine_wrt_tissue;
+
+
+        if (ik_solver_.ik_solve(des_gripper_two_wrt_base)==1) {
+          nsolns++;
+          des_gripper_two_affines_wrt_lt_camera.push_back(des_gripper_two_wrt_base);
+          ik_ok_array_(ipose) = 1;
+        } else {
+          ik_ok_array_(ipose) = 0;
+        }
+        phi_insertion += delta_phi;
+      }
+
+      convertAffinesToTrajectoryMsgs(des_gripper_two_affines_wrt_lt_camera, needleDriveTraj);
+
+      break;
+
+  }
+
+  std::cout << std::endl;
+  std::cout << "ik_ok_point:  " << ik_ok_array_.transpose() << std::endl;
+  std::cout << std::endl;
+
+
+
+
+  fraction = double(nsolns/path_waypoints_);
+
+  if (fraction != 1) {
+    ROS_ERROR("Fraction of IK solutions is: %f, with %d solutions, among %d waypoints.",
+              fraction, nsolns, path_waypoints_);
+  } else {
+    ROS_INFO("Needle driving trajectory (containing %d waypoints) computation succeeded with fraction: %f",
+             path_waypoints_,
+             fraction);
+  }
+
+  return fraction;
+
+
+}
+
+
+
+bool RnNeedleDrivingPlanner::hasValidNeedleDriveAffine(int arm_index, double phi) {
+
+  /// whichever gripper the user has selected
+  Eigen::Affine3d des_gripper_one_wrt_base;
+  Eigen::Affine3d des_gripper_two_wrt_base;
+
+  Eigen::Affine3d des_gripper_one_affine_wrt_lt_camera;
+  Eigen::Affine3d des_gripper_two_affine_wrt_lt_camera;
+  Eigen::Affine3d des_gripper_one_affine_wrt_tissue;
+  Eigen::Affine3d des_gripper_two_affine_wrt_tissue;
+
+  std::vector<Eigen::Affine3d> des_gripper_one_affines_wrt_lt_camera;
+  std::vector<Eigen::Affine3d> des_gripper_two_affines_wrt_lt_camera;
+
+  Eigen::Vector3d kvec_needle; // needle rotation axis w/rt tissue frame after needle tilting
+  Eigen::Matrix3d Rot_needle;
+
+  double phi_insertion = phi;
+
+  /// Needle calculation
+  needle_affine_wrt_tissue_frame_ = initial_needle_affine_wrt_tissue_frame_;
+
+  // Not that  psi_needle_axis_tilt_wrt_tissue_ = 0 as a constant for now.
+  needle_affine_wrt_tissue_frame_.linear() =
+      Rotx(psi_needle_axis_tilt_wrt_tissue_) * needle_affine_wrt_tissue_frame_.linear();
+  needle_affine_wrt_tissue_frame_.translation() =
+      Rotx(psi_needle_axis_tilt_wrt_tissue_) * needle_affine_wrt_tissue_frame_.translation();
+
+  needle_origin_wrt_tissue_frame_ = needle_affine_wrt_tissue_frame_.translation();
+  needle_rotation_mat_wrt_tissue_frame_ = needle_affine_wrt_tissue_frame_.linear();
+
+  kvec_needle = needle_affine_wrt_tissue_frame_.linear().col(2);
+
+
+  switch (arm_index) {
+
+    case 1:
+
+      // Calculate only once.
+      Rot_needle = Rot_k_phi(kvec_needle, phi_insertion);
+      needle_affine_wrt_tissue_frame_.linear() = Rot_needle * needle_rotation_mat_wrt_tissue_frame_;
+
+      /// Gripper Calculation
+      des_gripper_one_affine_wrt_tissue =
+          needle_affine_wrt_tissue_frame_ * needle_affine_wrt_gripper_one_frame_.inverse();
+      des_gripper_one_affine_wrt_lt_camera =
+          tissue_affine_wrt_lt_camera_ * des_gripper_one_affine_wrt_tissue;
+      des_gripper_one_wrt_base =
+          psm_one_affine_wrt_lt_camera_.inverse() * des_gripper_one_affine_wrt_lt_camera;
+
+      if (ik_solver_.ik_solve(des_gripper_one_wrt_base)==1) {
+
+        return true;
+
+      } else {
+
+        return false;
+
+      }
+
+      break;
+
+    case 2:
+
+      // Calculate only once.
+      Rot_needle = Rot_k_phi(kvec_needle, phi_insertion);
+      needle_affine_wrt_tissue_frame_.linear() = Rot_needle * needle_rotation_mat_wrt_tissue_frame_;
+
+      /// Gripper Calculation
+      des_gripper_two_affine_wrt_tissue =
+          needle_affine_wrt_tissue_frame_ * needle_affine_wrt_gripper_two_frame_.inverse();
+      des_gripper_two_affine_wrt_lt_camera =
+          tissue_affine_wrt_lt_camera_ * des_gripper_two_affine_wrt_tissue;
+      des_gripper_two_wrt_base =
+          psm_two_affine_wrt_lt_camera_.inverse() * des_gripper_two_affine_wrt_lt_camera;
+
+      if (ik_solver_.ik_solve(des_gripper_two_wrt_base)==1) {
+
+        return true;
+
+      } else {
+
+        return false;
+
+      }
+
+      break;
+
+  }
+
+}
+
+
+
+
 /*
  * The trajectory is 7x1 and time from start is NOT filled in.
  */
@@ -672,18 +917,24 @@ void RnNeedleDrivingPlanner::updateNeedleAndTissueParameters(const geometry_msgs
   // Make sure the exit point is valid, if not, adjust it
 
   checkExitPoint(needle_entry_point_, needle_exit_point_, dist_entrance_to_exit_);
+  ROS_INFO("Dist entrance to exit (%f) has been updated.", dist_entrance_to_exit_);
 
   defineTissueFrameWrtLtCamera(needle_entry_point_, needle_exit_point_, tissue_normal_);
   ROS_INFO("Tissue Frame definition has been updated.");
 
   needle_axis_ht_ = sqrt(needle_radius_ * needle_radius_ - (dist_entrance_to_exit_ / 2) * (dist_entrance_to_exit_ / 2));
   suture_depth_ = needle_radius_ - needle_axis_ht_;
-  ROS_INFO("Needle axis height/suture depth has been updated.");
+  ROS_INFO("Needle axis height (%f) and suture depth (%f) has been updated.", needle_axis_ht_, suture_depth_);
 
   needle_origin_wrt_tissue_frame << 0.5 * dist_entrance_to_exit_, 0, needle_axis_ht_;
   initial_needle_affine_wrt_tissue_frame_.translation() = needle_origin_wrt_tissue_frame;
   ROS_INFO("Needle Tissue Transform has been updated.");
 
+
+  phi_needle_initial_ = 0;
+  phi_needle_penetration_ = atan(needle_axis_ht_/(0.5*dist_entrance_to_exit_));
+  phi_needle_emergence_ = M_PI - 2*phi_needle_penetration_;
+  ROS_INFO("Needle Penetration (%f) and Emergence Phi (%f) have been updated.", phi_needle_penetration_, phi_needle_emergence_);
 }
 
 
@@ -713,6 +964,11 @@ void RnNeedleDrivingPlanner::updateNeedleAndTissueParametersWithExitAndTip(const
   needle_origin_wrt_tissue_frame << 0.5 * dist_entrance_to_exit_, 0, needle_axis_ht_;
   initial_needle_affine_wrt_tissue_frame_.translation() = needle_origin_wrt_tissue_frame;
   ROS_INFO("Needle Tissue Transform has been updated.");
+
+  phi_needle_initial_ = 0;
+  phi_needle_penetration_ = atan(needle_axis_ht_/(0.5*dist_entrance_to_exit_));
+  phi_needle_emergence_ = M_PI - 2*phi_needle_penetration_;
+  ROS_INFO("Needle Penetration and Emergence Phis have been updated.");
 
 
 }
@@ -755,7 +1011,7 @@ bool RnNeedleDrivingPlanner::requestNeedleDrivingTrajectoryDefaultGrasp(const in
  * Use user defined grasp transform to attempt a needle driving trajectory
  * with given entry and exit points.
  */
-bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectory(const int &arm_index,
+bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryUserGrasp(const int &arm_index,
                                                                const geometry_msgs::PointStamped &needle_entry_pt,
                                                                const geometry_msgs::PointStamped &needle_exit_pt,
                                                                const geometry_msgs::TransformStamped &grasp_transform,
@@ -785,7 +1041,7 @@ bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectory(const int &arm_in
  * Find a trajectory which allows a needle driving from the entry to exit requested by the user
  * Auto-search for a grasp transform that works.
  */
-bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectory(const int &arm_index,
+bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryGeneratedGrasp(const int &arm_index,
                                                                const geometry_msgs::PointStamped &needle_entry_pt,
                                                                const geometry_msgs::PointStamped &needle_exit_pt,
                                                                trajectory_msgs::JointTrajectory &needleDriveTraj,
@@ -814,7 +1070,7 @@ bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectory(const int &arm_in
 
   for (int i = 0; i < default_grasp_tf_search_resolution_; i++) {
 
-    has_solution = requestOneNeedleDrivingTrajectory(arm_index,
+    has_solution = requestOneNeedleDrivingTrajectoryUserGrasp(arm_index,
                                                      needle_entry_pt,
                                                      needle_exit_pt,
                                                      potential_transform_list.stamped_transform_list[i],
@@ -866,19 +1122,232 @@ bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectory(const int &arm_in
 
 
 
-bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectory(const int &arm_index,
-                                                               const geometry_msgs::PointStamped &needle_entry_pt,
-                                                               const geometry_msgs::PointStamped &needle_exit_pt,
-                                                               const geometry_msgs::TransformStamped &user_grasp_transform,
-                                                               const double &perturbation,
-                                                               trajectory_msgs::JointTrajectory &needleDriveTraj,
-                                                               geometry_msgs::TransformStamped &final_grasp_transform) {
+bool RnNeedleDrivingPlanner::requestNeedleDrivingTrajectoryDefaultGrasp(const int &arm_index,
+                                                                        const geometry_msgs::PointStamped &needle_entry_pt,
+                                                                        const geometry_msgs::PointStamped &needle_exit_pt,
+                                                                        const double phi_0,
+                                                                        const double phi_t,
+                                                                        trajectory_msgs::JointTrajectory &needleDriveTraj) {
 
+  double ik_fraction;
 
+  updateNeedleAndTissueParameters(needle_entry_pt, needle_exit_pt);
+  needle_affine_wrt_grasp_one_frame_ = default_needle_affine_wrt_grasp_one_frame_;
+  needle_affine_wrt_grasp_two_frame_ = default_needle_affine_wrt_grasp_two_frame_;
+  updateNeedleWrtGripperTransforms(); // to get needle_affine_wrt_gripper_one_frame_ & needle_affine_wrt_gripper_two_frame_
 
+  ik_fraction = computeNeedleDriveGripperAffines(arm_index, phi_0, phi_t, needleDriveTraj);
 
+  if (ik_fraction == 1) {
+    ROS_INFO("A valid needle drive trajectory has been acquired.");
+
+    // update needle upper and lower kinematically possible angle.
+    updateNeedleDriveKinematicBoundary(arm_index);
+
+    return true;
+  } else {
+    ROS_WARN("Failed to get a valid needle drive trajectory, the ik solution fraction is: %f", ik_fraction);
+    return false;
+  }
 
 }
+
+
+
+
+bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryUserGrasp(const int &arm_index,
+                                                                        const geometry_msgs::PointStamped &needle_entry_pt,
+                                                                        const geometry_msgs::PointStamped &needle_exit_pt,
+                                                                        const geometry_msgs::TransformStamped &grasp_transform,
+                                                                        const double phi_0,
+                                                                        const double phi_t,
+                                                                        trajectory_msgs::JointTrajectory &needleDriveTraj) {
+
+  double ik_fraction;
+
+  updateNeedleAndTissueParameters(needle_entry_pt, needle_exit_pt);
+
+  computeGraspTransform(arm_index, grasp_transform);
+  updateNeedleWrtGripperTransforms(); // TODO not needed perhaps
+
+  ik_fraction = computeNeedleDriveGripperAffines(arm_index, phi_0, phi_t, needleDriveTraj);
+
+  if (ik_fraction == 1) {
+    ROS_INFO("A valid needle drive trajectory has been acquired.");
+
+    // update needle upper and lower kinematically possible angle.
+    updateNeedleDriveKinematicBoundary(arm_index);
+
+    return true;
+  } else {
+    ROS_WARN("Failed to get a valid needle drive trajectory, the ik solution fraction is: %f", ik_fraction);
+    return false;
+  }
+
+}
+
+
+
+bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryGeneratedGrasp(const int &arm_index,
+                                                                             const geometry_msgs::PointStamped &needle_entry_pt,
+                                                                             const geometry_msgs::PointStamped &needle_exit_pt,
+                                                                             const double phi_0,
+                                                                             const double phi_t,
+                                                                             trajectory_msgs::JointTrajectory &needleDriveTraj,
+                                                                             geometry_msgs::TransformStamped &grasp_transform) {
+
+    cwru_davinci_msgs::ListOfTransformStamped potential_transform_list;
+    cwru_davinci_msgs::ListOfTransformStamped valid_transform_list;
+    Eigen::Affine3d default_preferred_grasp_tf;
+    double ik_fraction;
+    double grasp_trials_fraction;
+    int ngrasps = 0;
+    bool has_solution;
+
+    switch (arm_index) {
+      case 1:
+        default_preferred_grasp_tf = default_preferred_grasp_one_tf_;
+        break;
+
+      case 2:
+        default_preferred_grasp_tf = default_preferred_grasp_two_tf_;
+        break;
+    }
+
+    // default_grasp_tf_search_resolution_ is 36;
+    generateGraspTransformList(arm_index, default_grasp_tf_search_resolution_, potential_transform_list);
+
+    for (int i = 0; i < default_grasp_tf_search_resolution_; i++) {
+
+      has_solution = requestOneNeedleDrivingTrajectoryUserGrasp(arm_index,
+                                                                needle_entry_pt,
+                                                                needle_exit_pt,
+                                                                potential_transform_list.stamped_transform_list[i],
+                                                                phi_0,
+                                                                phi_t,
+                                                                needleDriveTraj);
+
+      if (has_solution == true) {
+        valid_transform_list.stamped_transform_list.push_back(potential_transform_list.stamped_transform_list[i]);
+        ngrasps ++;
+      }
+
+    }
+
+    if (ngrasps > 0) {
+
+      ROS_INFO("There are %d valid grasp transforms obtained. Entering selection process.", ngrasps);
+
+      grasp_transform = getBestGraspTransform(default_preferred_grasp_tf, valid_transform_list);
+
+      // Then calculate again with the selected grasp tf
+      computeGraspTransform(arm_index, grasp_transform);
+      updateNeedleWrtGripperTransforms();
+
+      ik_fraction = computeNeedleDriveGripperAffines(arm_index, needleDriveTraj);
+
+      // Should definitely pass the test, again.
+      if (ik_fraction == 1) {
+        ROS_INFO("A valid needle drive trajectory has been acquired.");
+        return true;
+      } else {
+        ROS_WARN("Failed to get a valid needle drive trajectory, the ik solution fraction is: %f", ik_fraction);
+        return false;
+      }
+
+    } else {
+
+      ROS_ERROR("\nCould not find any grasp transform that suffices the entry & exit pts to do a needle drive.\n");
+      return false;
+
+    }
+
+  }
+
+
+
+void RnNeedleDrivingPlanner::updateNeedleDriveKinematicBoundary(const int &arm_index) {
+
+  double upper_phi, lower_phi;
+  int count = 0;
+  bool upper_limit_found = false;
+  bool lower_limit_found = false;
+
+  double delta_phi = M_PI/180;
+
+  upper_phi = phi_needle_penetration_ + phi_needle_emergence_;
+  lower_phi = phi_needle_penetration_;
+
+  while ((!upper_limit_found) && (upper_phi < (phi_needle_penetration_ + M_PI) )) {
+
+
+    if (hasValidNeedleDriveAffine(arm_index, upper_phi)) {
+
+      count ++;
+      upper_phi = upper_phi + delta_phi;
+
+    } else {
+
+      switch (arm_index) {
+        case 1:
+          phi_needle_kinematic_upper_angle_psm_1_ = upper_phi - delta_phi;
+          break;
+        case 2:
+          phi_needle_kinematic_upper_angle_psm_2_ = upper_phi - delta_phi;
+          break;
+      }
+
+      upper_limit_found = true;
+    }
+
+  }
+
+  if (upper_limit_found) {
+    ROS_INFO("phi_needle_kinematic_upper_angle (%f) has been updated for PSM %d", upper_phi - delta_phi, arm_index);
+  } else {
+    ROS_WARN("phi_needle_kinematic_upper_angle has NOT been updated for PSM %d", arm_index);
+  }
+
+  count = 0;
+
+  while ((!lower_limit_found) && (lower_limit_found > -phi_needle_penetration_)) {
+
+
+
+    if (hasValidNeedleDriveAffine(arm_index, lower_phi)) {
+
+      count ++;
+      lower_phi = lower_phi - delta_phi;
+
+
+
+    } else {
+
+      switch (arm_index) {
+        case 1:
+          phi_needle_kinematic_lower_angle_psm_1_ = lower_phi + delta_phi;
+          break;
+        case 2:
+          phi_needle_kinematic_lower_angle_psm_2_ = lower_phi + delta_phi;
+          break;
+      }
+
+      lower_limit_found = true;
+    }
+
+  }
+
+  if (lower_limit_found) {
+    ROS_INFO("phi_needle_kinematic_lower_angle (%f) has been updated for PSM %d", lower_phi + delta_phi, arm_index);
+  } else {
+    ROS_WARN("phi_needle_kinematic_lower_angle has NOT been updated for PSM %d", arm_index);
+  }
+
+}
+
+
+
+
 
 
 
@@ -960,16 +1429,6 @@ void RnNeedleDrivingPlanner::generateGraspTransformList(const int &arm_index,
 
 
 
-void RnNeedleDrivingPlanner::generateGraspTransformListWithPerturbation (const int &arm_index,
-                                                                         const geometry_msgs::TransformStamped &user_grasp_transform,
-                                                                         const double &perturbation,
-                                                                         cwru_davinci_msgs::ListOfTransformStamped &grasp_tf_array) {
-
-
-
-}
-
-
 /*
  * Generate a list of exit points (w/rt left camera frame) for further evaluation.
  */
@@ -1023,7 +1482,7 @@ double RnNeedleDrivingPlanner::filterValidExitPoints(const int &arm_index,
 
   for (int n = 0; n < n_candidates; n++) {
 
-    if (requestOneNeedleDrivingTrajectory(arm_index,
+    if (requestOneNeedleDrivingTrajectoryGeneratedGrasp(arm_index,
                                           needle_entry_pt,
                                           exit_points_array.stamped_point_list[n],
                                           needleDriveTraj,
@@ -1066,7 +1525,7 @@ double RnNeedleDrivingPlanner::filterValidExitPoints(const int &arm_index,
 
   for (int n = 0; n < n_candidates; n++) {
 
-    if (requestOneNeedleDrivingTrajectory(arm_index,
+    if (requestOneNeedleDrivingTrajectoryUserGrasp(arm_index,
                                          needle_entry_pt,
                                          exit_points_array.stamped_point_list[n],
                                          grasp_tf,
@@ -1355,7 +1814,7 @@ geometry_msgs::TransformStamped RnNeedleDrivingPlanner::getBestGraspTransform(Ei
 }
 
 
-
+// TODO appears to have bugs
 /*
  * To make sure the entry-exit distance is less than the needle diameter. This function is called
  * internally by another member function updateNeedleAndTissueParameters().
@@ -1365,16 +1824,17 @@ void RnNeedleDrivingPlanner::checkExitPoint(const Eigen::Vector3d& entry_pt,
                                             double& dist_entry_exit) {
 
   double temp1, temp2, temp3;
+  Eigen::Vector3d temp_vec;
   Eigen::Vector3d direction;
 
   direction = exit_pt - entry_pt;
   direction = direction/direction.norm();
 
-  temp1 = exit_pt.transpose() * exit_pt;
-  temp2 = entry_pt.transpose() * entry_pt;
-  temp3 = temp1 - temp2;
+  temp_vec = exit_pt - entry_pt;
+  temp2 = temp_vec.transpose() * temp_vec;
 
-  dist_entry_exit = sqrt(abs(temp3));
+
+  dist_entry_exit = sqrt(fabs(temp2));
 
   if (dist_entry_exit >= 2*needle_radius_) {
     ROS_WARN("The entry exit distance (%f) is greater than the needle diameter. It will be adjusted!",
@@ -1382,14 +1842,17 @@ void RnNeedleDrivingPlanner::checkExitPoint(const Eigen::Vector3d& entry_pt,
 
     // Update exit point and distance
     exit_pt = entry_pt + direction * 1.8 * needle_radius_;
-    temp1 = exit_pt.transpose() * exit_pt;
-    temp3 = temp1 - temp2;
-    dist_entry_exit = sqrt(abs(temp3));
+
+    std::cout << "entry_pt: " << entry_pt.transpose() << std::endl;
+    std::cout << "updated exit_pt: " << exit_pt.transpose() << std::endl;
+
+    temp_vec = exit_pt - entry_pt;
+    temp2 = temp_vec.transpose() * temp_vec;
+    dist_entry_exit = sqrt(fabs(temp2));
 
   } else {
     ROS_INFO("Entry and Exit points check passed.");
   }
-
 
 }
 
@@ -1464,7 +1927,7 @@ bool RnNeedleDrivingPlanner::requestNeedleDrivingTrajectoryDefaultGraspInBaseFra
 }
 
 
-bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryInBaseFrame(const int &arm_index,
+bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryUserGraspInBaseFrame(const int &arm_index,
                                                                           const geometry_msgs::PointStamped &needle_entry_pt,
                                                                           const geometry_msgs::PointStamped &needle_exit_pt,
                                                                           const geometry_msgs::TransformStamped &grasp_transform,
@@ -1476,7 +1939,7 @@ bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryInBaseFrame(const 
 
   overlapLeftCamFrameAndPsmBase(arm_index);
 
-  result = requestOneNeedleDrivingTrajectory(arm_index,
+  result = requestOneNeedleDrivingTrajectoryUserGrasp(arm_index,
                                              needle_entry_pt,
                                              needle_exit_pt,
                                              grasp_transform,
@@ -1504,7 +1967,7 @@ bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryInBaseFrame(const 
 
   overlapLeftCamFrameAndPsmBase(arm_index);
 
-  result = requestOneNeedleDrivingTrajectory(arm_index,
+  result = requestOneNeedleDrivingTrajectoryGeneratedGrasp(arm_index,
                                              needle_entry_pt,
                                              needle_exit_pt,
                                              needleDriveTraj,

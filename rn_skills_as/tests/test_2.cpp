@@ -23,6 +23,10 @@ int main(int argc, char **argv) {
   int arm1 = 1;
   int arm2 = 2;
 
+  double phi_0 = 0.1 * M_PI;
+  double phi_t = 0.5 * M_PI;
+
+
 
   psm_controller psm1(arm1, node);
   psm_controller psm2(arm2, node);
@@ -90,11 +94,42 @@ int main(int argc, char **argv) {
 //                                                                           needle_exit_pt_cam,
 //                                                                           needleDriveTraj);
 
-  test = rnNeedleDrivingPlanner.requestOneNeedleDrivingTrajectory(arm1,
-                                                                  needle_entry_pt_cam,
-                                                                  needle_exit_pt_cam,
-                                                                  needleDriveTraj,
-                                                                  grasp_transform);
+//  test = rnNeedleDrivingPlanner.requestOneNeedleDrivingTrajectory(arm1,
+//                                                                  needle_entry_pt_cam,
+//                                                                  needle_exit_pt_cam,
+//                                                                  needleDriveTraj,
+//                                                                  grasp_transform);
+
+
+  rnNeedleDrivingPlanner.updateNeedleAndTissueParameters(needle_entry_pt_cam, needle_exit_pt_cam);
+
+  double phi_pen, phi_em, phi_02,  phi_t2;
+
+  phi_pen = rnNeedleDrivingPlanner.getPhiNeedlePenetration();
+  phi_em = rnNeedleDrivingPlanner.getPhiNeedleEmergence();
+
+  std::cout << "phi_pen: " << phi_pen << std::endl << "phi_em: " << phi_em << std::endl;
+
+//  phi_02 = - 0.0698132; // 0.0698132 rad = 4 deg
+  phi_02 = -0.1;
+  phi_t2 = M_PI;
+
+  test = rnNeedleDrivingPlanner.requestNeedleDrivingTrajectoryDefaultGrasp(arm1,
+                                                                           needle_entry_pt_cam,
+                                                                           needle_exit_pt_cam,
+                                                                           phi_02,
+                                                                           phi_t2,
+                                                                           needleDriveTraj);
+
+//  test = rnNeedleDrivingPlanner.requestOneNeedleDrivingTrajectoryGeneratedGrasp(arm1,
+//                                                                           needle_entry_pt_cam,
+//                                                                           needle_exit_pt_cam,
+//                                                                           phi_02,
+//                                                                           phi_t2,
+//                                                                           needleDriveTraj,
+//                                                                           grasp_transform);
+
+
 
 //  {
 //    Eigen::Quaterniond q;
@@ -132,11 +167,13 @@ int main(int argc, char **argv) {
 //                                                                           needle_exit_pt_cam,
 //                                                                           needleDriveTraj);
 
-    test = rnNeedleDrivingPlanner.requestOneNeedleDrivingTrajectory(arm2,
-                                                                    needle_entry_pt_cam,
-                                                                    needle_exit_pt_cam,
-                                                                    needleDriveTraj,
-                                                                    grasp_transform);
+//    test = rnNeedleDrivingPlanner.requestOneNeedleDrivingTrajectoryGeneratedGrasp(arm2,
+//                                                                    needle_entry_pt_cam,
+//                                                                    needle_exit_pt_cam,
+//                                                                    needleDriveTraj,
+//                                                                    grasp_transform);
+
+  test = false;
 
   if (test) {
     double velocity = 0.01; // meter/sec

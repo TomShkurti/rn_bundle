@@ -42,6 +42,24 @@ class RnNeedleDrivingPlanner {
   double computeNeedleDriveGripperAffines(int arm_index,
                                           trajectory_msgs::JointTrajectory &needleDriveTraj);
 
+  /**
+   * This function will get you a trajectory that start from phi_from_initial_0 and end at phi_from_initial_t.
+   * It will take only one drive.
+   * @param arm_index
+   * @param phi_from_initial_0: Initial is 0. Phi is the so called needle insertion angle. 0 indiates it is where the drive starts.
+   * @param phi_from_initial_t: destination.
+   * @param needleDriveTraj
+   * @return
+   */
+  double computeNeedleDriveGripperAffines(int arm_index,
+                                          double phi_from_initial_0,
+                                          double phi_from_initial_t,
+                                          trajectory_msgs::JointTrajectory &needleDriveTraj);
+
+  bool hasValidNeedleDriveAffine(int arm_index, double phi);
+
+
+
   void updateNeedleAndTissueParameters(const geometry_msgs::PointStamped &needle_entry_pt,
                                        const geometry_msgs::PointStamped &needle_exit_pt);
 
@@ -104,7 +122,7 @@ class RnNeedleDrivingPlanner {
    * @return true only when the fraction of valid waypoints is 1.
    * @return
    */
-  bool requestOneNeedleDrivingTrajectory(const int &arm_index,
+  bool requestOneNeedleDrivingTrajectoryUserGrasp(const int &arm_index,
                                          const geometry_msgs::PointStamped &needle_entry_pt,
                                          const geometry_msgs::PointStamped &needle_exit_pt,
                                          const geometry_msgs::TransformStamped &grasp_transform,
@@ -121,11 +139,45 @@ class RnNeedleDrivingPlanner {
    * @param grasp_transform
    * @return
    */
-  bool requestOneNeedleDrivingTrajectory(const int &arm_index,
+  bool requestOneNeedleDrivingTrajectoryGeneratedGrasp(const int &arm_index,
                                          const geometry_msgs::PointStamped &needle_entry_pt,
                                          const geometry_msgs::PointStamped &needle_exit_pt,
                                          trajectory_msgs::JointTrajectory &needleDriveTraj,
                                          geometry_msgs::TransformStamped &grasp_transform);
+
+
+
+  bool requestNeedleDrivingTrajectoryDefaultGrasp(const int &arm_index,
+                                                  const geometry_msgs::PointStamped &needle_entry_pt,
+                                                  const geometry_msgs::PointStamped &needle_exit_pt,
+                                                  const double phi_0,
+                                                  const double phi_t,
+                                                  trajectory_msgs::JointTrajectory &needleDriveTraj);
+
+
+  bool requestOneNeedleDrivingTrajectoryUserGrasp(const int &arm_index,
+                                                  const geometry_msgs::PointStamped &needle_entry_pt,
+                                                  const geometry_msgs::PointStamped &needle_exit_pt,
+                                                  const geometry_msgs::TransformStamped &grasp_transform,
+                                                  const double phi_0,
+                                                  const double phi_t,
+                                                  trajectory_msgs::JointTrajectory &needleDriveTraj);
+
+
+  bool requestOneNeedleDrivingTrajectoryGeneratedGrasp(const int &arm_index,
+                                                       const geometry_msgs::PointStamped &needle_entry_pt,
+                                                       const geometry_msgs::PointStamped &needle_exit_pt,
+                                                       const double phi_0,
+                                                       const double phi_t,
+                                                       trajectory_msgs::JointTrajectory &needleDriveTraj,
+                                                       geometry_msgs::TransformStamped &grasp_transform);
+
+
+  void updateNeedleDriveKinematicBoundary(const int &arm_index);
+
+
+
+
 
 
   // TODO finish
@@ -483,6 +535,18 @@ class RnNeedleDrivingPlanner {
   }
 
 
+  inline double getPhiNeedleInitial() {
+    return phi_needle_initial_;
+  }
+
+  inline double getPhiNeedlePenetration() {
+    return phi_needle_penetration_;
+  }
+
+  inline double getPhiNeedleEmergence() {
+    return phi_needle_emergence_;
+  }
+
 
 
   /// Camera Free Needle Drive Interface
@@ -512,7 +576,7 @@ class RnNeedleDrivingPlanner {
                                                              trajectory_msgs::JointTrajectory &needleDriveTraj);
 
 
-  bool requestOneNeedleDrivingTrajectoryInBaseFrame(const int &arm_index,
+  bool requestOneNeedleDrivingTrajectoryUserGraspInBaseFrame(const int &arm_index,
                                                     const geometry_msgs::PointStamped &needle_entry_pt,
                                                     const geometry_msgs::PointStamped &needle_exit_pt,
                                                     const geometry_msgs::TransformStamped &grasp_transform,
@@ -642,6 +706,20 @@ class RnNeedleDrivingPlanner {
   int grab_needle_plus_minus_y_;
   int grab_needle_plus_minus_z_;
   double psi_needle_axis_tilt_wrt_tissue_ = 0; // Not implemented, set to be 0
+
+  // When the needle is rotated for @phi_needle_penetration_ from @phi_needle_initial_ its tip will touch the
+  // tissue surface at the entry point. When the needle is rotated for @phi_needle_emergence_ from @phi_needle_penetration_ its tip
+  // will emerge again from the exit point.
+  double phi_needle_initial_;
+  double phi_needle_penetration_;
+  double phi_needle_emergence_;
+  // When tissue frame (entry and exit pts) is set, and the grasp tf is set, one can calculate the lower and upper boundary
+  // of the needle rotation. The results can be additions to the phi_needle_penetration_ and phi_needle_emergence_.
+  // This info can be helpful to addressing the multi-drive and extraction issues.
+  double phi_needle_kinematic_lower_angle_psm_1_;
+  double phi_needle_kinematic_lower_angle_psm_2_;
+  double phi_needle_kinematic_upper_angle_psm_1_;
+  double phi_needle_kinematic_upper_angle_psm_2_;
 
   Eigen::Vector3d needle_origin_wrt_tissue_frame_;
   Eigen::Matrix3d needle_rotation_mat_wrt_tissue_frame_;
