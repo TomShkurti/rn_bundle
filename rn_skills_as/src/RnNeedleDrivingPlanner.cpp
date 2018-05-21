@@ -339,13 +339,6 @@ void RnNeedleDrivingPlanner::defineTissueFrameWrtLtCameraViaExitAndTip(const Eig
   temp_result = temp_frame * temp_tip_pt_affine;
   temp_frame_tip_pt = temp_result.translation();
 
-  // TODO delete
-  {
-    std::cout << "temp_frame_exit_pt: " << temp_frame_exit_pt.transpose() << std::endl;
-    std::cout << "temp_frame_tip_pt: " << temp_frame_tip_pt.transpose() << std::endl;
-
-  }
-
 
   if (temp_frame_tip_pt(1) != 0) {
     ROS_ERROR("Error from defineTissueFrameWrtLtCameraViaExitAndTip() calculation! 001");
@@ -1762,9 +1755,6 @@ double RnNeedleDrivingPlanner::approximateTrajectoryDist(trajectory_msgs::JointT
     total_dist = total_dist + euler_dist;
 
   }
-
-  // TODO delete
-  std::cout << "total_dist: " << total_dist << std::endl;
 
   return total_dist;
 }

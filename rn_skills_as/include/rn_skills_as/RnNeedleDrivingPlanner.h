@@ -548,6 +548,22 @@ class RnNeedleDrivingPlanner {
   }
 
 
+  inline double getPhiNeedleKinematicLowerAnglePsm1() {
+    return phi_needle_kinematic_lower_angle_psm_1_;
+  }
+
+  inline double getPhiNeedleKinematicLowerAnglePsm2() {
+    return phi_needle_kinematic_lower_angle_psm_2_;
+  }
+
+  inline double getPhiNeedleKinematicUpperAnglePsm1() {
+    return phi_needle_kinematic_upper_angle_psm_1_;
+  }
+
+  inline double getPhiNeedleKinematicUpperAnglePsm2() {
+    return phi_needle_kinematic_upper_angle_psm_2_;
+  }
+
 
   /// Camera Free Needle Drive Interface
 
