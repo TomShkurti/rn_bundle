@@ -2,103 +2,103 @@
 <project version="4">
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true" buildAllGenerated="true">
     <generated>
-      <config projectName="rn_skills_as" targetName="DavinciActionServer" />
-      <config projectName="rn_skills_as" targetName="rn_skills_as_gencpp" />
-      <config projectName="rn_skills_as" targetName="actionlib_generate_messages_py" />
-      <config projectName="rn_skills_as" targetName="doxygen" />
-      <config projectName="rn_skills_as" targetName="tf_generate_messages_nodejs" />
-      <config projectName="rn_skills_as" targetName="std_msgs_generate_messages_py" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveActionGoal" />
-      <config projectName="rn_skills_as" targetName="actionlib_generate_messages_nodejs" />
-      <config projectName="rn_skills_as" targetName="tf2_msgs_generate_messages_cpp" />
-      <config projectName="rn_skills_as" targetName="std_msgs_generate_messages_nodejs" />
-      <config projectName="rn_skills_as" targetName="actionlib_msgs_generate_messages_lisp" />
-      <config projectName="rn_skills_as" targetName="roscpp_generate_messages_eus" />
-      <config projectName="rn_skills_as" targetName="std_msgs_generate_messages_eus" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveResult" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteFeedback" />
-      <config projectName="rn_skills_as" targetName="geometry_msgs_generate_messages_eus" />
-      <config projectName="rn_skills_as" targetName="tf2_msgs_generate_messages_py" />
-      <config projectName="rn_skills_as" targetName="tf2_msgs_generate_messages_eus" />
-      <config projectName="rn_skills_as" targetName="cwru_davinci_msgs_generate_messages_cpp" />
-      <config projectName="rn_skills_as" targetName="roscpp_generate_messages_nodejs" />
       <config projectName="rn_skills_as" targetName="rn_skills_as_geneus" />
-      <config projectName="rn_skills_as" targetName="sensor_msgs_generate_messages_lisp" />
-      <config projectName="rn_skills_as" targetName="sensor_msgs_generate_messages_cpp" />
-      <config projectName="rn_skills_as" targetName="tf_generate_messages_lisp" />
-      <config projectName="rn_skills_as" targetName="tf2_msgs_generate_messages_nodejs" />
-      <config projectName="rn_skills_as" targetName="trajectory_msgs_generate_messages_cpp" />
-      <config projectName="rn_skills_as" targetName="_catkin_empty_exported_target" />
-      <config projectName="rn_skills_as" targetName="rn_skills_as_gennodejs" />
-      <config projectName="rn_skills_as" targetName="geometry_msgs_generate_messages_nodejs" />
-      <config projectName="rn_skills_as" targetName="rosgraph_msgs_generate_messages_cpp" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveActionFeedback" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteResult" />
-      <config projectName="rn_skills_as" targetName="DavinciActionClient" />
-      <config projectName="rn_skills_as" targetName="geometry_msgs_generate_messages_lisp" />
-      <config projectName="rn_skills_as" targetName="actionlib_msgs_generate_messages_cpp" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteActionGoal" />
-      <config projectName="rn_skills_as" targetName="rn_skills_as_generate_messages_cpp" />
-      <config projectName="rn_skills_as" targetName="run_tests" />
-      <config projectName="rn_skills_as" targetName="geometry_msgs_generate_messages_py" />
-      <config projectName="rn_skills_as" targetName="cwru_davinci_msgs_generate_messages_nodejs" />
-      <config projectName="rn_skills_as" targetName="cwru_davinci_msgs_generate_messages_eus" />
-      <config projectName="rn_skills_as" targetName="rosgraph_msgs_generate_messages_nodejs" />
-      <config projectName="rn_skills_as" targetName="cwru_davinci_msgs_generate_messages_py" />
-      <config projectName="rn_skills_as" targetName="gmock" />
-      <config projectName="rn_skills_as" targetName="sensor_msgs_generate_messages_eus" />
-      <config projectName="rn_skills_as" targetName="tf_generate_messages_py" />
-      <config projectName="rn_skills_as" targetName="trajectory_msgs_generate_messages_eus" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveAction" />
-      <config projectName="rn_skills_as" targetName="actionlib_msgs_generate_messages_nodejs" />
-      <config projectName="rn_skills_as" targetName="gmock_main" />
-      <config projectName="rn_skills_as" targetName="tf_generate_messages_cpp" />
       <config projectName="rn_skills_as" targetName="std_msgs_generate_messages_lisp" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteActionResult" />
-      <config projectName="rn_skills_as" targetName="rn_needle_driving_fncs_test" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveGoal" />
-      <config projectName="rn_skills_as" targetName="trajectory_msgs_generate_messages_nodejs" />
-      <config projectName="rn_skills_as" targetName="rosgraph_msgs_generate_messages_lisp" />
-      <config projectName="rn_skills_as" targetName="tf2_msgs_generate_messages_lisp" />
-      <config projectName="rn_skills_as" targetName="sensor_msgs_generate_messages_py" />
-      <config projectName="rn_skills_as" targetName="download_extra_data" />
-      <config projectName="rn_skills_as" targetName="test_2" />
-      <config projectName="rn_skills_as" targetName="rn_skills_as_generate_messages_lisp" />
+      <config projectName="rn_skills_as" targetName="tf_generate_messages_nodejs" />
+      <config projectName="rn_skills_as" targetName="tf_generate_messages_py" />
+      <config projectName="rn_skills_as" targetName="actionlib_msgs_generate_messages_nodejs" />
+      <config projectName="rn_skills_as" targetName="_catkin_empty_exported_target" />
+      <config projectName="rn_skills_as" targetName="geometry_msgs_generate_messages_py" />
+      <config projectName="rn_skills_as" targetName="actionlib_generate_messages_lisp" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveAction" />
       <config projectName="rn_skills_as" targetName="actionlib_msgs_generate_messages_py" />
+      <config projectName="rn_skills_as" targetName="geometry_msgs_generate_messages_lisp" />
+      <config projectName="rn_skills_as" targetName="download_extra_data" />
+      <config projectName="rn_skills_as" targetName="sensor_msgs_generate_messages_eus" />
       <config projectName="rn_skills_as" targetName="actionlib_msgs_generate_messages_eus" />
-      <config projectName="rn_skills_as" targetName="rn_skills_as_generate_messages_eus" />
-      <config projectName="rn_skills_as" targetName="gtest_main" />
-      <config projectName="rn_skills_as" targetName="rn_skills_as_generate_messages_nodejs" />
-      <config projectName="rn_skills_as" targetName="tests" />
-      <config projectName="rn_skills_as" targetName="sensor_msgs_generate_messages_nodejs" />
-      <config projectName="rn_skills_as" targetName="roscpp_generate_messages_lisp" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveFeedback" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveActionResult" />
-      <config projectName="rn_skills_as" targetName="rosgraph_msgs_generate_messages_py" />
-      <config projectName="rn_skills_as" targetName="rn_skills_as_generate_messages" />
-      <config projectName="rn_skills_as" targetName="cwru_davinci_msgs_generate_messages_lisp" />
-      <config projectName="rn_skills_as" targetName="test_controller" />
-      <config projectName="rn_skills_as" targetName="rosgraph_msgs_generate_messages_eus" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteGoal" />
-      <config projectName="rn_skills_as" targetName="rn_skills_as_generate_messages_py" />
-      <config projectName="rn_skills_as" targetName="tf_generate_messages_eus" />
-      <config projectName="rn_skills_as" targetName="std_msgs_generate_messages_cpp" />
-      <config projectName="rn_skills_as" targetName="actionlib_generate_messages_cpp" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteAction" />
       <config projectName="rn_skills_as" targetName="actionlib_generate_messages_eus" />
+      <config projectName="rn_skills_as" targetName="cwru_davinci_msgs_generate_messages_nodejs" />
+      <config projectName="rn_skills_as" targetName="rosgraph_msgs_generate_messages_nodejs" />
+      <config projectName="rn_skills_as" targetName="tf2_msgs_generate_messages_nodejs" />
+      <config projectName="rn_skills_as" targetName="test_2" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteActionFeedback" />
+      <config projectName="rn_skills_as" targetName="rn_skills_as_generate_messages_cpp" />
+      <config projectName="rn_skills_as" targetName="rn_skills_as_gencpp" />
       <config projectName="rn_skills_as" targetName="clean_test_results" />
+      <config projectName="rn_skills_as" targetName="trajectory_msgs_generate_messages_lisp" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveResult" />
+      <config projectName="rn_skills_as" targetName="roscpp_generate_messages_py" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteActionResult" />
+      <config projectName="rn_skills_as" targetName="sensor_msgs_generate_messages_lisp" />
+      <config projectName="rn_skills_as" targetName="geometry_msgs_generate_messages_cpp" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveActionGoal" />
+      <config projectName="rn_skills_as" targetName="trajectory_msgs_generate_messages_cpp" />
+      <config projectName="rn_skills_as" targetName="cwru_davinci_msgs_generate_messages_lisp" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteGoal" />
+      <config projectName="rn_skills_as" targetName="trajectory_msgs_generate_messages_nodejs" />
+      <config projectName="rn_skills_as" targetName="actionlib_generate_messages_nodejs" />
+      <config projectName="rn_skills_as" targetName="test_controller" />
+      <config projectName="rn_skills_as" targetName="DavinciActionServer" />
+      <config projectName="rn_skills_as" targetName="tf2_msgs_generate_messages_cpp" />
+      <config projectName="rn_skills_as" targetName="actionlib_msgs_generate_messages_lisp" />
+      <config projectName="rn_skills_as" targetName="geometry_msgs_generate_messages_eus" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveFeedback" />
+      <config projectName="rn_skills_as" targetName="roscpp_generate_messages_eus" />
+      <config projectName="rn_skills_as" targetName="tf_generate_messages_lisp" />
+      <config projectName="rn_skills_as" targetName="tests" />
+      <config projectName="rn_skills_as" targetName="roscpp_generate_messages_lisp" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteFeedback" />
+      <config projectName="rn_skills_as" targetName="rosgraph_msgs_generate_messages_lisp" />
+      <config projectName="rn_skills_as" targetName="sensor_msgs_generate_messages_nodejs" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveActionFeedback" />
+      <config projectName="rn_skills_as" targetName="rn_skills_as_generate_messages_eus" />
+      <config projectName="rn_skills_as" targetName="cwru_davinci_msgs_generate_messages_py" />
+      <config projectName="rn_skills_as" targetName="tf2_msgs_generate_messages_lisp" />
+      <config projectName="rn_skills_as" targetName="roscpp_generate_messages_cpp" />
+      <config projectName="rn_skills_as" targetName="rn_skills_as_generate_messages_py" />
+      <config projectName="rn_skills_as" targetName="geometry_msgs_generate_messages_nodejs" />
+      <config projectName="rn_skills_as" targetName="demo_needle_planner_stand_alone" />
+      <config projectName="rn_skills_as" targetName="run_tests" />
       <config projectName="rn_skills_as" targetName="RnNeedleDrivingPlanner" />
       <config projectName="rn_skills_as" targetName="trajectory_msgs_generate_messages_py" />
-      <config projectName="rn_skills_as" targetName="roscpp_generate_messages_cpp" />
-      <config projectName="rn_skills_as" targetName="roscpp_generate_messages_py" />
-      <config projectName="rn_skills_as" targetName="rn_skills_as_genlisp" />
-      <config projectName="rn_skills_as" targetName="rn_skills_as_genpy" />
-      <config projectName="rn_skills_as" targetName="demo_needle_planner_stand_alone" />
-      <config projectName="rn_skills_as" targetName="geometry_msgs_generate_messages_cpp" />
-      <config projectName="rn_skills_as" targetName="trajectory_msgs_generate_messages_lisp" />
-      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteActionFeedback" />
+      <config projectName="rn_skills_as" targetName="rn_skills_as_generate_messages_nodejs" />
+      <config projectName="rn_skills_as" targetName="tf2_msgs_generate_messages_py" />
       <config projectName="rn_skills_as" targetName="gtest" />
-      <config projectName="rn_skills_as" targetName="actionlib_generate_messages_lisp" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteActionGoal" />
+      <config projectName="rn_skills_as" targetName="rosgraph_msgs_generate_messages_eus" />
+      <config projectName="rn_skills_as" targetName="gmock" />
+      <config projectName="rn_skills_as" targetName="rn_skills_as_generate_messages" />
+      <config projectName="rn_skills_as" targetName="gtest_main" />
+      <config projectName="rn_skills_as" targetName="tf_generate_messages_cpp" />
+      <config projectName="rn_skills_as" targetName="tf2_msgs_generate_messages_eus" />
+      <config projectName="rn_skills_as" targetName="DavinciActionClient" />
+      <config projectName="rn_skills_as" targetName="std_msgs_generate_messages_nodejs" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveGoal" />
+      <config projectName="rn_skills_as" targetName="rosgraph_msgs_generate_messages_py" />
+      <config projectName="rn_skills_as" targetName="std_msgs_generate_messages_eus" />
+      <config projectName="rn_skills_as" targetName="rosgraph_msgs_generate_messages_cpp" />
+      <config projectName="rn_skills_as" targetName="tf_generate_messages_eus" />
+      <config projectName="rn_skills_as" targetName="rn_skills_as_generate_messages_lisp" />
+      <config projectName="rn_skills_as" targetName="roscpp_generate_messages_nodejs" />
+      <config projectName="rn_skills_as" targetName="rn_skills_as_genpy" />
+      <config projectName="rn_skills_as" targetName="cwru_davinci_msgs_generate_messages_cpp" />
+      <config projectName="rn_skills_as" targetName="rn_skills_as_genlisp" />
+      <config projectName="rn_skills_as" targetName="actionlib_generate_messages_py" />
+      <config projectName="rn_skills_as" targetName="std_msgs_generate_messages_py" />
+      <config projectName="rn_skills_as" targetName="trajectory_msgs_generate_messages_eus" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteResult" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveActionResult" />
+      <config projectName="rn_skills_as" targetName="doxygen" />
+      <config projectName="rn_skills_as" targetName="std_msgs_generate_messages_cpp" />
+      <config projectName="rn_skills_as" targetName="cwru_davinci_msgs_generate_messages_eus" />
+      <config projectName="rn_skills_as" targetName="sensor_msgs_generate_messages_py" />
+      <config projectName="rn_skills_as" targetName="sensor_msgs_generate_messages_cpp" />
+      <config projectName="rn_skills_as" targetName="gmock_main" />
+      <config projectName="rn_skills_as" targetName="actionlib_generate_messages_cpp" />
+      <config projectName="rn_skills_as" targetName="actionlib_msgs_generate_messages_cpp" />
+      <config projectName="rn_skills_as" targetName="rn_needle_driving_fncs_test" />
+      <config projectName="rn_skills_as" targetName="rn_skills_as_gennodejs" />
+      <config projectName="rn_skills_as" targetName="_rn_skills_as_generate_messages_check_deps_NeedleDriveLiteAction" />
     </generated>
   </component>
   <component name="CMakeSettings">
@@ -108,8 +108,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fe247add-250a-4f79-8ed0-823d03747b06" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/include/rn_skills_as/RnNeedleDrivingPlanner.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/rn_skills_as/RnNeedleDrivingPlanner.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RnNeedleDrivingPlanner.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/RnNeedleDrivingPlanner.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <ignored path="$USER_HOME$/clion_cmake_generation_paths/Epsom_catkin_ws/cmake-build-debug/" />
@@ -154,21 +153,6 @@
                     <provider selected="true" editor-type-id="text-editor">
                       <state relative-caret-position="486">
                         <caret line="1137" column="38" selection-start-line="1137" selection-start-column="4" selection-end-line="1137" selection-end-column="38" />
-                        <folding>
-                          <element signature="e#17054#22043#0" />
-                          <element signature="e#22042#22355#0" />
-                          <element signature="e#27215#30211#0" />
-                          <element signature="e#22046#23384#0" />
-                          <element signature="e#23387#24727#0" />
-                          <element signature="e#24730#26152#0" />
-                          <element signature="e#26190#27487#0" />
-                          <element signature="e#27490#28704#0" />
-                          <element signature="e#28707#31807#0" />
-                          <element signature="e#39103#39890#0" />
-                          <element signature="e#40445#43798#0" />
-                          <element signature="e#43978#44053#0" />
-                          <element signature="e#32587#35582#0" />
-                        </folding>
                       </state>
                     </provider>
                   </entry>
@@ -191,7 +175,7 @@
           <file leaf-file-name="test_2.cpp" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/tests/test_2.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="574">
+                <state relative-caret-position="2040">
                   <caret line="136" column="17" selection-start-line="136" selection-start-column="17" selection-end-line="136" selection-end-column="17" />
                   <folding>
                     <element signature="e#43#102#0" expanded="true" />
@@ -203,22 +187,8 @@
           <file leaf-file-name="RnNeedleDrivingPlanner.cpp" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/RnNeedleDrivingPlanner.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-6892">
-                  <caret line="1765" column="27" lean-forward="true" selection-start-line="1765" selection-start-column="27" selection-end-line="1765" selection-end-column="27" />
-                  <folding>
-                    <element signature="e#17054#22043#0" />
-                    <element signature="e#22042#22355#0" />
-                    <element signature="e#27215#30211#0" />
-                    <element signature="e#22046#23384#0" />
-                    <element signature="e#23387#24727#0" />
-                    <element signature="e#24730#26152#0" />
-                    <element signature="e#26190#27487#0" />
-                    <element signature="e#27490#28704#0" />
-                    <element signature="e#28707#31807#0" />
-                    <element signature="e#37480#38737#0" />
-                    <element signature="e#39103#40429#0" />
-                    <element signature="e#40445#41257#0" />
-                  </folding>
+                <state relative-caret-position="405">
+                  <caret line="1785" selection-start-line="1785" selection-end-line="1785" />
                 </state>
               </provider>
             </entry>
@@ -226,7 +196,7 @@
           <file leaf-file-name="RnNeedleDrivingPlanner.h" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/include/rn_skills_as/RnNeedleDrivingPlanner.h">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="315">
+                <state relative-caret-position="2670">
                   <caret line="178" selection-start-line="178" selection-end-line="178" />
                 </state>
               </provider>
@@ -245,20 +215,20 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="RnNeedleDrivingPlanner.cpp" pinned="false" current-in-tab="false">
+          <file leaf-file-name="RnNeedleDrivingPlanner.cpp" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/RnNeedleDrivingPlanner.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="346">
-                  <caret line="475" column="4" selection-start-line="475" selection-start-column="4" selection-end-line="475" selection-end-column="4" />
+                <state>
+                  <caret line="1817" selection-start-line="1817" selection-end-line="1817" />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="RnNeedleDrivingPlanner.h" pinned="false" current-in-tab="true">
+          <file leaf-file-name="RnNeedleDrivingPlanner.h" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/include/rn_skills_as/RnNeedleDrivingPlanner.h">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="696">
-                  <caret line="574" column="71" lean-forward="true" selection-start-line="574" selection-start-column="71" selection-end-line="574" selection-end-column="71" />
+                <state relative-caret-position="8610">
+                  <caret line="574" column="71" selection-start-line="574" selection-start-column="71" selection-end-line="574" selection-end-column="71" />
                 </state>
               </provider>
             </entry>
@@ -353,11 +323,11 @@
   <component name="NodePackageJsonFileManager">
     <packageJsonPaths />
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="56" />
-    <option name="y" value="-14" />
-    <option name="width" value="1865" />
-    <option name="height" value="1095" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="332" />
+    <option name="y" value="86" />
+    <option name="width" value="1855" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -687,11 +657,13 @@
       <workItem from="1526702807940" duration="2646000" />
       <workItem from="1526711493849" duration="4777000" />
       <workItem from="1526856050849" duration="25691000" />
+      <workItem from="1527190917807" duration="60000" />
+      <workItem from="1527191004716" duration="82000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="272445000" />
+    <option name="totallyTimeSpent" value="272587000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -703,27 +675,26 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1977" y="-4" width="1863" height="1084" extended-state="6" />
-    <editor active="true" />
+    <frame x="402" y="211" width="1855" height="1056" extended-state="0" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.48635235" weight="0.12554348" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.22280335" />
-      <window_info anchor="bottom" id="CMake" order="7" weight="0.2751046" />
+      <window_info active="true" anchor="bottom" id="CMake" order="7" visible="true" weight="0.28216216" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5021739" side_tool="true" weight="0.24270834" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32881" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info id="Structure" order="2" sideWeight="0.5024814" visible="true" weight="0.073913045" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="7" sideWeight="0.4978261" visible="true" weight="0.15690376" />
+      <window_info id="Structure" order="2" sideWeight="0.5024814" side_tool="true" visible="true" weight="0.12117904" />
+      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.4978261" weight="0.15634838" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info id="Favorites" order="1" sideWeight="0.4975186" side_tool="true" weight="0.09347826" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="Messages" order="7" weight="0.32881" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.14718163" />
+      <window_info anchor="bottom" id="Messages" order="7" weight="0.32786885" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1053,16 +1024,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tests/rn_needle_driving_fncs_test_main.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3195">
-          <caret line="213" selection-start-line="213" selection-end-line="213" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tests/test_2.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="574">
+        <state relative-caret-position="2040">
           <caret line="136" column="17" selection-start-line="136" selection-start-column="17" selection-end-line="136" selection-end-column="17" />
           <folding>
             <element signature="e#43#102#0" expanded="true" />
@@ -1072,29 +1036,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/include/rn_skills_as/RnNeedleDrivingPlanner.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="178" selection-start-line="178" selection-end-line="178" />
+        <state relative-caret-position="8610">
+          <caret line="574" column="71" selection-start-line="574" selection-start-column="71" selection-end-line="574" selection-end-column="71" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/rn_needle_driving_fncs_test_main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3195">
+          <caret line="213" selection-start-line="213" selection-end-line="213" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/RnNeedleDrivingPlanner.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-6892">
-          <caret line="1765" column="27" lean-forward="true" selection-start-line="1765" selection-start-column="27" selection-end-line="1765" selection-end-column="27" />
-          <folding>
-            <element signature="e#17054#22043#0" />
-            <element signature="e#22042#22355#0" />
-            <element signature="e#27215#30211#0" />
-            <element signature="e#22046#23384#0" />
-            <element signature="e#23387#24727#0" />
-            <element signature="e#24730#26152#0" />
-            <element signature="e#26190#27487#0" />
-            <element signature="e#27490#28704#0" />
-            <element signature="e#28707#31807#0" />
-            <element signature="e#37480#38737#0" />
-            <element signature="e#39103#40429#0" />
-            <element signature="e#40445#41257#0" />
-          </folding>
+        <state>
+          <caret line="1817" selection-start-line="1817" selection-end-line="1817" />
         </state>
       </provider>
     </entry>
