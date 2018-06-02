@@ -63,16 +63,33 @@ struct NeedlePhis {
   double phi_needle_tip;
   double phi_needle_tail;
 
+  // get/set fncs
+  void showParameters() {
+    std::cout << "Printing needle phis" << std::endl << "---" << std::endl;
+    std::cout << "phi_initial: " << phi_initial << std::endl
+              << "phi_entry_pt: " << phi_entry_pt << std::endl
+              << "phi_exit_pt: " << phi_exit_pt << std::endl
+              << "phi_penetration: " << phi_penetration << std::endl
+              << "phi_emergence: " << phi_emergence << std::endl
+              << "phi_initial_insertion_lower_reference: " << phi_initial_insertion_lower_reference << std::endl
+              << "phi_initial_insertion_upper_reference: " << phi_initial_insertion_upper_reference << std::endl
+              << "phi_final_insertion_lower_reference: " << phi_final_insertion_lower_reference << std::endl
+              << "phi_final_insertion_upper_reference: " << phi_final_insertion_upper_reference << std::endl;
+    std::cout << std::endl;
+
+  }
+
 };
 
 
 struct PmsKinematicAvailability {
   int id;
 
+  // should get updated every time new entyr and exit are provided.
   int arm_index;
   int num_continuous_kinematic_ok_sections;
-  double section_lower_limits[];
-  double section_upper_limits[];
+  std::vector<double> section_lower_limits;
+  std::vector<double> section_upper_limits;
 
 };
 

@@ -112,7 +112,7 @@ int main(int argc, char **argv) {
 
 //  phi_02 = - 0.0698132; // 0.0698132 rad = 4 deg
   phi_02 = -0.1;
-  phi_t2 = M_PI;
+  phi_t2 = 3.833167;
 
   test = rnNeedleDrivingPlanner.requestNeedleDrivingTrajectoryDefaultGrasp(arm1,
                                                                            needle_entry_pt_cam,
@@ -120,6 +120,8 @@ int main(int argc, char **argv) {
                                                                            phi_02,
                                                                            phi_t2,
                                                                            needleDriveTraj);
+
+//  rnNeedleDrivingPlanner.updatePsmKinematicAvailability(arm1);
 
 //  test = rnNeedleDrivingPlanner.requestOneNeedleDrivingTrajectoryGeneratedGrasp(arm1,
 //                                                                           needle_entry_pt_cam,
