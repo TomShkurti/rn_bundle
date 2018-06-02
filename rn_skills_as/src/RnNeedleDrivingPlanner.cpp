@@ -873,9 +873,6 @@ void RnNeedleDrivingPlanner::convertAffinesToTrajectoryMsgs(const std::vector<Ei
       q_vec1 = ik_solver_.get_soln();
       q_vec1(6) = 0;
 
-      // TODO delete
-//      std::cout << "q_vec1: " << q_vec1.transpose() << std::endl;
-
 
     } else {
       ROS_ERROR("Failed to solve IK while generating a trajectory from affines");
@@ -926,7 +923,22 @@ void RnNeedleDrivingPlanner::updateNeedleAndTissueParameters(const geometry_msgs
 
   phi_needle_initial_ = 0;
   phi_needle_penetration_ = atan(needle_axis_ht_/(0.5*dist_entrance_to_exit_));
-  phi_needle_emergence_ = M_PI - 2*phi_needle_penetration_;
+//  phi_needle_emergence_ = M_PI - 2*phi_needle_penetration_;
+  phi_needle_emergence_ = M_PI - 1*phi_needle_penetration_;
+
+  // This set gets updated every time the system receives a new pair of needle entry and exit.
+  needle_phis_.phi_initial = 0;
+  needle_phis_.phi_entry_pt = - atan(needle_axis_ht_/(0.5*dist_entrance_to_exit_));
+  needle_phis_.phi_exit_pt = M_PI - needle_phis_.phi_entry_pt;
+  needle_phis_.phi_penetration = - needle_phis_.phi_entry_pt; // = atan(needle_axis_ht_/(0.5*dist_entrance_to_exit_))
+  needle_phis_.phi_emergence = M_PI - needle_phis_.phi_penetration;
+  needle_phis_.phi_initial_insertion_lower_reference = needle_phis_.phi_penetration - (1/36)*M_PI;
+  needle_phis_.phi_initial_insertion_upper_reference = needle_phis_.phi_penetration + (5/36)*M_PI;
+  needle_phis_.phi_final_insertion_lower_reference = needle_phis_.phi_emergence - (5/36)*M_PI;
+  needle_phis_.phi_final_insertion_upper_reference = needle_phis_.phi_emergence + (1/36)*M_PI;
+
+
+
   ROS_INFO("Needle Penetration (%f) and Emergence Phi (%f) have been updated.", phi_needle_penetration_, phi_needle_emergence_);
 }
 
@@ -960,13 +972,24 @@ void RnNeedleDrivingPlanner::updateNeedleAndTissueParametersWithExitAndTip(const
 
   phi_needle_initial_ = 0;
   phi_needle_penetration_ = atan(needle_axis_ht_/(0.5*dist_entrance_to_exit_));
-  phi_needle_emergence_ = M_PI - 2*phi_needle_penetration_;
-  ROS_INFO("Needle Penetration and Emergence Phis have been updated.");
+//  phi_needle_emergence_ = M_PI - 2*phi_needle_penetration_;
+  phi_needle_emergence_ = M_PI - 1*phi_needle_penetration_;
 
+  // This set gets updated every time the system receives a new pair of needle entry and exit.
+  needle_phis_.phi_initial = 0;
+  needle_phis_.phi_entry_pt = - atan(needle_axis_ht_/(0.5*dist_entrance_to_exit_));
+  needle_phis_.phi_exit_pt = M_PI - needle_phis_.phi_entry_pt;
+  needle_phis_.phi_penetration = - needle_phis_.phi_entry_pt; // = atan(needle_axis_ht_/(0.5*dist_entrance_to_exit_))
+  needle_phis_.phi_emergence = M_PI - needle_phis_.phi_penetration;
+  needle_phis_.phi_initial_insertion_lower_reference = needle_phis_.phi_penetration - (1/36)*M_PI;
+  needle_phis_.phi_initial_insertion_upper_reference = needle_phis_.phi_penetration + (5/36)*M_PI;
+  needle_phis_.phi_final_insertion_lower_reference = needle_phis_.phi_emergence - (5/36)*M_PI;
+  needle_phis_.phi_final_insertion_upper_reference = needle_phis_.phi_emergence + (1/36)*M_PI;
+
+  ROS_INFO("Needle Penetration and Emergence Phis have been u"
+           "pdated.");
 
 }
-
-
 
 
 
@@ -1258,7 +1281,7 @@ bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryGeneratedGrasp(con
   }
 
 
-
+// TODO retire this one
 void RnNeedleDrivingPlanner::updateNeedleDriveKinematicBoundary(const int &arm_index) {
 
   double upper_phi, lower_phi;
@@ -1340,7 +1363,58 @@ void RnNeedleDrivingPlanner::updateNeedleDriveKinematicBoundary(const int &arm_i
 
 
 
+void RnNeedleDrivingPlanner::updatePsmKinematicAvailability(const int &arm_index) {
 
+  int n_step;
+  double angle_step;
+  double angle_test;
+  bool previous_ik_ok = false;
+
+  angle_step = (1/36) * M_PI;
+  n_step = (int)fabs((needle_phis_.phi_entry_pt - needle_phis_.phi_exit_pt)/angle_step);
+  angle_test = needle_phis_.phi_exit_pt;
+
+  psm_1_kinematic_availability_.arm_index = 1;
+  psm_1_kinematic_availability_.num_continuous_kinematic_ok_sections = 0;
+
+  for (int n = 0; n < n_step; n++) {
+
+    if (hasValidNeedleDriveAffine(arm_index, angle_test)) {
+
+      if (!previous_ik_ok) { // a section's lower boundary found
+
+        psm_1_kinematic_availability_.section_lower_limits[psm_1_kinematic_availability_.num_continuous_kinematic_ok_sections]
+            = angle_test;
+
+        psm_1_kinematic_availability_.num_continuous_kinematic_ok_sections ++;
+
+      } else {
+        // do nothing
+      }
+
+      previous_ik_ok = true;
+
+    } else {
+
+      if (previous_ik_ok) { // a section's upper boundary found
+
+        psm_1_kinematic_availability_.section_upper_limits[psm_1_kinematic_availability_.num_continuous_kinematic_ok_sections]
+            = angle_test - angle_step; // need to step back
+
+      }
+
+      previous_ik_ok = false;
+
+    }
+
+    angle_test = angle_test + angle_step;
+
+  }
+
+  ROS_WARN("");
+
+
+}
 
 
 

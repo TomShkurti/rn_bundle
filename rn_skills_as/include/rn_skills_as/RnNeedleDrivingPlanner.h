@@ -7,7 +7,7 @@
 
 #include "rn_skills_as/rn_davinci_skills_base.h"
 
-
+using namespace rn_davinci_skills;
 
 class RnNeedleDrivingPlanner {
  public:
@@ -174,6 +174,9 @@ class RnNeedleDrivingPlanner {
 
 
   void updateNeedleDriveKinematicBoundary(const int &arm_index);
+
+  // To be used only after you update the grasp transform(s).
+  void updatePsmKinematicAvailability(const int &arm_index);
 
 
 
@@ -736,6 +739,11 @@ class RnNeedleDrivingPlanner {
   double phi_needle_kinematic_lower_angle_psm_2_;
   double phi_needle_kinematic_upper_angle_psm_1_;
   double phi_needle_kinematic_upper_angle_psm_2_;
+
+  // structs defined in <davinci_skills_base.h>
+  NeedlePhis needle_phis_;
+  PmsKinematicAvailability psm_1_kinematic_availability_;
+  PmsKinematicAvailability psm_2_kinematic_availability_;
 
   Eigen::Vector3d needle_origin_wrt_tissue_frame_;
   Eigen::Matrix3d needle_rotation_mat_wrt_tissue_frame_;
