@@ -932,10 +932,10 @@ void RnNeedleDrivingPlanner::updateNeedleAndTissueParameters(const geometry_msgs
   needle_phis_.phi_entry_pt = M_PI - needle_phis_.phi_exit_pt;
   needle_phis_.phi_penetration = - needle_phis_.phi_exit_pt; // = atan(needle_axis_ht_/(0.5*dist_entrance_to_exit_))
   needle_phis_.phi_emergence = M_PI - needle_phis_.phi_penetration;
-  needle_phis_.phi_initial_insertion_lower_reference = needle_phis_.phi_penetration - (1/36)*M_PI;
-  needle_phis_.phi_initial_insertion_upper_reference = needle_phis_.phi_penetration + (5/36)*M_PI;
-  needle_phis_.phi_final_insertion_lower_reference = needle_phis_.phi_emergence - (5/36)*M_PI;
-  needle_phis_.phi_final_insertion_upper_reference = needle_phis_.phi_emergence + (1/36)*M_PI;
+  needle_phis_.phi_initial_insertion_lower_reference = needle_phis_.phi_penetration - (1.0/36.0)*M_PI;
+  needle_phis_.phi_initial_insertion_upper_reference = needle_phis_.phi_penetration + (5.0/36.0)*M_PI;
+  needle_phis_.phi_final_insertion_lower_reference = needle_phis_.phi_emergence - (5.0/36.0)*M_PI;
+  needle_phis_.phi_final_insertion_upper_reference = needle_phis_.phi_emergence + (1.0/36.0)*M_PI;
 
 
 
@@ -981,10 +981,10 @@ void RnNeedleDrivingPlanner::updateNeedleAndTissueParametersWithExitAndTip(const
   needle_phis_.phi_entry_pt = M_PI - needle_phis_.phi_exit_pt;
   needle_phis_.phi_penetration = - needle_phis_.phi_exit_pt; // = atan(needle_axis_ht_/(0.5*dist_entrance_to_exit_))
   needle_phis_.phi_emergence = M_PI - needle_phis_.phi_penetration;
-  needle_phis_.phi_initial_insertion_lower_reference = needle_phis_.phi_penetration - (1/36)*M_PI;
-  needle_phis_.phi_initial_insertion_upper_reference = needle_phis_.phi_penetration + (5/36)*M_PI;
-  needle_phis_.phi_final_insertion_lower_reference = needle_phis_.phi_emergence - (5/36)*M_PI;
-  needle_phis_.phi_final_insertion_upper_reference = needle_phis_.phi_emergence + (1/36)*M_PI;
+  needle_phis_.phi_initial_insertion_lower_reference = needle_phis_.phi_penetration - (1.0/36.0)*M_PI;
+  needle_phis_.phi_initial_insertion_upper_reference = needle_phis_.phi_penetration + (5.0/36.0)*M_PI;
+  needle_phis_.phi_final_insertion_lower_reference = needle_phis_.phi_emergence - (5.0/36.0)*M_PI;
+  needle_phis_.phi_final_insertion_upper_reference = needle_phis_.phi_emergence + (1.0/36.0)*M_PI;
 
   ROS_INFO("Needle Penetration and Emergence Phis have been u"
            "pdated.");
@@ -1188,6 +1188,8 @@ bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryUserGrasp(const in
   computeGraspTransform(arm_index, grasp_transform);
   updateNeedleWrtGripperTransforms(); // TODO not needed perhaps
 
+  updatePsmKinematicAvailability(arm_index);
+
   ik_fraction = computeNeedleDriveGripperAffines(arm_index, phi_0, phi_t, needleDriveTraj);
 
   if (ik_fraction == 1) {
@@ -1374,66 +1376,141 @@ void RnNeedleDrivingPlanner::updatePsmKinematicAvailability(const int &arm_index
 
   int n_section = 0;
 
-  angle_step = (double) M_PI/36; // 5 degrees
+  angle_step = (double) M_PI/36.0; // 5 degrees
 
   n_step = (int)fabs((needle_phis_.phi_entry_pt - needle_phis_.phi_exit_pt)/angle_step);
   angle_test = needle_phis_.phi_exit_pt;
 
-  psm_1_kinematic_availability_.arm_index = 1;
-  psm_1_kinematic_availability_.num_continuous_kinematic_ok_sections = 0;
-
-  // TODO delete after debugging
+  // Comment out after debugging
 //  needle_phis_.showParameters();
 
-  for (int n = 0; n < n_step; n++) {
+  switch (arm_index) {
 
-    if (hasValidNeedleDriveAffine(arm_index, angle_test)) {
+    case 1:
 
-      if (!previous_ik_ok) { // a section's lower boundary found
+      psm_1_kinematic_availability_.section_lower_limits.clear();
+      psm_1_kinematic_availability_.section_upper_limits.clear();
 
-        psm_1_kinematic_availability_.section_lower_limits.push_back(angle_test);
+      psm_1_kinematic_availability_.arm_index = 1;
+      psm_1_kinematic_availability_.num_continuous_kinematic_ok_sections = 0;
 
-        n_section ++;
-        psm_1_kinematic_availability_.num_continuous_kinematic_ok_sections = n_section;
 
-      } else {
-        // do nothing
+      for (int n = 0; n < n_step; n++) {
+
+        if (hasValidNeedleDriveAffine(arm_index, angle_test)) {
+
+          if (!previous_ik_ok) { // a section's lower boundary found
+
+            psm_1_kinematic_availability_.section_lower_limits.push_back(angle_test);
+
+            n_section ++;
+            psm_1_kinematic_availability_.num_continuous_kinematic_ok_sections = n_section;
+
+          } else {
+            // do nothing
+          }
+
+          previous_ik_ok = true;
+
+        } else {
+
+          if (previous_ik_ok) { // a section's upper boundary found
+
+            double v_2 = angle_test - angle_step;
+            psm_1_kinematic_availability_.section_upper_limits.push_back(v_2); // need to step back
+
+          }
+
+          previous_ik_ok = false;
+
+        }
+
+        angle_test = angle_test + angle_step;
+
       }
 
-      previous_ik_ok = true;
+      ROS_WARN("There are %d kinematically availible sections for PSM 1.", psm_1_kinematic_availability_.num_continuous_kinematic_ok_sections);
+      std::cout << "_____________________________________________" << std::endl;
+      std::cout << " Section # | Lower boundary | Upper Boundary" << std::endl
+                << "---------------------------------------------" << std::endl;
+      for (int i = 0; i < psm_1_kinematic_availability_.num_continuous_kinematic_ok_sections; i++) {
 
-    } else {
+        std::cout << "    "<< i << "         "
+                  << psm_1_kinematic_availability_.section_lower_limits[i] << "        "
+                  << psm_1_kinematic_availability_.section_upper_limits[i] << std::endl;
+      }
+      std::cout << "---------------------------------------------" << std::endl;
 
-      if (previous_ik_ok) { // a section's upper boundary found
+      break;
 
-//        psm_1_kinematic_availability_.section_upper_limits[psm_1_kinematic_availability_.num_continuous_kinematic_ok_sections - 1]
-//            = angle_test - angle_step; // need to step back
+    case 2:
 
-        int n_2 = n_section - 1;
-        double v_2 = angle_test - angle_step;
-        psm_1_kinematic_availability_.section_upper_limits.push_back(v_2); // need to step back
+      psm_2_kinematic_availability_.section_lower_limits.clear();
+      psm_2_kinematic_availability_.section_upper_limits.clear();
+
+      psm_2_kinematic_availability_.arm_index = 2;
+      psm_2_kinematic_availability_.num_continuous_kinematic_ok_sections = 0;
+
+
+      for (int n = 0; n < n_step; n++) {
+
+        if (hasValidNeedleDriveAffine(arm_index, angle_test)) {
+
+          if (!previous_ik_ok) { // a section's lower boundary found
+
+            psm_2_kinematic_availability_.section_lower_limits.push_back(angle_test);
+
+            n_section ++;
+            psm_2_kinematic_availability_.num_continuous_kinematic_ok_sections = n_section;
+
+          } else {
+            // do nothing
+          }
+
+          previous_ik_ok = true;
+
+        } else {
+
+          if (previous_ik_ok) { // a section's upper boundary found
+
+            double v_2 = angle_test - angle_step;
+            psm_2_kinematic_availability_.section_upper_limits.push_back(v_2); // need to step back
+
+          }
+
+          previous_ik_ok = false;
+
+        }
+
+        angle_test = angle_test + angle_step;
 
       }
 
-      previous_ik_ok = false;
+      ROS_WARN("There are %d kinematically availible sections for PSM 2.", psm_2_kinematic_availability_.num_continuous_kinematic_ok_sections);
+      std::cout << "_____________________________________________" << std::endl;
+      std::cout << " Section # | Lower boundary | Upper Boundary" << std::endl
+                << "---------------------------------------------" << std::endl;
+      for (int i = 0; i < psm_2_kinematic_availability_.num_continuous_kinematic_ok_sections; i++) {
 
-    }
+        std::cout << "    "<< i << "         "
+                  << psm_2_kinematic_availability_.section_lower_limits[i] << "        "
+                  << psm_2_kinematic_availability_.section_upper_limits[i] << std::endl;
+      }
+      std::cout << "---------------------------------------------" << std::endl;
 
-    angle_test = angle_test + angle_step;
+      break;
+
 
   }
 
-  ROS_WARN("There are %d kinematically availible sections for PSM 1.", psm_1_kinematic_availability_.num_continuous_kinematic_ok_sections);
-  std::cout << "_____________________________________________" << std::endl;
-  std::cout << " Section # | Lower boundary | Upper Boundary" << std::endl
-            << "---------------------------------------------" << std::endl;
-  for (int i = 0; i < psm_1_kinematic_availability_.num_continuous_kinematic_ok_sections; i++) {
 
-    std::cout << "    "<< i << "         "
-              << psm_1_kinematic_availability_.section_lower_limits[i] << "        "
-              << psm_1_kinematic_availability_.section_upper_limits[i] << std::endl;
-  }
-  std::cout << "---------------------------------------------" << std::endl;
+
+
+
+
+
+
+
 
 }
 
