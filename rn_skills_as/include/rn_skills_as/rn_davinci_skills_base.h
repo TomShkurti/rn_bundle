@@ -45,7 +45,7 @@ const double LCAMERA_TO_PSM_TWO_TRANSLATION[] = {0.145, -0.03265, 0.0};
 
 namespace rn_davinci_skills {
 
-struct NeedlePhis {
+struct NeedleDrivingPhis {
   int needle_op_id;
 
   // should get updated every time new entry and exit are provided.
@@ -61,7 +61,7 @@ struct NeedlePhis {
 
   // should get updated every time a trajectory has been complete.
   double phi_needle_tip;
-  double phi_needle_tail;
+  double phi_needle_tail; // the grabable range will start from the tail end at the entry pt.
 
   // get/set fncs
   void showParameters() {

@@ -741,7 +741,7 @@ class RnNeedleDrivingPlanner {
   double phi_needle_kinematic_upper_angle_psm_2_;
 
   // structs defined in <davinci_skills_base.h>
-  NeedlePhis needle_phis_;
+  NeedleDrivingPhis needle_phis_;
   PmsKinematicAvailability psm_1_kinematic_availability_;
   PmsKinematicAvailability psm_2_kinematic_availability_;
 

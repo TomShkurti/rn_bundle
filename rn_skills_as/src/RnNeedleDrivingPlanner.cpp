@@ -585,7 +585,7 @@ double RnNeedleDrivingPlanner::computeNeedleDriveGripperAffines(int arm_index,
 
 
 
-  fraction = double(nsolns/path_waypoints_);
+  fraction = double(nsolns/double(path_waypoints_));
 
   if (fraction != 1) {
     ROS_ERROR("Fraction of IK solutions is: %f, with %d solutions, among %d waypoints.",
@@ -733,7 +733,7 @@ double RnNeedleDrivingPlanner::computeNeedleDriveGripperAffines(int arm_index,
 
 
 
-  fraction = double(nsolns/path_waypoints_);
+  fraction = double(nsolns/double(path_waypoints_));
 
   if (fraction != 1) {
     ROS_ERROR("Fraction of IK solutions is: %f, with %d solutions, among %d waypoints.",
