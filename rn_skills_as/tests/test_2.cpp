@@ -54,6 +54,8 @@ int main(int argc, char **argv) {
 //  pt_entry << 0.09, 0.08, -0.18; //Good point for PSM2
 //  pt_exit << 0.09, 0.09, -0.18; //Good point for PSM2
 
+  rnNeedleDrivingPlanner.generateDualPsmOpBoundaryVertices();
+
   pt_entry << -0.12, 0.08, -0.16; //Good point for PSM1 & PSM2 (expressed in PSM1 frame)
   pt_exit << -0.12, 0.09, -0.16; //Good point for PSM1 & PSM2 (expressed in PSM1 frame)
 

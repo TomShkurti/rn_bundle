@@ -156,7 +156,7 @@ bool RnNeedleDrivingPlanner::getTransforms(){
 bool RnNeedleDrivingPlanner::getCameraToPSMsTransforms(){
 
   tf::TransformListener tfListener;
-  tf::StampedTransform tfResult_one, tfResult_two;
+  tf::StampedTransform tfResult_one, tfResult_two, tfResult_three;
 
   bool tf_acquired = false;
   int n_tries = 0;
@@ -175,6 +175,12 @@ bool RnNeedleDrivingPlanner::getCameraToPSMsTransforms(){
                                  "PSM2psm_base_link",
                                  ros::Time(0),
                                  tfResult_two);
+
+      tfListener.lookupTransform("PSM1psm_base_link",
+                                 "PSM2psm_base_link",
+                                 ros::Time(0),
+                                 tfResult_three);
+
     } catch (tf::TransformException &exception){
       ROS_WARN("%s", exception.what());
       tf_acquired = false;
@@ -192,11 +198,14 @@ bool RnNeedleDrivingPlanner::getCameraToPSMsTransforms(){
 
     psm_one_affine_wrt_lt_camera_ = convertTFToEigen(tfResult_one);
     psm_two_affine_wrt_lt_camera_ = convertTFToEigen(tfResult_two);
+    psm_two_affine_wrt_psm_one_ = convertTFToEigen(tfResult_three);
 
     ROS_WARN("Checking the transforms(psm_one_affine_wrt_lt_camera_):");
     printEigenAffine(psm_one_affine_wrt_lt_camera_);
     ROS_WARN("Checking the transforms(psm_two_affine_wrt_lt_camera_):");
     printEigenAffine(psm_two_affine_wrt_lt_camera_);
+    ROS_WARN("Checking the transforms(psm_two_affine_wrt_psm_one_):");
+    printEigenAffine(psm_two_affine_wrt_psm_one_);
 
   }
 
@@ -2141,6 +2150,110 @@ bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryInBaseFrame(const 
   } else {
     return result;
   }
+
+}
+
+
+/// Dual Arm Related Functions
+
+void RnNeedleDrivingPlanner::generateDualPsmOpBoundaryVertices() {
+
+//  std::vector<Eigen::Vector3d> dual_ok_pts_in_pms1;
+  davinci_kinematics::Vectorq7x1 q_vec;
+  Eigen::Affine3d psm1_test_affine_in_psm2, psm2_test_affine_in_psm1, self_psm_affine;
+  Eigen::Matrix3d psm1_tip_rotation, psm2_tip_rotation;
+  Eigen::Vector3d x_vec_psm_1, y_vec_psm_1, z_vec_psm_1;
+  Eigen::Vector3d x_vec_psm_2, y_vec_psm_2, z_vec_psm_2;
+  Eigen::Vector3d psm1_test_pt_in_psm1, psm2_test_pt_in_psm2, psm1_test_pt_in_psm2, psm2_test_pt_in_psm1;
+  Eigen::Vector3d temp_vec;
+  int count = 0;
+
+  double delta_angle = M_PI/36.0;
+
+  dual_op_boundary_pts_in_psm_one_.clear();
+  dual_op_zone_geo_centre_in_psm_one_ << 0, 0, 0;
+
+  // TODO delete or clean up
+//  joint_range_upper_limit:
+//  1.5994 0.94249 0.24001 3.0485 3.0528 3.0376 3.0399
+//  joint_range_lower_limit:
+//  -1.605 -0.93556 -0.002444 -3.0456 -3.0414 -3.0481 -3.0498
+
+  // TODO delete
+  std::cout << "POINTS" << std::endl << std::endl;
+
+  // q_upper_limits & q_lower_limits defined in namespace davinci_kinematics
+  // <cwru_davinci_kinematics/davinci_kinematic_definitions.h>
+  for (double q0 = -1.605; q0 < 1.5994; q0 = q0 + delta_angle) {
+
+    for (double q1 = -0.93556; q1 < 0.94249; q1 = q1 + delta_angle) {
+
+      q_vec(0) = q0;
+      q_vec(1) = q1;
+      q_vec(2) = 0.24001;
+      q_vec(3) = 0;
+      q_vec(4) = 0;
+      q_vec(5) = 0;
+      q_vec(6) = 0;
+
+      // A PSM1 test point in PSM1 base frame OR a PSM2 test point in PSM2 base frame
+      self_psm_affine = fwd_solver_.fwd_kin_solve(q_vec); // A point in a PSM1 base frame
+
+      psm1_test_pt_in_psm1 = self_psm_affine.translation();
+      psm2_test_pt_in_psm2 = psm1_test_pt_in_psm1;
+
+      x_vec_psm_1 << 0, 0, 1;
+      z_vec_psm_1 = psm1_test_pt_in_psm1/psm1_test_pt_in_psm1.norm();
+      y_vec_psm_1 = z_vec_psm_1.cross(x_vec_psm_1);
+      psm1_tip_rotation.col(0) = x_vec_psm_1;
+      psm1_tip_rotation.col(1) = z_vec_psm_1;
+      psm1_tip_rotation.col(2) = y_vec_psm_1;
+
+      self_psm_affine.linear() = psm1_tip_rotation;
+
+      // A PMS1 test point in PSM2 base frame
+      psm1_test_affine_in_psm2 = psm_two_affine_wrt_psm_one_.inverse() * self_psm_affine;
+      // A PSM2 test point in PSM1 base frame
+      psm2_test_affine_in_psm1 = psm_two_affine_wrt_psm_one_ * self_psm_affine;
+
+      psm1_test_pt_in_psm2 = psm1_test_affine_in_psm2.translation();
+      psm2_test_pt_in_psm1 = psm2_test_affine_in_psm1.translation();
+
+//      std::cout << psm1_test_pt_in_psm1.transpose() << std::endl;
+//      std::cout << psm2_test_pt_in_psm1.transpose() << std::endl;
+
+
+      // Check if the PSM1 test point passes PSM2's ik test
+      if (ik_solver_.ik_solve(psm1_test_affine_in_psm2)==1) {
+        dual_op_boundary_pts_in_psm_one_.push_back(psm1_test_pt_in_psm1);
+//        std::cout << psm1_test_pt_in_psm1.transpose() << std::endl;
+        temp_vec = temp_vec + psm1_test_pt_in_psm1;
+        count++;
+
+      }
+
+      // Check if the PSM2 test point passes PSM1's ik test
+      if (ik_solver_.ik_solve(psm2_test_affine_in_psm1)==1) {
+        dual_op_boundary_pts_in_psm_one_.push_back(psm2_test_pt_in_psm1);
+//        std::cout << psm2_test_pt_in_psm1.transpose() << std::endl;
+        temp_vec = temp_vec + psm2_test_pt_in_psm1;
+        count++;
+      }
+
+    }
+
+  }
+
+  if (count != 0) {
+    dual_op_zone_geo_centre_in_psm_one_(0) = temp_vec(0)/count;
+    dual_op_zone_geo_centre_in_psm_one_(1) = temp_vec(1)/count;
+    dual_op_zone_geo_centre_in_psm_one_(2) = temp_vec(2)/count;
+  }
+
+  std::cout << "dual_op_boundary_pts_in_psm_one_: " << std::endl;
+  std::cout << dual_op_zone_geo_centre_in_psm_one_.transpose() << std::endl;
+
+
 
 }
 

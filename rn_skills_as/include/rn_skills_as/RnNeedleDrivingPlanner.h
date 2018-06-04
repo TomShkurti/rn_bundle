@@ -9,6 +9,8 @@
 
 using namespace rn_davinci_skills;
 
+using namespace davinci_kinematics;
+
 class RnNeedleDrivingPlanner {
  public:
 
@@ -611,6 +613,11 @@ class RnNeedleDrivingPlanner {
                                                     geometry_msgs::TransformStamped &grasp_transform);
 
 
+  /// Dual arm related functions
+
+  void generateDualPsmOpBoundaryVertices();
+
+
 
   /// Debugging functions
 
@@ -781,6 +788,11 @@ class RnNeedleDrivingPlanner {
   Eigen::Affine3d psm_two_affine_wrt_lt_camera_;
   Eigen::Affine3d gripper_one_affine_wrt_lt_camera_;
   Eigen::Affine3d gripper_two_affine_wrt_lt_camera_;
+  Eigen::Affine3d psm_two_affine_wrt_psm_one_;
+
+  // Dual PSM related
+  std::vector<Eigen::Vector3d> dual_op_boundary_pts_in_psm_one_;
+  Eigen::Vector3d dual_op_zone_geo_centre_in_psm_one_;
 
 
   /// Planning
