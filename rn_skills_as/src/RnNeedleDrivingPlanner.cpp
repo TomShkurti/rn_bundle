@@ -468,6 +468,44 @@ void RnNeedleDrivingPlanner::computeGraspTransform(int arm_index,
 }
 
 
+void RnNeedleDrivingPlanner::computeGripperNeedleTransform(int arm_index,
+                                                           const geometry_msgs::TransformStamped &gripper_to_needle_tf) {
+
+  Eigen::Quaterniond q;
+  Eigen::Matrix3d R;
+
+  q.x() = gripper_to_needle_tf.transform.rotation.x;
+  q.y() = gripper_to_needle_tf.transform.rotation.y;
+  q.z() = gripper_to_needle_tf.transform.rotation.z;
+  q.w() = gripper_to_needle_tf.transform.rotation.w;
+  R = q.toRotationMatrix();
+
+  switch(arm_index) {
+
+    case 1:
+
+      needle_affine_wrt_gripper_one_frame_.linear() = R;
+      needle_affine_wrt_gripper_one_frame_.translation() << gripper_to_needle_tf.transform.translation.x,
+          gripper_to_needle_tf.transform.translation.y,
+          gripper_to_needle_tf.transform.translation.z;
+
+      break;
+
+    case 2:
+
+      needle_affine_wrt_gripper_two_frame_.linear() = R;
+      needle_affine_wrt_gripper_two_frame_.translation() << gripper_to_needle_tf.transform.translation.x,
+          gripper_to_needle_tf.transform.translation.y,
+          gripper_to_needle_tf.transform.translation.z;
+
+      break;
+
+  }
+
+
+}
+
+
 double RnNeedleDrivingPlanner::computeNeedleDriveGripperAffines(int arm_index,
                                                                 trajectory_msgs::JointTrajectory &needleDriveTraj){
 
@@ -1298,13 +1336,35 @@ bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryGeneratedGrasp(con
 
 
 bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryUserGripperNeedleTransform(const int &arm_index,
-                                                                 const geometry_msgs::PointStamped &needle_entry_pt,
-                                                                 const geometry_msgs::PointStamped &needle_exit_pt,
-                                                                 const geometry_msgs::TransformStamped &grasp_transform,
-                                                                 const double phi_0,
-                                                                 const double phi_t,
-                                                                 trajectory_msgs::JointTrajectory &needleDriveTraj) {
+                                                                                         const geometry_msgs::PointStamped &needle_entry_pt,
+                                                                                         const geometry_msgs::PointStamped &needle_exit_pt,
+                                                                                         const geometry_msgs::TransformStamped &grasp_transform,
+                                                                                         const double phi_0,
+                                                                                         const double phi_t,
+                                                                                         trajectory_msgs::JointTrajectory &needleDriveTraj) {
 
+  double ik_fraction;
+
+  updateNeedleAndTissueParameters(needle_entry_pt, needle_exit_pt);
+
+  // Update the needle affine wrt gripper frame, which is used in the computeNeedleDriveGripperAffines()
+  computeGripperNeedleTransform(arm_index, grasp_transform);
+
+  updatePsmKinematicAvailability(arm_index);
+
+  ik_fraction = computeNeedleDriveGripperAffines(arm_index, phi_0, phi_t, needleDriveTraj);
+
+  if (ik_fraction == 1) {
+    ROS_INFO("A valid needle drive trajectory has been acquired.");
+
+    // update needle upper and lower kinematically possible angle.
+    updateNeedleDriveKinematicBoundary(arm_index);
+
+    return true;
+  } else {
+    ROS_WARN("Failed to get a valid needle drive trajectory, the ik solution fraction is: %f", ik_fraction);
+    return false;
+  }
 
 
 }

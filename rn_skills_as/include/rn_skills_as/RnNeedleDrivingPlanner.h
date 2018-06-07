@@ -44,6 +44,9 @@ class RnNeedleDrivingPlanner {
   void computeGraspTransform(int arm_index,
                              const geometry_msgs::TransformStamped &grasp_transform);
 
+  void computeGripperNeedleTransform(int arm_index,
+                                     const geometry_msgs::TransformStamped &grasp_transform);
+
   /// TODO add & finish (to accommodate Orhan's usage)
   void computeGraspTransfrom(int arm_index,
                              const geometry_msgs::TransformStamped &gripper_to_needle_transform);
