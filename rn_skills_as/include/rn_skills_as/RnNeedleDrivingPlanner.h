@@ -31,6 +31,14 @@ class RnNeedleDrivingPlanner {
                                     Eigen::Vector3d exit_pt,
                                     Eigen::Vector3d tissue_normal);
 
+  /**
+   * This function is useful for the auto-generation process of the grasp tf. However, if a human user input
+   * a transform between the needle frame and the gripper, then the user is bypassing the calculation involved
+   * here.
+   * @param arm_index
+   * @param phi_x
+   * @param phi_y
+   */
   void computeGraspTransform(int arm_index, double phi_x, double phi_y);
 
   void computeGraspTransform(int arm_index,
@@ -175,6 +183,15 @@ class RnNeedleDrivingPlanner {
                                                        geometry_msgs::TransformStamped &grasp_transform);
 
 
+  bool requestOneNeedleDrivingTrajectoryUserGripperNeedleTransform(const int &arm_index,
+                                                                   const geometry_msgs::PointStamped &needle_entry_pt,
+                                                                   const geometry_msgs::PointStamped &needle_exit_pt,
+                                                                   const geometry_msgs::TransformStamped &grasp_transform,
+                                                                   const double phi_0,
+                                                                   const double phi_t,
+                                                                   trajectory_msgs::JointTrajectory &needleDriveTraj);
+
+
   void updateNeedleDriveKinematicBoundary(const int &arm_index);
 
   // To be used only after you update the grasp transform(s).
@@ -279,7 +296,7 @@ class RnNeedleDrivingPlanner {
   void setTrajectoryVelocity(double velocity, trajectory_msgs::JointTrajectory &needleDriveTraj);
 
 
-  // TODO finish
+  // TODO finish or delete
 
   /**
    * Try to find a grasp transform with an allowed perturbation from the user specified grasp transform, which allows

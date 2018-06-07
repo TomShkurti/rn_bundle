@@ -386,12 +386,14 @@ void RnNeedleDrivingPlanner::defineTissueFrameWrtLtCameraViaExitAndTip(const Eig
 }
 
 
-
+// Used by generateGraspTransformList()
 void RnNeedleDrivingPlanner::computeGraspTransform(int arm_index, double phi_x, double phi_y){
 
   Eigen::Matrix3d new_needle_rotation_wrt_grasp_one, new_needle_rotation_wrt_grasp_two, Rx, Ry;
   Eigen::Vector3d new_needle_origin_wrt_grasp_one, new_needle_origin_wrt_grasp_two;
 
+  // Note that currently we never actually apply phi_y. Therefore we only allow the needle to
+  // rotate about the gripper x axis (phi_x).
   Rx = Rotx(phi_x);
   Ry = Roty(phi_y);
 
@@ -1292,6 +1294,21 @@ bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryGeneratedGrasp(con
     }
 
   }
+
+
+
+bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryUserGripperNeedleTransform(const int &arm_index,
+                                                                 const geometry_msgs::PointStamped &needle_entry_pt,
+                                                                 const geometry_msgs::PointStamped &needle_exit_pt,
+                                                                 const geometry_msgs::TransformStamped &grasp_transform,
+                                                                 const double phi_0,
+                                                                 const double phi_t,
+                                                                 trajectory_msgs::JointTrajectory &needleDriveTraj) {
+
+
+
+}
+
 
 
 // TODO retire this one
