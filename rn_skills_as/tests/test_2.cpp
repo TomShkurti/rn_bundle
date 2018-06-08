@@ -26,12 +26,8 @@ int main(int argc, char **argv) {
   double phi_0 = 0.1 * M_PI;
   double phi_t = 0.5 * M_PI;
 
-
-
   psm_controller psm1(arm1, node);
   psm_controller psm2(arm2, node);
-
-
 
   RnNeedleDrivingPlanner rnNeedleDrivingPlanner(node);
   trajectory_msgs::JointTrajectory needleDriveTraj;
@@ -56,12 +52,13 @@ int main(int argc, char **argv) {
 
   rnNeedleDrivingPlanner.generateDualPsmOpBoundaryVertices();
 
+  if (0 > 1)
+  {
   pt_entry << -0.12, 0.08, -0.16; //Good point for PSM1 & PSM2 (expressed in PSM1 frame)
   pt_exit << -0.12, 0.09, -0.16; //Good point for PSM1 & PSM2 (expressed in PSM1 frame)
 
   pt_entry_cam = rnNeedleDrivingPlanner.transformPointFromBaseToLtCamFrame(arm1, pt_entry);
   pt_exit_cam = rnNeedleDrivingPlanner.transformPointFromBaseToLtCamFrame(arm1, pt_exit);
-
 
   needle_entry_pt = rnNeedleDrivingPlanner.ConvertEigenVec3dToGeoMsgsPtStamped(pt_entry);
   needle_exit_pt = rnNeedleDrivingPlanner.ConvertEigenVec3dToGeoMsgsPtStamped(pt_exit);
@@ -105,7 +102,7 @@ int main(int argc, char **argv) {
 
   rnNeedleDrivingPlanner.updateNeedleAndTissueParameters(needle_entry_pt_cam, needle_exit_pt_cam);
 
-  double phi_pen, phi_em, phi_02,  phi_t2;
+  double phi_pen, phi_em, phi_02, phi_t2;
 
   phi_pen = rnNeedleDrivingPlanner.getPhiNeedlePenetration();
   phi_em = rnNeedleDrivingPlanner.getPhiNeedleEmergence();
@@ -126,12 +123,12 @@ int main(int argc, char **argv) {
 //  rnNeedleDrivingPlanner.updatePsmKinematicAvailability(arm1);
 
   test = rnNeedleDrivingPlanner.requestOneNeedleDrivingTrajectoryGeneratedGrasp(arm1,
-                                                                           needle_entry_pt_cam,
-                                                                           needle_exit_pt_cam,
-                                                                           phi_02,
-                                                                           phi_t2,
-                                                                           needleDriveTraj,
-                                                                           grasp_transform);
+                                                                                needle_entry_pt_cam,
+                                                                                needle_exit_pt_cam,
+                                                                                phi_02,
+                                                                                phi_t2,
+                                                                                needleDriveTraj,
+                                                                                grasp_transform);
 
 
 
@@ -196,8 +193,7 @@ int main(int argc, char **argv) {
   grasp_transform_eigen = rnNeedleDrivingPlanner.convertGeoTransformStampedToEigenAffine(grasp_transform);
   rnNeedleDrivingPlanner.printEigenAffine(grasp_transform_eigen);
 
-
-
+}
 
   return 0;
 }

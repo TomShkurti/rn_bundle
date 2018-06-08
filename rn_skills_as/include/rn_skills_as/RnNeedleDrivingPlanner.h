@@ -329,6 +329,14 @@ class RnNeedleDrivingPlanner {
 
   /// Auxiliary Utility Functions
 
+
+  Eigen::Vector3d transformPointFromBaseToLtCamFrame(const int & arm_index,
+                                                     const Eigen::Vector3d &point);
+
+
+  Eigen::Vector3d transformPointFromLtCamFrameToBase(const int & arm_index,
+                                                     const Eigen::Vector3d &point);
+
   double approximateTrajectoryDist(trajectory_msgs::JointTrajectory &joint_trajectory);
 
   void convertAffinesToTrajectoryMsgs(const std::vector<Eigen::Affine3d> &gripper_affines_wrt_portal,
@@ -641,12 +649,7 @@ class RnNeedleDrivingPlanner {
 
   /// Debugging functions
 
-  Eigen::Vector3d transformPointFromBaseToLtCamFrame(const int & arm_index,
-                                                     const Eigen::Vector3d &point);
 
-
-  Eigen::Vector3d transformPointFromLtCamFrameToBase(const int & arm_index,
-                                                     const Eigen::Vector3d &point);
 
   inline void printPsmBaseToCamTransfomrs() {
 

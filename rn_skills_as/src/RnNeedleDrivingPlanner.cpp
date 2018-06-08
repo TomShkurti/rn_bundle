@@ -2256,18 +2256,18 @@ void RnNeedleDrivingPlanner::generateDualPsmOpBoundaryVertices() {
 //  joint_range_lower_limit:
 //  -1.605 -0.93556 -0.002444 -3.0456 -3.0414 -3.0481 -3.0498
 
-  // TODO delete
+  // TODO delete or clean up
   std::cout << "POINTS" << std::endl << std::endl;
 
   // q_upper_limits & q_lower_limits defined in namespace davinci_kinematics
   // <cwru_davinci_kinematics/davinci_kinematic_definitions.h>
-  for (double q0 = -1.605; q0 < 1.5994; q0 = q0 + delta_angle) {
+  for (double q0 = q_lower_limits[0]; q0 < q_upper_limits[0]; q0 = q0 + delta_angle) {
 
-    for (double q1 = -0.93556; q1 < 0.94249; q1 = q1 + delta_angle) {
+    for (double q1 = q_lower_limits[1]; q1 < q_upper_limits[1]; q1 = q1 + delta_angle) {
 
       q_vec(0) = q0;
       q_vec(1) = q1;
-      q_vec(2) = 0.24001;
+      q_vec(2) = q_upper_limits[2];
       q_vec(3) = 0;
       q_vec(4) = 0;
       q_vec(5) = 0;
@@ -2279,7 +2279,8 @@ void RnNeedleDrivingPlanner::generateDualPsmOpBoundaryVertices() {
       psm1_test_pt_in_psm1 = self_psm_affine.translation();
       psm2_test_pt_in_psm2 = psm1_test_pt_in_psm1;
 
-      x_vec_psm_1 << 0, 0, 1;
+      // Setting gripper frame orientation.
+      x_vec_psm_1 << 0, 0, -1;
       z_vec_psm_1 = psm1_test_pt_in_psm1/psm1_test_pt_in_psm1.norm();
       y_vec_psm_1 = z_vec_psm_1.cross(x_vec_psm_1);
       psm1_tip_rotation.col(0) = x_vec_psm_1;
@@ -2296,6 +2297,7 @@ void RnNeedleDrivingPlanner::generateDualPsmOpBoundaryVertices() {
       psm1_test_pt_in_psm2 = psm1_test_affine_in_psm2.translation();
       psm2_test_pt_in_psm1 = psm2_test_affine_in_psm1.translation();
 
+      // Use when debugging
 //      std::cout << psm1_test_pt_in_psm1.transpose() << std::endl;
 //      std::cout << psm2_test_pt_in_psm1.transpose() << std::endl;
 
@@ -2303,7 +2305,8 @@ void RnNeedleDrivingPlanner::generateDualPsmOpBoundaryVertices() {
       // Check if the PSM1 test point passes PSM2's ik test
       if (ik_solver_.ik_solve(psm1_test_affine_in_psm2)==1) {
         dual_op_boundary_pts_in_psm_one_.push_back(psm1_test_pt_in_psm1);
-//        std::cout << psm1_test_pt_in_psm1.transpose() << std::endl;
+        // Use when debugging
+        std::cout << psm1_test_pt_in_psm1.transpose() << std::endl;
         temp_vec = temp_vec + psm1_test_pt_in_psm1;
         count++;
 
@@ -2312,7 +2315,8 @@ void RnNeedleDrivingPlanner::generateDualPsmOpBoundaryVertices() {
       // Check if the PSM2 test point passes PSM1's ik test
       if (ik_solver_.ik_solve(psm2_test_affine_in_psm1)==1) {
         dual_op_boundary_pts_in_psm_one_.push_back(psm2_test_pt_in_psm1);
-//        std::cout << psm2_test_pt_in_psm1.transpose() << std::endl;
+        // Use when debugging
+        std::cout << psm2_test_pt_in_psm1.transpose() << std::endl;
         temp_vec = temp_vec + psm2_test_pt_in_psm1;
         count++;
       }
