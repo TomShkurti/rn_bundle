@@ -167,7 +167,17 @@ class RnNeedleDrivingPlanner {
                                                   const double phi_t,
                                                   trajectory_msgs::JointTrajectory &needleDriveTraj);
 
-
+  /**
+   *
+   * @param arm_index
+   * @param needle_entry_pt
+   * @param needle_exit_pt
+   * @param grasp_transform: The transform between the grasp frame (NOT the gripper frame) and needle frame.
+   * @param phi_0
+   * @param phi_t
+   * @param needleDriveTraj
+   * @return
+   */
   bool requestOneNeedleDrivingTrajectoryUserGrasp(const int &arm_index,
                                                   const geometry_msgs::PointStamped &needle_entry_pt,
                                                   const geometry_msgs::PointStamped &needle_exit_pt,
@@ -186,10 +196,21 @@ class RnNeedleDrivingPlanner {
                                                        geometry_msgs::TransformStamped &grasp_transform);
 
 
+  /**
+   *
+   * @param arm_index
+   * @param needle_entry_pt
+   * @param needle_exit_pt
+   * @param gripper_to_needle_tf: The transform between the gripper tip and needle frame.
+   * @param phi_0
+   * @param phi_t
+   * @param needleDriveTraj
+   * @return
+   */
   bool requestOneNeedleDrivingTrajectoryUserGripperNeedleTransform(const int &arm_index,
                                                                    const geometry_msgs::PointStamped &needle_entry_pt,
                                                                    const geometry_msgs::PointStamped &needle_exit_pt,
-                                                                   const geometry_msgs::TransformStamped &grasp_transform,
+                                                                   const geometry_msgs::TransformStamped &gripper_to_needle_tf,
                                                                    const double phi_0,
                                                                    const double phi_t,
                                                                    trajectory_msgs::JointTrajectory &needleDriveTraj);

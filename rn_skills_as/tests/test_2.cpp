@@ -44,18 +44,18 @@ int main(int argc, char **argv) {
 //  pt_entry << -0.1, 0.08, -0.18; //Good point for PSM1
 //  pt_exit << -0.1, 0.09, -0.18; //Good point for PSM1
 
-//  pt_entry << -0.09, 0.08, -0.18; //Good point for PSM1
-//  pt_exit << -0.09, 0.09, -0.18; //Good point for PSM1
+  pt_entry << -0.09, 0.08, -0.18; //Good point for PSM1
+  pt_exit << -0.09, 0.09, -0.18; //Good point for PSM1
 
 //  pt_entry << 0.09, 0.08, -0.18; //Good point for PSM2
 //  pt_exit << 0.09, 0.09, -0.18; //Good point for PSM2
 
   rnNeedleDrivingPlanner.generateDualPsmOpBoundaryVertices();
 
-  if (0 > 1)
+  if (0 < 1)
   {
-  pt_entry << -0.12, 0.08, -0.16; //Good point for PSM1 & PSM2 (expressed in PSM1 frame)
-  pt_exit << -0.12, 0.09, -0.16; //Good point for PSM1 & PSM2 (expressed in PSM1 frame)
+//  pt_entry << -0.12, 0.08, -0.16; //Good point for PSM1 & PSM2 (expressed in PSM1 frame)
+//  pt_exit << -0.12, 0.09, -0.16; //Good point for PSM1 & PSM2 (expressed in PSM1 frame)
 
   pt_entry_cam = rnNeedleDrivingPlanner.transformPointFromBaseToLtCamFrame(arm1, pt_entry);
   pt_exit_cam = rnNeedleDrivingPlanner.transformPointFromBaseToLtCamFrame(arm1, pt_exit);
@@ -110,25 +110,25 @@ int main(int argc, char **argv) {
   std::cout << "phi_pen: " << phi_pen << std::endl << "phi_em: " << phi_em << std::endl;
 
 //  phi_02 = - 0.0698132; // 0.0698132 rad = 4 deg
-  phi_02 = -0.1;
-  phi_t2 = 3.833167;
+  phi_02 = 0.17;
+  phi_t2 = 3.7;
 
-//  test = rnNeedleDrivingPlanner.requestNeedleDrivingTrajectoryDefaultGrasp(arm1,
-//                                                                           needle_entry_pt_cam,
-//                                                                           needle_exit_pt_cam,
-//                                                                           phi_02,
-//                                                                           phi_t2,
-//                                                                           needleDriveTraj);
+  test = rnNeedleDrivingPlanner.requestNeedleDrivingTrajectoryDefaultGrasp(arm1,
+                                                                           needle_entry_pt_cam,
+                                                                           needle_exit_pt_cam,
+                                                                           phi_02,
+                                                                           phi_t2,
+                                                                           needleDriveTraj);
 
 //  rnNeedleDrivingPlanner.updatePsmKinematicAvailability(arm1);
 
-  test = rnNeedleDrivingPlanner.requestOneNeedleDrivingTrajectoryGeneratedGrasp(arm1,
-                                                                                needle_entry_pt_cam,
-                                                                                needle_exit_pt_cam,
-                                                                                phi_02,
-                                                                                phi_t2,
-                                                                                needleDriveTraj,
-                                                                                grasp_transform);
+//  test = rnNeedleDrivingPlanner.requestOneNeedleDrivingTrajectoryGeneratedGrasp(arm1,
+//                                                                                needle_entry_pt_cam,
+//                                                                                needle_exit_pt_cam,
+//                                                                                phi_02,
+//                                                                                phi_t2,
+//                                                                                needleDriveTraj,
+//                                                                                grasp_transform);
 
 
 

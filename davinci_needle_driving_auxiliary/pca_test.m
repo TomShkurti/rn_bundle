@@ -6,6 +6,7 @@ clear all
 %%
 load('sample_pts.mat');
 load('sample_boundary_pts.mat');
+%%
 
 sample_pts_centre = [-0.0836266 -0.00382424   -0.134643]
 

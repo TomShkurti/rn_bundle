@@ -467,7 +467,7 @@ void RnNeedleDrivingPlanner::computeGraspTransform(int arm_index,
 
 }
 
-
+// It modifies 'needle_affine_wrt_gripper_two_frame_'
 void RnNeedleDrivingPlanner::computeGripperNeedleTransform(int arm_index,
                                                            const geometry_msgs::TransformStamped &gripper_to_needle_tf) {
 
@@ -1338,7 +1338,7 @@ bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryGeneratedGrasp(con
 bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryUserGripperNeedleTransform(const int &arm_index,
                                                                                          const geometry_msgs::PointStamped &needle_entry_pt,
                                                                                          const geometry_msgs::PointStamped &needle_exit_pt,
-                                                                                         const geometry_msgs::TransformStamped &grasp_transform,
+                                                                                         const geometry_msgs::TransformStamped &gripper_to_needle_tf,
                                                                                          const double phi_0,
                                                                                          const double phi_t,
                                                                                          trajectory_msgs::JointTrajectory &needleDriveTraj) {
@@ -1348,7 +1348,7 @@ bool RnNeedleDrivingPlanner::requestOneNeedleDrivingTrajectoryUserGripperNeedleT
   updateNeedleAndTissueParameters(needle_entry_pt, needle_exit_pt);
 
   // Update the needle affine wrt gripper frame, which is used in the computeNeedleDriveGripperAffines()
-  computeGripperNeedleTransform(arm_index, grasp_transform);
+  computeGripperNeedleTransform(arm_index, gripper_to_needle_tf);
 
   updatePsmKinematicAvailability(arm_index);
 
@@ -1884,6 +1884,8 @@ void RnNeedleDrivingPlanner::setTrajectoryVelocity(double velocity,
 
   int waypoints = needleDriveTraj.points.size();
 
+  std::cout << "Printing the trajectory pts -- " << std::endl;
+
   for (int n = 0; n < (waypoints-1); n++) {
 
     for (int i = 0; i < 7; i++) {
@@ -2257,7 +2259,7 @@ void RnNeedleDrivingPlanner::generateDualPsmOpBoundaryVertices() {
 //  -1.605 -0.93556 -0.002444 -3.0456 -3.0414 -3.0481 -3.0498
 
   // TODO delete or clean up
-  std::cout << "POINTS" << std::endl << std::endl;
+  // std::cout << "POINTS" << std::endl << std::endl;
 
   // q_upper_limits & q_lower_limits defined in namespace davinci_kinematics
   // <cwru_davinci_kinematics/davinci_kinematic_definitions.h>
@@ -2306,7 +2308,7 @@ void RnNeedleDrivingPlanner::generateDualPsmOpBoundaryVertices() {
       if (ik_solver_.ik_solve(psm1_test_affine_in_psm2)==1) {
         dual_op_boundary_pts_in_psm_one_.push_back(psm1_test_pt_in_psm1);
         // Use when debugging
-        std::cout << psm1_test_pt_in_psm1.transpose() << std::endl;
+        // std::cout << psm1_test_pt_in_psm1.transpose() << std::endl;
         temp_vec = temp_vec + psm1_test_pt_in_psm1;
         count++;
 
@@ -2316,7 +2318,7 @@ void RnNeedleDrivingPlanner::generateDualPsmOpBoundaryVertices() {
       if (ik_solver_.ik_solve(psm2_test_affine_in_psm1)==1) {
         dual_op_boundary_pts_in_psm_one_.push_back(psm2_test_pt_in_psm1);
         // Use when debugging
-        std::cout << psm2_test_pt_in_psm1.transpose() << std::endl;
+        // std::cout << psm2_test_pt_in_psm1.transpose() << std::endl;
         temp_vec = temp_vec + psm2_test_pt_in_psm1;
         count++;
       }
@@ -2331,7 +2333,7 @@ void RnNeedleDrivingPlanner::generateDualPsmOpBoundaryVertices() {
     dual_op_zone_geo_centre_in_psm_one_(2) = temp_vec(2)/count;
   }
 
-  std::cout << "dual_op_boundary_pts_in_psm_one_: " << std::endl;
+  std::cout << "dual_op_zone_geo_centre_in_psm_one_: " << std::endl;
   std::cout << dual_op_zone_geo_centre_in_psm_one_.transpose() << std::endl;
 
 
