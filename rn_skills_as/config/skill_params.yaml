@@ -1,2 +1,2 @@
-needle: {radius: 0.012, grasp_depth: 0.000, height: 0.008}
+needle: {radius: 0.012, grasp_depth: -0.00, height: 0.008}
 needle_driving_path_waypoints: 21

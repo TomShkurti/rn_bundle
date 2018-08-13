@@ -47,6 +47,14 @@ int main(int argc, char **argv) {
   pt_entry << -0.09, 0.08, -0.18; //Good point for PSM1
   pt_exit << -0.09, 0.09, -0.18; //Good point for PSM1
 
+//  pt_entry <<  -0.105, 0.03, -0.15; //Good point for PSM1
+//  pt_exit << -0.125, 0.03, -0.15; //Good point for PSM1
+
+
+//  pt_entry << -0.11, 0.045, -0.15; //Good point for PSM1
+//  pt_exit << -0.11, 0.035, -0.15; //Good point for PSM1
+
+
 //  pt_entry << 0.09, 0.08, -0.18; //Good point for PSM2
 //  pt_exit << 0.09, 0.09, -0.18; //Good point for PSM2
 
@@ -110,8 +118,8 @@ int main(int argc, char **argv) {
   std::cout << "phi_pen: " << phi_pen << std::endl << "phi_em: " << phi_em << std::endl;
 
 //  phi_02 = - 0.0698132; // 0.0698132 rad = 4 deg
-  phi_02 = 0.17;
-  phi_t2 = 3.7;
+  phi_02 = 0.2;
+  phi_t2 = 1.2;
 
   test = rnNeedleDrivingPlanner.requestNeedleDrivingTrajectoryDefaultGrasp(arm1,
                                                                            needle_entry_pt_cam,
@@ -174,24 +182,24 @@ int main(int argc, char **argv) {
 //                                                                    needleDriveTraj,
 //                                                                    grasp_transform);
 
-  test = false;
-
-  if (test) {
-    double velocity = 0.01; // meter/sec
-    rnNeedleDrivingPlanner.setTrajectoryVelocity(velocity, needleDriveTraj);
-    ROS_WARN("Will execute the plan in 1 sec.");
-    ros::Duration(1).sleep();
-    rnNeedleDrivingPlanner.executeTrajectory(psm2, needleDriveTraj);
-
-    ROS_WARN("DEBUG 002");
-    rnNeedleDrivingPlanner.printDebugAffineVessel();
-
-  } else {
-    ROS_ERROR("FAILED TO GET A TRAJECTORY!");
-  }
-
-  grasp_transform_eigen = rnNeedleDrivingPlanner.convertGeoTransformStampedToEigenAffine(grasp_transform);
-  rnNeedleDrivingPlanner.printEigenAffine(grasp_transform_eigen);
+//  test = false;
+//
+//  if (test) {
+//    double velocity = 0.01; // meter/sec
+//    rnNeedleDrivingPlanner.setTrajectoryVelocity(velocity, needleDriveTraj);
+//    ROS_WARN("Will execute the plan in 1 sec.");
+//    ros::Duration(1).sleep();
+//    rnNeedleDrivingPlanner.executeTrajectory(psm2, needleDriveTraj);
+//
+//    ROS_WARN("DEBUG 002");
+//    rnNeedleDrivingPlanner.printDebugAffineVessel();
+//
+//  } else {
+//    ROS_ERROR("FAILED TO GET A TRAJECTORY!");
+//  }
+//
+//  grasp_transform_eigen = rnNeedleDrivingPlanner.convertGeoTransformStampedToEigenAffine(grasp_transform);
+//  rnNeedleDrivingPlanner.printEigenAffine(grasp_transform_eigen);
 
 }
 

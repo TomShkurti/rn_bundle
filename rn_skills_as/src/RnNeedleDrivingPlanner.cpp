@@ -106,7 +106,7 @@ void RnNeedleDrivingPlanner::computeDefaultNeedleWrtGripperTransform(){
   /// PSM 1
   // Calculating Needle frame wrt Grasp frame
   needle_origin_wrt_grasp_one_frame_ << 0, grab_needle_plus_minus_y_ * needle_radius_, 0;
-  bvec_needle_wrt_grasp_frame << 0, 0, -grab_needle_plus_minus_z_; // z
+  bvec_needle_wrt_grasp_frame << 0, 0, grab_needle_plus_minus_z_; // z
   nvec_needle_wrt_grasp_frame << 0, grab_needle_plus_minus_y_, 0; // x
   tvec_needle_wrt_grasp_frame = bvec_needle_wrt_grasp_frame.cross(nvec_needle_wrt_grasp_frame); // y
   needle_rotation_wrt_grasp_one_frame_.col(0) = nvec_needle_wrt_grasp_frame;
@@ -126,7 +126,7 @@ void RnNeedleDrivingPlanner::computeDefaultNeedleWrtGripperTransform(){
   // TODO Or should it be exactly the same as the PSM1?
   // Calculating Needle frame wrt Grasp frame
   needle_origin_wrt_grasp_two_frame_ << 0, -grab_needle_plus_minus_y_ * needle_radius_, 0;
-  bvec_needle_wrt_grasp_frame << 0, 0, grab_needle_plus_minus_z_; // z
+  bvec_needle_wrt_grasp_frame << 0, 0, -grab_needle_plus_minus_z_; // z
   nvec_needle_wrt_grasp_frame << 0, -grab_needle_plus_minus_y_, 0; // x
   tvec_needle_wrt_grasp_frame = bvec_needle_wrt_grasp_frame.cross(nvec_needle_wrt_grasp_frame); // y
   needle_rotation_wrt_grasp_two_frame_.col(0) = nvec_needle_wrt_grasp_frame;
@@ -721,6 +721,9 @@ double RnNeedleDrivingPlanner::computeNeedleDriveGripperAffines(int arm_index,
         if (ik_solver_.ik_solve(des_gripper_one_wrt_base)==1) {
           nsolns++;
           des_gripper_one_affines_wrt_lt_camera.push_back(des_gripper_one_wrt_base);
+
+          // TODO delete after debugging
+          printEigenAffine(des_gripper_one_wrt_base);
 
           if ((ipose == 0) || (ipose == (path_waypoints_ - 1)) ) {
 
