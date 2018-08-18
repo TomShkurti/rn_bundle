@@ -666,6 +666,8 @@ class RnNeedleDrivingPlanner {
 
   void generateDualPsmOpBoundaryVertices();
 
+  void generateDualPsmOpFrame();
+
 
 
   /// Debugging functions
@@ -837,6 +839,8 @@ class RnNeedleDrivingPlanner {
   // Dual PSM related
   std::vector<Eigen::Vector3d> dual_op_boundary_pts_in_psm_one_;
   Eigen::Vector3d dual_op_zone_geo_centre_in_psm_one_;
+  Eigen::Affine3d dual_op_frame_affine_wrt_psm_one_;
+  Eigen::Affine3d dual_op_frame_affine_wrt_psm_two_;
 
 
   /// Planning

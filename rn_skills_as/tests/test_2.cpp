@@ -60,6 +60,8 @@ int main(int argc, char **argv) {
 
   rnNeedleDrivingPlanner.generateDualPsmOpBoundaryVertices();
 
+  rnNeedleDrivingPlanner.generateDualPsmOpFrame();
+
   if (0 < 1)
   {
 //  pt_entry << -0.12, 0.08, -0.16; //Good point for PSM1 & PSM2 (expressed in PSM1 frame)

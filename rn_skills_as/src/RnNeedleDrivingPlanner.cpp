@@ -2344,6 +2344,30 @@ void RnNeedleDrivingPlanner::generateDualPsmOpBoundaryVertices() {
 }
 
 
+void RnNeedleDrivingPlanner::generateDualPsmOpFrame() {
+
+  generateDualPsmOpBoundaryVertices();
+
+  Eigen::Quaterniond dual_frame_quat_wrt_psm1, psm_1_self_quat, psm2_wrt_psm1_quat;
+  Eigen::Matrix3d identity_mat, dual_frame_rot_wrt_psm1;
+  double scale = 0.5;
+  identity_mat.setIdentity();
+  psm_1_self_quat = identity_mat;
+
+  psm2_wrt_psm1_quat = psm_two_affine_wrt_psm_one_.linear();
+
+  dual_frame_quat_wrt_psm1 = psm_1_self_quat.slerp(scale, psm2_wrt_psm1_quat);
+
+  dual_frame_rot_wrt_psm1 =  dual_frame_quat_wrt_psm1.normalized().toRotationMatrix();
+
+  dual_op_frame_affine_wrt_psm_one_.linear() = dual_frame_rot_wrt_psm1;
+  dual_op_frame_affine_wrt_psm_one_.translation() = dual_op_zone_geo_centre_in_psm_one_;
+  dual_op_frame_affine_wrt_psm_two_ = psm_two_affine_wrt_psm_one_* dual_op_frame_affine_wrt_psm_one_;
+
+}
+
+
+
 
 /// PSM controllers
 
