@@ -4,13 +4,13 @@
 
 
 #include <cwru_davinci_kinematics/davinci_inv_kinematics.h>
-#include <cwru_davinci_control/psm_controller.h>
+#include <cwru_davinci/uv_control/psm_interface.h>
 #include "rn_skills_as/RnNeedleDrivingPlanner.h"
 
 
 
 
-void goToLocationPointingDown(psm_controller &psm,
+void goToLocationPointingDown(psm_interface &psm,
                               double x,
                               double y,
                               double z);
@@ -26,8 +26,8 @@ int main(int argc, char **argv) {
   double phi_0 = 0.1 * M_PI;
   double phi_t = 0.5 * M_PI;
 
-  psm_controller psm1(arm1, node);
-  psm_controller psm2(arm2, node);
+  psm_interface psm1(arm1, node);
+  psm_interface psm2(arm2, node);
 
   RnNeedleDrivingPlanner rnNeedleDrivingPlanner(node);
   trajectory_msgs::JointTrajectory needleDriveTraj;
@@ -173,33 +173,33 @@ int main(int argc, char **argv) {
 
   /////
 
-//  test = rnNeedleDrivingPlanner.requestNeedleDrivingTrajectoryDefaultGrasp(arm2,
-//                                                                           needle_entry_pt_cam,
-//                                                                           needle_exit_pt_cam,
-//                                                                           needleDriveTraj);
+/*test = rnNeedleDrivingPlanner.requestNeedleDrivingTrajectoryDefaultGrasp(arm2,
+                                                                           needle_entry_pt_cam,
+                                                                           needle_exit_pt_cam,
+                                                                           needleDriveTraj);*/
 
-//    test = rnNeedleDrivingPlanner.requestOneNeedleDrivingTrajectoryGeneratedGrasp(arm2,
-//                                                                    needle_entry_pt_cam,
-//                                                                    needle_exit_pt_cam,
-//                                                                    needleDriveTraj,
-//                                                                    grasp_transform);
+    test = rnNeedleDrivingPlanner.requestOneNeedleDrivingTrajectoryGeneratedGrasp(arm1,
+                                                                    needle_entry_pt_cam,
+                                                                    needle_exit_pt_cam,
+                                                                    needleDriveTraj,
+                                                                    grasp_transform);
 
 //  test = false;
 //
-//  if (test) {
-//    double velocity = 0.01; // meter/sec
-//    rnNeedleDrivingPlanner.setTrajectoryVelocity(velocity, needleDriveTraj);
-//    ROS_WARN("Will execute the plan in 1 sec.");
-//    ros::Duration(1).sleep();
-//    rnNeedleDrivingPlanner.executeTrajectory(psm2, needleDriveTraj);
-//
-//    ROS_WARN("DEBUG 002");
-//    rnNeedleDrivingPlanner.printDebugAffineVessel();
-//
-//  } else {
-//    ROS_ERROR("FAILED TO GET A TRAJECTORY!");
-//  }
-//
+  if (test) {
+    double velocity = 0.01; // meter/sec
+    rnNeedleDrivingPlanner.setTrajectoryVelocity(velocity, needleDriveTraj);
+    ROS_WARN("Will execute the plan in 1 sec.");
+    ros::Duration(1).sleep();
+    rnNeedleDrivingPlanner.executeTrajectory(psm1, needleDriveTraj);
+
+    ROS_WARN("DEBUG 002");
+    rnNeedleDrivingPlanner.printDebugAffineVessel();
+
+  } else {
+    ROS_ERROR("FAILED TO GET A TRAJECTORY!");
+  }
+
 //  grasp_transform_eigen = rnNeedleDrivingPlanner.convertGeoTransformStampedToEigenAffine(grasp_transform);
 //  rnNeedleDrivingPlanner.printEigenAffine(grasp_transform_eigen);
 

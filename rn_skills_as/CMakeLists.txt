@@ -21,7 +21,7 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   Eigen3
   cwru_davinci_kinematics
-  cwru_davinci_control
+  uv_control
   cwru_davinci_msgs
 )
 
@@ -118,7 +118,7 @@ generate_messages(
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES rn_skills_as
-  CATKIN_DEPENDS roscpp rospy std_msgs geometry_msgs trajectory_msgs tf cwru_davinci_kinematics actionlib_msgs cwru_davinci_msgs cwru_davinci_control
+  CATKIN_DEPENDS roscpp rospy std_msgs geometry_msgs trajectory_msgs tf cwru_davinci_kinematics actionlib_msgs cwru_davinci_msgs uv_control
   DEPENDS system_lib
 )
 

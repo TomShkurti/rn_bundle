@@ -58,7 +58,7 @@
   <build_depend>cwru_davinci_kinematics</build_depend>
   <build_depend>actionlib_msgs</build_depend>
   <build_depend>cwru_davinci_msgs</build_depend>
-  <build_depend>cwru_davinci_control</build_depend>
+  <build_depend>uv_control</build_depend>
   <build_depend>message_generation</build_depend>
 
 
@@ -76,7 +76,7 @@
   <exec_depend>cwru_davinci_kinematics</exec_depend>
   <exec_depend>actionlib_msgs</exec_depend>
   <exec_depend>cwru_davinci_msgs</exec_depend>
-  <exec_depend>cwru_davinci_control</exec_depend>
+  <exec_depend>uv_control</exec_depend>
   <exec_depend>message_generation</exec_depend>
 
   <!-- The export tag contains other, unspecified, tags -->

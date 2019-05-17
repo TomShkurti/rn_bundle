@@ -22,7 +22,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/thread.hpp>
 
-#include <cwru_davinci_control/psm_controller.h>
+#include <cwru_davinci/uv_control/psm_interface.h>
 
 #include "rn_skills_as/rn_davinci_skills_base.h"
 #include "rn_skills_as/RnNeedleDrivingPlanner.h"
@@ -38,7 +38,7 @@ class DavinciSkillsActionServer {
 
   void executeCB(const rn_skills_as::NeedleDriveLiteGoalConstPtr &goal);
 
-  void movePSM(psm_controller &psm);
+  void movePSM(psm_interface &psm);
 
 // rn_skills_as
 
@@ -57,7 +57,7 @@ class DavinciSkillsActionServer {
   RnNeedleDrivingPlanner rnNeedleDrivingPlanner;
 
   void go(
-      psm_controller & psm,
+      psm_interface & psm,
       double x,
       double y,
       double z,
@@ -67,7 +67,7 @@ class DavinciSkillsActionServer {
   );
 
   /// Controller
-  void executeTrajectory(psm_controller & psm,
+  void executeTrajectory(psm_interface & psm,
                          trajectory_msgs::JointTrajectory &des_trajectory);
 
 

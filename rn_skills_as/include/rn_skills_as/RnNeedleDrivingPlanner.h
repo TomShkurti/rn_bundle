@@ -724,36 +724,36 @@ class RnNeedleDrivingPlanner {
    * @param psm
    * @param needleDriveTraj
    */
-  void executeTrajectory(psm_controller &psm,
+  void executeTrajectory(psm_interface &psm,
                          const trajectory_msgs::JointTrajectory &needleDriveTraj);
 
-  void executeTrajectory(psm_controller &psm,
+  void executeTrajectory(psm_interface &psm,
                          const cwru_davinci_msgs::ListOfJointTrajectory &list_of_joint_traj);
 
 
 
-  void goToLocationPointingDownFaceVector(psm_controller &psm,
+  void goToLocationPointingDownFaceVector(psm_interface &psm,
                                           const double &x,
                                           const double &y,
                                           const double &z);
 
-  void goToLocationPointingDownFaceForward(psm_controller &psm,
+  void goToLocationPointingDownFaceForward(psm_interface &psm,
                                           const double &x,
                                           const double &y,
                                           const double &z);
 
-  void goToLocationPointingPsmLeft(psm_controller &psm,
+  void goToLocationPointingPsmLeft(psm_interface &psm,
                                            const double &x,
                                            const double &y,
                                            const double &z);
 
-  void goToLocationPointingPsmRight(psm_controller &psm,
+  void goToLocationPointingPsmRight(psm_interface &psm,
                                    const double &x,
                                    const double &y,
                                    const double &z);
 
   // TODO complete
-  void openGripper(psm_controller &psm, const double &angle);
+  void openGripper(psm_interface &psm, const double &angle);
 
 
 
@@ -886,8 +886,8 @@ class RnNeedleDrivingPlanner {
 
 
   /// Temporary PSM controllers
-  psm_controller psm_one_;
-  psm_controller psm_two_;
+  psm_interface psm_one_;
+  psm_interface psm_two_;
 
 
   /// Debug Auxiliary

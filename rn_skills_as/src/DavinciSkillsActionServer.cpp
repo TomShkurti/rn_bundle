@@ -26,7 +26,7 @@ DavinciSkillsActionServer::DavinciSkillsActionServer(ros::NodeHandle nodeHandle,
 
 
 void go(
-    psm_controller & psm,
+    psm_interface & psm,
     double x,
     double y,
     double z,
@@ -38,7 +38,7 @@ void go(
 
 
   sensor_msgs::JointState js;
-  psm.get_fresh_psm_state(js);
+  psm.get_fresh_position(js);
   trajectory_msgs::JointTrajectoryPoint trajectory_point_prev;
   trajectory_point_prev.time_from_start = ros::Duration(0.0);
   trajectory_point_prev.velocities = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
@@ -58,8 +58,9 @@ void go(
   R.col(2) = z_vec;
   des_gripper_affine.linear() = R;
   des_gripper_affine.translation() = tip_origin;
-  kin.ik_solve(des_gripper_affine);
-  davinci_kinematics::Vectorq7x1 q_vec1 = kin.get_soln();
+  kin.ik_solve_refined(des_gripper_affine, "psm1_dh");
+ // kin.ik_solve(des_gripper_affine);
+  davinci_kinematics::Vectorq7x1 q_vec1 = kin.get_soln_refined("psm1_dh");
   //q_vec1[5] = q_vec1[5] + g / 2.0;
   q_vec1[6] = q_vec1[6] + g;
 
@@ -90,6 +91,6 @@ void go(
   des_trajectory.points.push_back(trajectory_point_after);
 
   //Send it off
-  psm.move_psm(des_trajectory);
+  psm.execute_trajectory(des_trajectory);
   ros::Duration(t).sleep();
 }

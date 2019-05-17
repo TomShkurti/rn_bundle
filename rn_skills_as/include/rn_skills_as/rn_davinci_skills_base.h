@@ -28,7 +28,7 @@
 #include <cwru_davinci_msgs/ListOfPointStamped.h>
 #include <cwru_davinci_msgs/ListOfJointTrajectory.h>
 
-#include <cwru_davinci_control/psm_controller.h>
+#include <cwru_davinci/uv_control/psm_interface.h>
 
 #include <geometry_msgs/Polygon.h>
 #include <geometry_msgs/TransformStamped.h>

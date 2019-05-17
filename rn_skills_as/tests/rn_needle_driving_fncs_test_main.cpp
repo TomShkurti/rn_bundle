@@ -5,7 +5,7 @@
 
 
 #include <cwru_davinci_kinematics/davinci_inv_kinematics.h>
-#include <cwru_davinci_control/psm_controller.h>
+#include <cwru_davinci/uv_control/psm_interface.h>
 #include "rn_skills_as/RnNeedleDrivingPlanner.h"
 
 
@@ -16,7 +16,7 @@ int main(int argc, char **argv){
 
   RnNeedleDrivingPlanner rnNeedleDrivingPlanner(node);
 
-  psm_controller psm(1, node);
+  psm_interface psm(1, node);
 
   trajectory_msgs::JointTrajectory needleDriveTraj;
 
@@ -201,8 +201,8 @@ int main(int argc, char **argv){
 
   rnNeedleDrivingPlanner.printDebugAffineVessel();
 
-  psm_controller psm1(1, node);
-  psm_controller psm2(2, node);
+  psm_interface psm1(1, node);
+  psm_interface psm2(2, node);
 
   Eigen::Vector3d pt_in_psm1, pt_in_psm2, pt_in_lt_cam;
   pt_in_psm1 << -0.12, 0, -0.1;

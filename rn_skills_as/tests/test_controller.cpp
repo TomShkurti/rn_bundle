@@ -4,15 +4,15 @@
 //
 
 #include <cwru_davinci_kinematics/davinci_inv_kinematics.h>
-#include <cwru_davinci_control/psm_controller.h>
+#include <cwru_davinci/uv_control/psm_interface.h>
 #include "rn_skills_as/RnNeedleDrivingPlanner.h"
 
-void goToLocationPointingDown(psm_controller &psm,
+void goToLocationPointingDown(psm_interface &psm,
                               double x,
                               double y,
                               double z);
 
-void executeTrajectory(psm_controller &psm,
+void executeTrajectory(psm_interface &psm,
                        trajectory_msgs::JointTrajectory &needleDriveTraj);
 
 
@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
 
   /// Phase I
 
-  psm_controller psm(1, node);
+  psm_interface psm(1, node);
 
   ROS_INFO("This is a controller test main. Will start in 1 sec.");
   ros::Duration(1).sleep();
@@ -79,7 +79,7 @@ int main(int argc, char **argv) {
 
 }
 
-void goToLocationPointingDown(psm_controller &psm,
+void goToLocationPointingDown(psm_interface &psm,
                               double x,
                               double y,
                               double z) {
@@ -108,7 +108,7 @@ void goToLocationPointingDown(psm_controller &psm,
   // FIXME this will cause bug: it never gets and the process got stuck here,
   // rostopic echo joint states worked well.
   sensor_msgs::JointState js;
-  psm.get_fresh_psm_state(js);
+  psm.get_fresh_position(js);
 
   trajPoint_0.time_from_start = ros::Duration(0);
   trajPoint_0.velocities = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
@@ -161,14 +161,14 @@ void goToLocationPointingDown(psm_controller &psm,
 
   // Order the PSM to move
   ROS_INFO("Going to (%f, %f, %f)", x, y, z);
-  psm.move_psm(traj);
+  psm.execute_trajectory(traj);
   ros::Duration(time).sleep(); // TODO is this necessary?
   ROS_INFO("Done");
 
 
 }
 
-void executeTrajectory(psm_controller &psm,
+void executeTrajectory(psm_interface &psm,
                        trajectory_msgs::JointTrajectory &needleDriveTraj) {
 
   ROS_WARN("Reviewing Plan");
@@ -187,7 +187,7 @@ void executeTrajectory(psm_controller &psm,
   ROS_WARN("Execute Plan");
   ros::Duration(1).sleep();
 
-  psm.move_psm(needleDriveTraj);
+  psm.execute_trajectory(needleDriveTraj);
 
   duration.sleep();
 

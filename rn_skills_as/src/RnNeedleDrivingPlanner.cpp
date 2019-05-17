@@ -167,17 +167,17 @@ bool RnNeedleDrivingPlanner::getCameraToPSMsTransforms(){
     if (n_tries > 5) break;
     tf_acquired = true;
     try {
-      tfListener.lookupTransform("left_camera_link",
-                                 "PSM1psm_base_link",
+      tfListener.lookupTransform("davinci_endo_cam_l",
+                                 "PSM1_psm_base_link",
                                  ros::Time(0),
                                  tfResult_one);
-      tfListener.lookupTransform("left_camera_link",
-                                 "PSM2psm_base_link",
+      tfListener.lookupTransform("davinci_endo_cam_l",
+                                 "PSM2_psm_base_link",
                                  ros::Time(0),
                                  tfResult_two);
 
-      tfListener.lookupTransform("PSM1psm_base_link",
-                                 "PSM2psm_base_link",
+      tfListener.lookupTransform("PSM1_psm_base_link",
+                                 "PSM2_psm_base_link",
                                  ros::Time(0),
                                  tfResult_three);
 
@@ -227,12 +227,12 @@ bool RnNeedleDrivingPlanner::getCameraToGripperTransforms(){
     if (n_tries > 5) break;
     tf_acquired = true;
     try {
-      tfListener.lookupTransform("left_camera_link",
-                                 "PSM1fingertip1",
+      tfListener.lookupTransform("davinci_endo_cam_l",
+                                 "PSM1_tool_wrist_sca_ee_link_1",
                                  ros::Time(0),
                                  tfResult_one);
-      tfListener.lookupTransform("left_camera_link",
-                                 "PSM2fingertip1",
+      tfListener.lookupTransform("davinci_endo_cam_l",
+                                 "PSM2_tool_wrist_sca_ee_link_1",
                                  ros::Time(0),
                                  tfResult_two);
     } catch (tf::TransformException &exception){
@@ -552,7 +552,7 @@ double RnNeedleDrivingPlanner::computeNeedleDriveGripperAffines(int arm_index,
   switch (arm_index) {
 
     case 1:
-
+	//TODO Serious kludge.
       for (int ipose = 0; ipose < path_waypoints_; ipose++){
 
         // Update needle frame rotation wrt tissue each step
@@ -1640,7 +1640,7 @@ void RnNeedleDrivingPlanner::generateGraspTransformList(const int &arm_index,
         grasp_transform_temp.transform.rotation.y = q1.y();
         grasp_transform_temp.transform.rotation.z = q1.z();
         grasp_transform_temp.transform.rotation.w = q1.w();
-        grasp_transform_temp.child_frame_id = "left_camera_link";
+        grasp_transform_temp.child_frame_id = "davinci_endo_cam_l";
         grasp_transform_temp.header.stamp = ros::Time::now();
         grasp_tf_array.stamped_transform_list.push_back(grasp_transform_temp);
       }
@@ -1661,7 +1661,7 @@ void RnNeedleDrivingPlanner::generateGraspTransformList(const int &arm_index,
         grasp_transform_temp.transform.rotation.y = q2.y();
         grasp_transform_temp.transform.rotation.z = q2.z();
         grasp_transform_temp.transform.rotation.w = q2.w();
-        grasp_transform_temp.child_frame_id = "left_camera_link";
+        grasp_transform_temp.child_frame_id = "davinci_endo_cam_l";
         grasp_transform_temp.header.stamp = ros::Time::now();
         grasp_tf_array.stamped_transform_list.push_back(grasp_transform_temp);
       }
@@ -2371,7 +2371,7 @@ void RnNeedleDrivingPlanner::generateDualPsmOpFrame() {
 
 /// PSM controllers
 
-void RnNeedleDrivingPlanner::executeTrajectory(psm_controller &psm,
+void RnNeedleDrivingPlanner::executeTrajectory(psm_interface &psm,
                                                const trajectory_msgs::JointTrajectory &needle_drive_traj) {
 
   ROS_WARN("Reviewing Plan");
@@ -2388,7 +2388,7 @@ void RnNeedleDrivingPlanner::executeTrajectory(psm_controller &psm,
 
   ROS_WARN("Executing Plan!");
 
-  psm.move_psm(trajectory);
+  psm.execute_trajectory(trajectory);
 
   duration.sleep();
 
@@ -2397,7 +2397,7 @@ void RnNeedleDrivingPlanner::executeTrajectory(psm_controller &psm,
 }
 
 
-void RnNeedleDrivingPlanner::executeTrajectory(psm_controller &psm,
+void RnNeedleDrivingPlanner::executeTrajectory(psm_interface &psm,
                                                const cwru_davinci_msgs::ListOfJointTrajectory &list_of_joint_traj) {
 
   ROS_WARN("Receiving a Trajectory List");
@@ -2419,7 +2419,7 @@ void RnNeedleDrivingPlanner::executeTrajectory(psm_controller &psm,
 
 
 
-void RnNeedleDrivingPlanner::goToLocationPointingDownFaceVector(psm_controller &psm,
+void RnNeedleDrivingPlanner::goToLocationPointingDownFaceVector(psm_interface &psm,
                                                       const double &x,
                                                       const double &y,
                                                       const double &z) {
@@ -2480,7 +2480,7 @@ void RnNeedleDrivingPlanner::goToLocationPointingDownFaceVector(psm_controller &
 
   // Order the PSM to move
   ROS_INFO("Going to (%f, %f, %f)", x, y, z);
-  psm.move_psm(traj);
+  psm.execute_trajectory(traj);
   ros::Duration(time).sleep(); // TODO is this necessary?
   ROS_INFO("Done");
 
@@ -2488,7 +2488,7 @@ void RnNeedleDrivingPlanner::goToLocationPointingDownFaceVector(psm_controller &
 
 
 
-void RnNeedleDrivingPlanner::goToLocationPointingDownFaceForward(psm_controller &psm,
+void RnNeedleDrivingPlanner::goToLocationPointingDownFaceForward(psm_interface &psm,
                                                                  const double &x,
                                                                  const double &y,
                                                                  const double &z) {
@@ -2541,7 +2541,7 @@ void RnNeedleDrivingPlanner::goToLocationPointingDownFaceForward(psm_controller 
 
   // Order the PSM to move
   ROS_INFO("Going to (%f, %f, %f)", x, y, z);
-  psm.move_psm(traj);
+  psm.execute_trajectory(traj);
   ros::Duration(time).sleep(); // TODO is this necessary?
   ROS_INFO("Done");
 
@@ -2549,7 +2549,7 @@ void RnNeedleDrivingPlanner::goToLocationPointingDownFaceForward(psm_controller 
 
 
 
-void RnNeedleDrivingPlanner::goToLocationPointingPsmLeft(psm_controller &psm,
+void RnNeedleDrivingPlanner::goToLocationPointingPsmLeft(psm_interface &psm,
                                                       const double &x,
                                                       const double &y,
                                                       const double &z) {
@@ -2606,13 +2606,13 @@ void RnNeedleDrivingPlanner::goToLocationPointingPsmLeft(psm_controller &psm,
   std::cout << "q_vec: " << q_vec.transpose();
   std::cout << "debug_affine:" << std::endl;
   printEigenAffine(debug_affine);
-  psm.move_psm(traj);
+  psm.execute_trajectory(traj);
   ros::Duration(time).sleep(); // TODO is this necessary?
   ROS_INFO("Done");
 
 }
 
-void RnNeedleDrivingPlanner::goToLocationPointingPsmRight(psm_controller &psm,
+void RnNeedleDrivingPlanner::goToLocationPointingPsmRight(psm_interface &psm,
                                                       const double &x,
                                                       const double &y,
                                                       const double &z) {
@@ -2670,7 +2670,7 @@ void RnNeedleDrivingPlanner::goToLocationPointingPsmRight(psm_controller &psm,
   std::cout << "q_vec: " << q_vec.transpose();
   std::cout << "debug_affine:" << std::endl;
   printEigenAffine(debug_affine);
-  psm.move_psm(traj);
+  psm.execute_trajectory(traj);
   ros::Duration(time).sleep(); // TODO is this necessary?
   ROS_INFO("Done");
 
@@ -2678,7 +2678,7 @@ void RnNeedleDrivingPlanner::goToLocationPointingPsmRight(psm_controller &psm,
 
 
 // TODO complete
-void RnNeedleDrivingPlanner::openGripper(psm_controller &psm, const double &angle) {
+void RnNeedleDrivingPlanner::openGripper(psm_interface &psm, const double &angle) {
 
   davinci_kinematics::Vectorq7x1 q_vec;
 
