@@ -23,6 +23,9 @@ find_package(catkin REQUIRED COMPONENTS
   cwru_davinci_kinematics
   uv_control
   cwru_davinci_msgs
+  cwru_msgs
+xform_utils
+	cwru_davinci_white_tracker
 )
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
@@ -82,7 +85,7 @@ add_action_files(
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
    DEPENDENCIES
-   actionlib_msgs std_msgs geometry_msgs trajectory_msgs cwru_davinci_msgs
+   actionlib_msgs std_msgs geometry_msgs trajectory_msgs cwru_davinci_msgs cwru_msgs
  )
 
 ################################################
@@ -117,8 +120,9 @@ generate_messages(
 
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES rn_skills_as
-  CATKIN_DEPENDS roscpp rospy std_msgs geometry_msgs trajectory_msgs tf cwru_davinci_kinematics actionlib_msgs cwru_davinci_msgs uv_control
+  LIBRARIES RnNeedleDrivingPlanner
+  CATKIN_DEPENDS roscpp rospy std_msgs geometry_msgs trajectory_msgs tf cwru_davinci_kinematics actionlib_msgs cwru_davinci_msgs uv_control cwru_msgs xform_utils
+	cwru_davinci_white_tracker
   DEPENDS system_lib
 )
 
